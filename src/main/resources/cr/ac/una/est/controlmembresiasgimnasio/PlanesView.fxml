@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PlanesController"
+            prefHeight="400" prefWidth="600">
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="15" right="15" bottom="10" left="15"/>
+            </padding>
+            <Label text="Gestión de Planes" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+        </VBox>
+    </top>
+    <center>
+        <TableView fx:id="tablaPlanes">
+            <columns>
+                <TableColumn fx:id="colNombre" text="Plan" prefWidth="150"/>
+                <TableColumn fx:id="colPrecio" text="Precio" prefWidth="150"/>
+                <TableColumn fx:id="colBeneficios" text="Beneficios" prefWidth="300"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>
