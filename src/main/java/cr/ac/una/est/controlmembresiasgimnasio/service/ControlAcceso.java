@@ -1,8 +1,10 @@
-package main.java.cr.ac.una.est.controlmembresiasgimnasio.service;
+package cr.ac.una.est.controlmembresiasgimnasio.service;
 
 import main.java.cr.ac.una.est.controlmembresiasgimnasio.modelo.planes.Socio;
 import java.util.ArrayList;
 import java.time.LocalDate;
+
+import static jdk.jfr.internal.util.Utils.isBefore;
 
 public class ControlAcceso {
 
@@ -35,7 +37,7 @@ public class ControlAcceso {
         }
         LocalDate hoy = LocalDate.now();
 
-        return !socio.getFechaVencimiento() isBefore(hoy)
+        return !socio.getExpiraMembrecia() isBefore(hoy);
     }
 
 }
