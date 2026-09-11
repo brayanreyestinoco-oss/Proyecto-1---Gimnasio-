@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="600"
+            prefHeight="400"
+            style="-fx-background-color: #F4F6F8;">
+
+    <top>
+        <VBox spacing="5"
+              style="-fx-background-color: #1F2937;">
+
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <Label text="➕ REGISTRAR PAGO"
+                   style="-fx-font-size: 20px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: white;"/>
+
+            <Label text="Registro de un nuevo pago"
+                   style="-fx-font-size: 13px;
+                          -fx-text-fill: #D1D5DB;"/>
+
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="15">
+
+            <padding>
+                <Insets top="20" right="30" bottom="15" left="30"/>
+            </padding>
+
+            <GridPane hgap="15" vgap="12">
+
+                <Label text="Cédula del socio:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="0"
+                       style="-fx-font-weight: bold;
+                              -fx-text-fill: #1F2937;"/>
+
+                <TextField fx:id="txtCedula"
+                           promptText="Ingrese la cédula"
+                           prefWidth="300"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="0"
+                           style="-fx-background-color: white;
+                                  -fx-border-color: #D1D5DB;
+                                  -fx-border-radius: 6;
+                                  -fx-background-radius: 6;
+                                  -fx-padding: 7px;"/>
+
+
+                <Label text="Plan:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="1"
+                       style="-fx-font-weight: bold;
+                              -fx-text-fill: #1F2937;"/>
+
+                <ComboBox fx:id="cmbPlan"
+                          prefWidth="300"
+                          promptText="Seleccione un plan"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="1"/>
+
+
+                <Label text="Monto:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="2"
+                       style="-fx-font-weight: bold;
+                              -fx-text-fill: #1F2937;"/>
+
+                <TextField fx:id="txtMonto"
+                           promptText="Ingrese el monto"
+                           prefWidth="300"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="2"
+                           style="-fx-background-color: white;
+                                  -fx-border-color: #D1D5DB;
+                                  -fx-border-radius: 6;
+                                  -fx-background-radius: 6;
+                                  -fx-padding: 7px;"/>
+
+
+                <Label text="Fecha de inicio:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="3"
+                       style="-fx-font-weight: bold;
+                              -fx-text-fill: #1F2937;"/>
+
+                <DatePicker fx:id="dpFechaInicio"
+                            prefWidth="300"
+                            GridPane.columnIndex="1"
+                            GridPane.rowIndex="3"/>
+
+
+                <Label text="Vencimiento:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="4"
+                       style="-fx-font-weight: bold;
+                              -fx-text-fill: #1F2937;"/>
+
+                <Label fx:id="lblVencimiento"
+                       text="Se calculará automáticamente"
+                       prefWidth="300"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="4"
+                       style="-fx-background-color: white;
+                              -fx-border-color: #D1D5DB;
+                              -fx-border-radius: 6;
+                              -fx-background-radius: 6;
+                              -fx-padding: 8px;
+                              -fx-text-fill: #4B5563;"/>
+
+            </GridPane>
+
+            <HBox spacing="10"
+                  alignment="CENTER_RIGHT">
+
+                <Button fx:id="btnCancelar"
+                        text="Cancelar"
+                        prefWidth="100"
+                        style="-fx-background-color: white;
+                               -fx-text-fill: #1F2937;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-border-color: #D1D5DB;
+                               -fx-border-radius: 6;"/>
+
+                <Button fx:id="btnGuardar"
+                        text="💾 Guardar"
+                        prefWidth="100"
+                        style="-fx-background-color: #1F2937;
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;"/>
+
+            </HBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>
