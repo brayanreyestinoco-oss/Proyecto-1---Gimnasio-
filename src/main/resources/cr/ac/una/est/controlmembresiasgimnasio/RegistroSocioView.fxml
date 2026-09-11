@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefWidth="600.0"
+      prefHeight="400.0"
+      minWidth="600.0"
+      minHeight="400.0"
+      maxWidth="600.0"
+      maxHeight="400.0"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1">
+
+    <BorderPane prefWidth="600.0"
+                prefHeight="400.0"
+                minWidth="600.0"
+                minHeight="400.0"
+                maxWidth="600.0"
+                maxHeight="400.0">
+
+        <!-- ENCABEZADO -->
+        <top>
+            <VBox alignment="CENTER"
+                  spacing="4.0"
+                  style="-fx-background-color: #1F2937;">
+
+                <padding>
+                    <Insets top="12.0"
+                            right="15.0"
+                            bottom="12.0"
+                            left="15.0"/>
+                </padding>
+
+                <Label text="➕ REGISTRAR SOCIO"
+                       style="-fx-text-fill: white;
+                              -fx-font-size: 22px;
+                              -fx-font-weight: bold;"/>
+
+                <Label text="Registro de un nuevo socio"
+                       style="-fx-text-fill: #D1D5DB;
+                              -fx-font-size: 12px;"/>
+
+            </VBox>
+        </top>
+
+        <!-- FORMULARIO -->
+        <center>
+
+            <GridPane hgap="12.0"
+                      vgap="8.0">
+
+                <padding>
+                    <Insets top="15.0"
+                            right="25.0"
+                            bottom="10.0"
+                            left="25.0"/>
+                </padding>
+
+                <!-- DATOS PERSONALES -->
+
+                <Label text="Cédula:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="0"
+                       style="-fx-font-weight: bold;"/>
+
+                <TextField fx:id="txtCedula"
+                           promptText="Ej. 1-2345-6789"
+                           prefWidth="200.0"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="0"/>
+
+
+                <Label text="Nombre completo:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="1"
+                       style="-fx-font-weight: bold;"/>
+
+                <TextField fx:id="txtNombre"
+                           promptText="Nombre del socio"
+                           prefWidth="200.0"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="1"/>
+
+
+                <Label text="Teléfono:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="2"
+                       style="-fx-font-weight: bold;"/>
+
+                <TextField fx:id="txtTelefono"
+                           promptText="Ej. 8888-8888"
+                           prefWidth="200.0"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="2"/>
+
+
+                <Label text="Correo:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="3"
+                       style="-fx-font-weight: bold;"/>
+
+                <TextField fx:id="txtCorreo"
+                           promptText="correo@ejemplo.com"
+                           prefWidth="200.0"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="3"/>
+
+
+                <!-- CONTACTO DE EMERGENCIA -->
+
+                <Label text="Contacto emergencia:"
+                       GridPane.columnIndex="2"
+                       GridPane.rowIndex="0"
+                       style="-fx-font-weight: bold;"/>
+
+                <TextField fx:id="txtContactoEmergencia"
+                           promptText="Nombre"
+                           prefWidth="200.0"
+                           GridPane.columnIndex="3"
+                           GridPane.rowIndex="0"/>
+
+
+                <Label text="Teléfono emergencia:"
+                       GridPane.columnIndex="2"
+                       GridPane.rowIndex="1"
+                       style="-fx-font-weight: bold;"/>
+
+                <TextField fx:id="txtTelefonoEmergencia"
+                           promptText="Ej. 8888-8888"
+                           prefWidth="200.0"
+                           GridPane.columnIndex="3"
+                           GridPane.rowIndex="1"/>
+
+
+                <!-- CONDICIONES MÉDICAS -->
+
+                <Label text="Condiciones médicas:"
+                       GridPane.columnIndex="2"
+                       GridPane.rowIndex="2"
+                       style="-fx-font-weight: bold;"/>
+
+                <TextArea fx:id="txtCondicionesMedicas"
+                          promptText="Indique condiciones médicas..."
+                          prefWidth="200.0"
+                          prefHeight="60.0"
+                          wrapText="true"
+                          GridPane.columnIndex="3"
+                          GridPane.rowIndex="2"
+                          GridPane.rowSpan="2"/>
+
+            </GridPane>
+
+        </center>
+
+        <!-- BOTONES -->
+
+        <bottom>
+
+            <HBox alignment="CENTER"
+                  spacing="15.0">
+
+                <padding>
+                    <Insets top="5.0"
+                            right="15.0"
+                            bottom="15.0"
+                            left="15.0"/>
+                </padding>
+
+                <Button fx:id="btnGuardar"
+                        text="💾 Guardar"
+                        prefWidth="130.0"
+                        prefHeight="35.0"
+                        style="-fx-background-color: #1F2937;
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;"/>
+
+                <Button fx:id="btnCancelar"
+                        text="Cancelar"
+                        prefWidth="130.0"
+                        prefHeight="35.0"
+                        style="-fx-background-color: #DC2626;
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;"/>
+
+            </HBox>
+
+        </bottom>
+
+    </BorderPane>
+
+</VBox>

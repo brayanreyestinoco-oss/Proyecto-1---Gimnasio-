@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="400" prefWidth="600" style="-fx-background-color: #F4F6F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PagosController">
+
+    <top>
+        <VBox spacing="10" style="-fx-background-color: #1F2937;">
+
+            <padding>
+                <Insets bottom="10" left="15" right="15" top="15" />
+            </padding>
+
+            <Label style="-fx-font-size: 20px;                           -fx-font-weight: bold;                           -fx-text-fill: white;" text="Gestión de Pagos" />
+
+            <HBox spacing="10">
+
+                <TextField fx:id="txtBuscar" prefWidth="250" promptText="Buscar por cédula o nombre" style="-fx-background-color: white;                                   -fx-border-color: #D1D5DB;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-padding: 7px;" />
+
+                <Button fx:id="btnBuscar" onAction="#buscarPago" style="-fx-background-color: white;                                -fx-text-fill: #1F2937;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-color: #D1D5DB;                                -fx-border-radius: 6;" text="🔎 Buscar" />
+
+                <Button fx:id="btnEliminar" onAction="#eliminarPago" style="-fx-background-color: #DC2626;                                -fx-text-fill: white;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-radius: 6;" text="🗑Eliminar" />
+
+                <Button fx:id="btnModificar" onAction="#modificarPago" style="-fx-background-color: white;                                -fx-text-fill: #1F2937;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-color: #D1D5DB;                                -fx-border-radius: 6;" text="✏ Modificar" />
+
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10" />
+            </padding>
+
+            <HBox spacing="10" />
+
+            <TableView fx:id="tablaPagos" style="-fx-background-color: white;                               -fx-border-color: #D1D5DB;                               -fx-border-radius: 6;                               -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+
+                <columns>
+
+                    <TableColumn fx:id="colCedula" prefWidth="90" text="Cédula" />
+
+                    <TableColumn fx:id="colSocio" prefWidth="120" text="Socio" />
+
+                    <TableColumn fx:id="colPlan" prefWidth="90" text="Plan" />
+
+                    <TableColumn fx:id="colFechaPago" prefWidth="100" text="Fecha de pago" />
+
+                    <TableColumn fx:id="colMonto" prefWidth="90" text="Monto" />
+
+                    <TableColumn fx:id="colVencimiento" prefWidth="110" text="Vencimiento" />
+
+                </columns>
+
+            </TableView>
+
+             <Button fx:id="btnRegistrar" onAction="#registrarPago" prefHeight="27.0" prefWidth="580.0" style="-fx-background-color: white;                                -fx-text-fill: #1F2937;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-color: #D1D5DB;                                -fx-border-radius: 6;" text="➕ Registrar pago" />
+
+        </VBox>
+    </center>
+
+</BorderPane>

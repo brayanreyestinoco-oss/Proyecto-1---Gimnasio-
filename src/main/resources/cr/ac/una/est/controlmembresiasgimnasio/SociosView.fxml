@@ -1,10 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<VBox maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
 
-<VBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" />
-   </children>
+   <BorderPane maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0">
+
+      <!-- ENCABEZADO -->
+      <top>
+         <VBox alignment="CENTER" prefHeight="74.0" prefWidth="600.0" spacing="4.0" style="-fx-background-color: #1F2937;">
+
+            <padding>
+               <Insets bottom="12.0" left="15.0" right="15.0" top="12.0" />
+            </padding>
+
+            <Label style="-fx-text-fill: white;                               -fx-font-size: 22px;                               -fx-font-weight: bold;" text="👥 MENÚ SOCIOS" />
+
+            <Label style="-fx-text-fill: #D1D5DB;                               -fx-font-size: 12px;" text="Gestión de socios del gimnasio" />
+
+         </VBox>
+      </top>
+
+      <!-- CONTENIDO -->
+      <center>
+         <VBox spacing="8.0">
+
+            <padding>
+               <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+            </padding>
+
+            <!-- BOTONES -->
+            <HBox alignment="CENTER" spacing="8.0" />
+
+            <!-- BUSCADOR -->
+            <HBox spacing="8.0">
+
+               <TextField fx:id="txtBuscar" promptText="Buscar por nombre o cédula" style="-fx-background-color: white;                                       -fx-border-color: #D1D5DB;                                       -fx-border-radius: 6;                                       -fx-background-radius: 6;                                       -fx-padding: 7px;" HBox.hgrow="ALWAYS" />
+   
+               <Button fx:id="btnBuscar" prefHeight="33.0" prefWidth="89.0" style="-fx-background-color: white;                                    -fx-text-fill: #1F2937;                                    -fx-border-color: #D1D5DB;                                    -fx-border-radius: 6;                                    -fx-background-radius: 6;                                    -fx-font-weight: bold;" text="🔎 Buscar" />
+   
+               <Button fx:id="btnModificar" prefHeight="33.0" prefWidth="98.0" style="-fx-background-color: white;                                    -fx-text-fill: #1F2937;                                    -fx-border-color: #D1D5DB;                                    -fx-border-radius: 6;                                    -fx-background-radius: 6;                                    -fx-font-weight: bold;" text="✏Modificar" />
+   
+               <Button fx:id="btnEliminar" prefHeight="33.0" prefWidth="96.0" style="-fx-background-color: #DC2626;                                    -fx-text-fill: white;                                    -fx-background-radius: 6;                                    -fx-font-weight: bold;" text="🗑Eliminar" />
+
+            </HBox>
+
+               <Button fx:id="btnRegistrar" prefHeight="27.0" prefWidth="639.0" style="-fx-background-color: white;                                    -fx-text-fill: #1F2937;                                    -fx-border-color: #D1D5DB;                                    -fx-border-radius: 6;                                    -fx-background-radius: 6;                                    -fx-font-weight: bold;" text="➕ Registrar" />
+
+            <!-- TABLA -->
+            <Label style="-fx-text-fill: #1F2937;                               -fx-font-size: 15px;                               -fx-font-weight: bold;" text="Socios registrados" />
+
+            <TableView fx:id="tablaSocios" prefHeight="145.0" VBox.vgrow="NEVER">
+
+               <columns>
+
+                  <TableColumn fx:id="colCedula" prefWidth="105.0" text="Cédula" />
+
+                  <TableColumn fx:id="colNombre" prefWidth="155.0" text="Nombre" />
+
+                  <TableColumn fx:id="colTelefono" prefWidth="110.0" text="Teléfono" />
+
+                  <TableColumn fx:id="colCorreo" prefWidth="200.0" text="Correo" />
+
+               </columns>
+
+            </TableView>
+
+            <!-- INFORMACIÓN DEL SELECCIONADO -->
+            <VBox spacing="3.0" style="-fx-background-color: #F3F4F6;                              -fx-background-radius: 7;                              -fx-padding: 7;">
+
+               <Label style="-fx-text-fill: #1F2937;                                   -fx-font-size: 12px;                                   -fx-font-weight: bold;" text="Información adicional" />
+
+               <HBox spacing="20.0">
+
+                  <Label fx:id="lblContactoEmergencia" style="-fx-text-fill: #4B5563;                                       -fx-font-size: 11px;" text="Contacto de emergencia: -" />
+
+                  <Label fx:id="lblCondicionesMedicas" style="-fx-text-fill: #4B5563;                                       -fx-font-size: 11px;" text="Condiciones médicas: -" />
+
+               </HBox>
+
+            </VBox>
+
+         </VBox>
+      </center>
+
+   </BorderPane>
+
 </VBox>
