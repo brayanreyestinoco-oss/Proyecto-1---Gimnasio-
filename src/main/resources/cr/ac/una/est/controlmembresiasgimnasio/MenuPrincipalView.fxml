@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane prefHeight="400.0" prefWidth="565.0">
+         <top>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="95.0" text="MENU PRINCIPAL" BorderPane.alignment="CENTER">
+               <cursor>
+                  <Cursor fx:constant="CROSSHAIR" />
+               </cursor></Label>
+         </top>
+         <center>
+            <ScrollPane prefHeight="342.0" prefWidth="565.0" BorderPane.alignment="CENTER">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="380.0" prefWidth="562.0">
+                     <children>
+                        <VBox prefHeight="360.0" prefWidth="552.0">
+                           <children>
+                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="551.0" text="Socios 🤵" />
+                              <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="552.0" text="Planes 📋" />
+                              <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="552.0" text="Pagos 💰" />
+                              <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="569.0" text="Control de Accesos🛡️" />
+                              <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="552.0" text="Reportes 📖" />
+                              <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="551.0" text="SALIR" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+         </center></BorderPane>
+   </children>
+</VBox>

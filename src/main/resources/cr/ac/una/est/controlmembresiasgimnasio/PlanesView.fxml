@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PlanesController"
-            prefHeight="400" prefWidth="600">
+<BorderPane prefHeight="400" prefWidth="565.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PlanesController">
     <top>
         <VBox spacing="10">
             <padding>
-                <Insets top="15" right="15" bottom="10" left="15"/>
+                <Insets bottom="10" left="15" right="15" top="15" />
             </padding>
-            <Label text="Gestión de Planes" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Gestión de Planes" />
         </VBox>
     </top>
     <center>
         <TableView fx:id="tablaPlanes">
             <columns>
-                <TableColumn fx:id="colNombre" text="Plan" prefWidth="150"/>
-                <TableColumn fx:id="colPrecio" text="Precio" prefWidth="150"/>
-                <TableColumn fx:id="colBeneficios" text="Beneficios" prefWidth="300"/>
+                <TableColumn fx:id="colNombre" prefWidth="150" text="Plan" />
+                <TableColumn fx:id="colPrecio" prefWidth="150" text="Precio" />
+                <TableColumn fx:id="colBeneficios" prefWidth="300" text="Beneficios" />
             </columns>
         </TableView>
     </center>
