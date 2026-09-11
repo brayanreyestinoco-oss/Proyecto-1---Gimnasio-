@@ -1,24 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="400" prefWidth="565.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PlanesController">
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PlanesController"
+            prefHeight="400" prefWidth="600">
     <top>
         <VBox spacing="10">
             <padding>
-                <Insets bottom="10" left="15" right="15" top="15" />
+                <Insets top="15" right="15" bottom="10" left="15"/>
             </padding>
-            <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Gestión de Planes" />
+            <Label text="Gestión de Planes" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+            <HBox spacing="10">
+                <TextField fx:id="txtBuscar" promptText="Nombre del plan (Mensual, Anual, VIP)" prefWidth="250"/>
+                <Button fx:id="btnBuscar" text="Buscar" onAction="#buscarPlan"/>
+                <Button fx:id="btnMostrarTodos" text="Mostrar todos" onAction="#mostrarTodos"/>
+            </HBox>
         </VBox>
     </top>
     <center>
         <TableView fx:id="tablaPlanes">
             <columns>
-                <TableColumn fx:id="colNombre" prefWidth="150" text="Plan" />
-                <TableColumn fx:id="colPrecio" prefWidth="150" text="Precio" />
-                <TableColumn fx:id="colBeneficios" prefWidth="300" text="Beneficios" />
+                <TableColumn fx:id="colNombre" text="Plan" prefWidth="150"/>
+                <TableColumn fx:id="colPrecio" text="Precio" prefWidth="150"/>
+                <TableColumn fx:id="colBeneficios" text="Beneficios" prefWidth="300"/>
             </columns>
         </TableView>
     </center>
