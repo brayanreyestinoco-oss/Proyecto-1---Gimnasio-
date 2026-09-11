@@ -7,12 +7,12 @@ public class Socio {
 
     private int idSocio;
     private String nombreSocio;
-    private LocalDate expiraMembrecia;
+    private LocalDate expiraMembresia;
 
     public Socio(int idSocio, String nombreSocio, LocalDate expiraMembrecia) {
         this.idSocio = idSocio;
         this.nombreSocio = nombreSocio;
-        this.expiraMembrecia = expiraMembrecia;
+        this.expiraMembresia = expiraMembrecia;
     }
     //Retorna el numero de identificacion del socio sin recibir parametros
     public int getIdSocio()
@@ -25,9 +25,9 @@ public class Socio {
         return nombreSocio;
     }
     //Retorna la Fecha de expiracion de la membrecia sin recibir parametros
-    public LocalDate getExpiraMembrecia() {
+    public LocalDate getExpiraMembresia() {
 
-        return expiraMembrecia;
+        return expiraMembresia;
     }
 }
 
