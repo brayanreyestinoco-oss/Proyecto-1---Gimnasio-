@@ -1,38 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <BorderPane prefHeight="400.0" prefWidth="565.0">
-         <top>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="95.0" text="MENU PRINCIPAL" BorderPane.alignment="CENTER">
-               <cursor>
-                  <Cursor fx:constant="CROSSHAIR" />
-               </cursor></Label>
-         </top>
-         <center>
-            <ScrollPane prefHeight="342.0" prefWidth="565.0" BorderPane.alignment="CENTER">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="380.0" prefWidth="562.0">
-                     <children>
-                        <VBox prefHeight="360.0" prefWidth="552.0">
-                           <children>
-                              <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="551.0" text="Socios 🤵" />
-                              <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="552.0" text="Planes 📋" />
-                              <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="552.0" text="Pagos 💰" />
-                              <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="569.0" text="Control de Accesos🛡️" />
-                              <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="552.0" text="Reportes 📖" />
-                              <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="551.0" text="SALIR" />
-                           </children>
+<VBox prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #F4F6F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+
+    <children>
+
+        <BorderPane prefHeight="400.0" prefWidth="600.0">
+
+            <!-- ENCABEZADO -->
+            <top>
+                <VBox alignment="CENTER" spacing="5.0" style="-fx-background-color: #1F2937;">
+
+                    <padding>
+                        <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
+                    </padding>
+
+                    <Label style="-fx-text-fill: white;                                   -fx-font-size: 22px;                                   -fx-font-weight: bold;" text="MENU PRINCIPAL 📚" />
+
+                    <Label style="-fx-text-fill: #D1D5DB;                                   -fx-font-size: 12px;" text="Sistema de Gestión de Membresías" />
+
+                </VBox>
+            </top>
+
+            <!-- MENÚ -->
+            <center>
+                <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;" vbarPolicy="AS_NEEDED">
+
+                    <content>
+
+                        <VBox alignment="TOP_CENTER" spacing="10.0">
+
+                            <padding>
+                                <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+                            </padding>
+
+                            <Button maxWidth="Infinity" mnemonicParsing="false" prefHeight="42.0" style="-fx-background-color: white;                                            -fx-text-fill: #1F2937;                                            -fx-font-size: 15px;                                            -fx-font-weight: bold;                                            -fx-background-radius: 8px;                                            -fx-border-radius: 8px;                                            -fx-border-color: #D1D5DB;" text="👥  Socios" />
+
+                            <Button maxWidth="Infinity" mnemonicParsing="false" prefHeight="42.0" style="-fx-background-color: white;                                            -fx-text-fill: #1F2937;                                            -fx-font-size: 15px;                                            -fx-font-weight: bold;                                            -fx-background-radius: 8px;                                            -fx-border-radius: 8px;                                            -fx-border-color: #D1D5DB;" text="📋  Planes" />
+
+                            <Button maxWidth="Infinity" mnemonicParsing="false" prefHeight="42.0" style="-fx-background-color: white;                                            -fx-text-fill: #1F2937;                                            -fx-font-size: 15px;                                            -fx-font-weight: bold;                                            -fx-background-radius: 8px;                                            -fx-border-radius: 8px;                                            -fx-border-color: #D1D5DB;" text="💰  Pagos" />
+
+                            <Button maxWidth="Infinity" mnemonicParsing="false" prefHeight="42.0" style="-fx-background-color: white;                                            -fx-text-fill: #1F2937;                                            -fx-font-size: 15px;                                            -fx-font-weight: bold;                                            -fx-background-radius: 8px;                                            -fx-border-radius: 8px;                                            -fx-border-color: #D1D5DB;" text="🛡  Control de Accesos" />
+
+                            <Button maxWidth="Infinity" mnemonicParsing="false" prefHeight="42.0" style="-fx-background-color: white;                                            -fx-text-fill: #1F2937;                                            -fx-font-size: 15px;                                            -fx-font-weight: bold;                                            -fx-background-radius: 8px;                                            -fx-border-radius: 8px;                                            -fx-border-color: #D1D5DB;" text="📖  Reportes" />
+
+                            <Button maxWidth="Infinity" mnemonicParsing="false" prefHeight="42.0" style="-fx-background-color: #DC2626;                                            -fx-text-fill: white;                                            -fx-font-size: 15px;                                            -fx-font-weight: bold;                                            -fx-background-radius: 8px;" text="🚪  SALIR" />
+
                         </VBox>
-                     </children>
-                  </AnchorPane>
-              </content>
-            </ScrollPane>
-         </center></BorderPane>
-   </children>
+
+                    </content>
+
+                </ScrollPane>
+            </center>
+
+        </BorderPane>
+
+    </children>
+
 </VBox>
