@@ -1,58 +1,104 @@
 package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
+import cr.ac.una.est.controlmembresiasgimnasio.service.ControlAcceso;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-import cr.ac.una.est.controlmembresiasgimnasio.service.ControlAcceso;
-
 public class ControladorAcceso {
 
     @FXML
-    private TextFIeld txtIdsocio;
+    private TextField txtIdsocio;
 
     @FXML
     private Button btnVerificar;
 
     @FXML
-    private label lblResultado;
+    private Label lblResultado;
 
-    private ControladorAcceso controladorAcceso;
-    /*Inicialisa los componentes necesarios para el controlador sin recibir nada ni retornar nada
-}
-     */
+    private ControlAcceso controlAcceso;
 
-    /*Verifica si la suscripcion del socio esta activa por medio del id no retorna nada este
-    resultado va directo a la interfas
+    /*
+     * Inicializa los componentes necesarios para el controlador.
+     * No recibe parámetros.
+     * No retorna ningún valor.
      */
     @FXML
-    private void verificarAcceso(){
+    public void initialize() {
+        lblResultado.setText("");
+    }
+
+    /*
+     * Recibe el objeto ControlAcceso que contiene la lógica
+     * y la información necesaria para verificar el acceso.
+     *
+     * @param controlAcceso objeto encargado de verificar el acceso.
+     * No retorna ningún valor.
+     */
+    public void setControlAcceso(ControlAcceso controlAcceso) {
+        this.controlAcceso = controlAcceso;
+    }
+
+    /*
+     * Verifica si la suscripción del socio está activa por medio del ID.
+     * No recibe parámetros directamente.
+     * No retorna ningún valor porque el resultado se muestra en la interfaz.
+     */
+    @FXML
+    private void verificarAcceso() {
 
         String textoId = txtIdsocio.getText();
 
-        if (textoId == null || textoId.isBlank()){
-            lblResultado.setText("Ingrese la identificacion del socio.");
+        // Verifica que el usuario haya escrito un número de socio
+        if (textoId == null || textoId.isBlank()) {
+
+            lblResultado.setText(
+                    "Ingrese la identificación del socio."
+            );
+
             return;
         }
-        try{
+
+        // Verifica que ControlAcceso haya sido cargado desde el sistema principal
+        if (controlAcceso == null) {
+
+            lblResultado.setText(
+                    "No se ha cargado la información de los socios."
+            );
+
+            return;
+        }
+
+        try {
+
+            // Convierte el texto ingresado a un número entero
             int idSocio = Integer.parseInt(textoId);
+
+            // Envía el ID a la clase ControlAcceso
             boolean accesoPermitido =
-                    controladorAcceso.verificarAcceso(idSocio);
-            if (accesoPermitido){
-                lblResultado.setText("Acceso perimitido");
+                    controlAcceso.verificarAcceso(idSocio);
+
+            // Muestra el resultado en la interfaz
+            if (accesoPermitido) {
+
+                lblResultado.setText(
+                        "Acceso permitido"
+                );
+
+            } else {
+
+                lblResultado.setText(
+                        "Acceso denegado por morosidad"
+                );
             }
-            else {
-                lblResultado.setText("Acceso denegado por morosidad");
-            }
+
+        } catch (NumberFormatException e) {
+
+            lblResultado.setText(
+                    "Ingrese un número de socio válido."
+            );
         }
-        catch(NumberFormatException e){
-            lblResultado.setText("Ingrese un numero de socio valido ");
-        }
-
-
-
-
-
     }
 }
