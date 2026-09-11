@@ -13,27 +13,83 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PlanesController"
-            prefHeight="400" prefWidth="600">
+            prefHeight="400"
+            prefWidth="600"
+            style="-fx-background-color: #F4F6F8;">
+
     <top>
-        <VBox spacing="10">
+        <VBox spacing="10"
+              style="-fx-background-color: #1F2937;">
+
             <padding>
                 <Insets top="15" right="15" bottom="10" left="15"/>
             </padding>
-            <Label text="Gestión de Planes" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+            <Label text="Gestión de Planes"
+                   style="-fx-font-size: 20px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: white;"/>
+
             <HBox spacing="10">
-                <TextField fx:id="txtBuscar" promptText="Nombre del plan (Mensual, Anual, VIP)" prefWidth="250"/>
-                <Button fx:id="btnBuscar" text="Buscar" onAction="#buscarPlan"/>
-                <Button fx:id="btnMostrarTodos" text="Mostrar todos" onAction="#mostrarTodos"/>
+
+                <TextField fx:id="txtBuscar"
+                           promptText="Nombre del plan (Mensual, Anual, VIP)"
+                           prefWidth="250"
+                           style="-fx-background-color: white;
+                                  -fx-border-color: #D1D5DB;
+                                  -fx-border-radius: 6;
+                                  -fx-background-radius: 6;
+                                  -fx-padding: 7px;"/>
+
+                <Button fx:id="btnBuscar"
+                        text="Buscar"
+                        onAction="#buscarPlan"
+                        style="-fx-background-color: white;
+                               -fx-text-fill: #1F2937;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-border-color: #D1D5DB;
+                               -fx-border-radius: 6;"/>
+
+                <Button fx:id="btnMostrarTodos"
+                        text="Mostrar todos"
+                        onAction="#mostrarTodos"
+                        style="-fx-background-color: white;
+                               -fx-text-fill: #1F2937;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-border-color: #D1D5DB;
+                               -fx-border-radius: 6;"/>
+
             </HBox>
+
         </VBox>
     </top>
+
     <center>
-        <TableView fx:id="tablaPlanes">
+        <TableView fx:id="tablaPlanes"
+                   style="-fx-background-color: white;
+                          -fx-border-color: #D1D5DB;
+                          -fx-border-radius: 6;
+                          -fx-background-radius: 6;">
+
             <columns>
-                <TableColumn fx:id="colNombre" text="Plan" prefWidth="150"/>
-                <TableColumn fx:id="colPrecio" text="Precio" prefWidth="150"/>
-                <TableColumn fx:id="colBeneficios" text="Beneficios" prefWidth="300"/>
+
+                <TableColumn fx:id="colNombre"
+                             text="Plan"
+                             prefWidth="150"/>
+
+                <TableColumn fx:id="colPrecio"
+                             text="Precio"
+                             prefWidth="150"/>
+
+                <TableColumn fx:id="colBeneficios"
+                             text="Beneficios"
+                             prefWidth="300"/>
+
             </columns>
+
         </TableView>
     </center>
+
 </BorderPane>
