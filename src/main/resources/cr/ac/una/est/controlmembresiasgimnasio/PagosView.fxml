@@ -23,7 +23,7 @@
 
                 <Button fx:id="btnEliminar" onAction="#eliminarPago" style="-fx-background-color: #DC2626;                                -fx-text-fill: white;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-radius: 6;" text="🗑Eliminar" />
 
-                <Button fx:id="btnModificar" onAction="#modificarPago" style="-fx-background-color: white;                                -fx-text-fill: #1F2937;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-color: #D1D5DB;                                -fx-border-radius: 6;" text="✏️ Modificar" />
+                <Button fx:id="btnModificar" onAction="#modificarPago" style="-fx-background-color: white;                                -fx-text-fill: #1F2937;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-color: #D1D5DB;                                -fx-border-radius: 6;" text="✏ Modificar" />
 
             </HBox>
         </VBox>
