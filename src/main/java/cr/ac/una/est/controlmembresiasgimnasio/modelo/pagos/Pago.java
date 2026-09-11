@@ -110,7 +110,7 @@ public class Pago {
     }
 
     /**
-     * Obtiene el método utilizado para realizar el pago.
+     * Obtiene el método utilizado para realizar el pago. s
      *
      * @return método de pago
      */

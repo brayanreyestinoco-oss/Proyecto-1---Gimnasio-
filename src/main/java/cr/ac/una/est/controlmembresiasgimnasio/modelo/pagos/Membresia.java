@@ -5,7 +5,7 @@ import cr.ac.una.est.controlmembresiasgimnasio.modelo.planes.Plan;
 import java.time.LocalDate;
 
 /**
- * Representa la membresía que tiene un socio del gimnasio.
+ * Representa la membresía que tiene un socio del gimnasio.s
  * Una membresía relaciona un socio con un plan y mantiene
  * las fechas de inicio y vencimiento.
  */

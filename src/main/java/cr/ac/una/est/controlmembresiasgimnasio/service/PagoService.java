@@ -39,7 +39,7 @@ public class PagoService {
     /**
      * Obtiene la lista de membresías registradas.
      *
-     * @return lista de membresías
+     * @return lista de membresías s
      */
     public ArrayList<Membresia> getMembresias() {
         return membresias;
