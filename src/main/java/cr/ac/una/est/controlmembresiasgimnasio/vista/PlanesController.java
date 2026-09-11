@@ -5,8 +5,10 @@ import cr.ac.una.est.controlmembresiasgimnasio.service.PlanService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
@@ -27,6 +29,9 @@ public class PlanesController {
     @FXML
     private TableColumn<PlanFila, String> colBeneficios;
 
+    @FXML
+    private TextField txtBuscar;
+
     private final PlanService planService = new PlanService();
 
     /**
@@ -39,23 +44,73 @@ public class PlanesController {
         colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
         colBeneficios.setCellValueFactory(new PropertyValueFactory<>("beneficios"));
 
-        cargarPlanes();
+        mostrarTodos();
     }
 
     /**
-     * Convierte los objetos Plan del servicio en filas visuales (PlanFila)
-     * y las coloca en la tabla.
+     * Busca un plan por el nombre escrito en el campo de texto y muestra
+     * únicamente ese resultado en la tabla. Si no existe, muestra una
+     * alerta al usuario.
      */
-    private void cargarPlanes() {
+    @FXML
+    public void buscarPlan() {
+        String nombreBuscado = txtBuscar.getText().trim();
+
+        if (nombreBuscado.isEmpty()) {
+            mostrarAlerta("Escribe el nombre de un plan para buscar.");
+            return;
+        }
+
+        Plan planEncontrado = planService.buscarPorNombre(nombreBuscado);
+
+        if (planEncontrado == null) {
+            mostrarAlerta("No se encontró ningún plan llamado \"" + nombreBuscado + "\".");
+            return;
+        }
+
+        ObservableList<PlanFila> filas = FXCollections.observableArrayList();
+        filas.add(convertirAFila(planEncontrado));
+        tablaPlanes.setItems(filas);
+    }
+
+    /**
+     * Vuelve a mostrar todos los planes disponibles en la tabla,
+     * deshaciendo cualquier filtro de búsqueda anterior.
+     */
+    @FXML
+    public void mostrarTodos() {
         ObservableList<PlanFila> filas = FXCollections.observableArrayList();
         for (Plan plan : planService.getPlanesDisponibles()) {
-            filas.add(new PlanFila(
-                    plan.getNombre(),
-                    String.format("₡%,.0f", plan.calcularPrecioFinal()),
-                    plan.getBeneficios()
-            ));
+            filas.add(convertirAFila(plan));
         }
         tablaPlanes.setItems(filas);
+        txtBuscar.clear();
+    }
+
+    /**
+     * Convierte un objeto Plan del modelo en una fila lista para mostrar
+     * en la tabla (con el precio ya formateado como texto).
+     * @param plan el plan a convertir
+     * @return la fila correspondiente
+     */
+    private PlanFila convertirAFila(Plan plan) {
+        return new PlanFila(
+                plan.getNombre(),
+                String.format("₡%,.0f", plan.calcularPrecioFinal()),
+                plan.getBeneficios()
+        );
+    }
+
+    /**
+     * Muestra una ventana emergente de alerta con el mensaje indicado.
+     * @param mensaje texto a mostrar al usuario
+     */
+    private void mostrarAlerta(String mensaje) {
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setTitle("Búsqueda de planes");
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 
     /**
@@ -68,12 +123,6 @@ public class PlanesController {
         private final String precio;
         private final String beneficios;
 
-        /**
-         * Crea una fila con los datos ya formateados para mostrar.
-         * @param nombre nombre del plan
-         * @param precio precio ya formateado como texto
-         * @param beneficios descripción de beneficios
-         */
         public PlanFila(String nombre, String precio, String beneficios) {
             this.nombre = nombre;
             this.precio = precio;
