@@ -1,4 +1,4 @@
-package main.java.cr.ac.una.est.controlmembresiasgimnasio.modelo.planes;
+package cr.ac.una.est.controlmembresiasgimnasio.modelo.planes;
 
 import java.time.LocalDate;
 
