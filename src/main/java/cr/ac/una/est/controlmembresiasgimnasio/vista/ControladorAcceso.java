@@ -1,58 +1,100 @@
 package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
+import cr.ac.una.est.controlmembresiasgimnasio.service.ControlAcceso;
+
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
-import cr.ac.una.est.controlmembresiasgimnasio.service.ControlAcceso;
 
 public class ControladorAcceso {
 
     @FXML
-    private TextFIeld txtIdsocio;
+    private TextField txtNumeroSocio;
 
     @FXML
-    private Button btnVerificar;
+    private Label lblResultado;
 
-    @FXML
-    private label lblResultado;
+    private ControlAcceso controlAcceso;
 
-    private ControladorAcceso controladorAcceso;
-    /*Inicialisa los componentes necesarios para el controlador sin recibir nada ni retornar nada
-}
-     */
-
-    /*Verifica si la suscripcion del socio esta activa por medio del id no retorna nada este
-    resultado va directo a la interfas
+    /**
+     * Inicializa los componentes de la pantalla de acceso.
+     * No recibe parámetros.
+     * No retorna ningún valor.
      */
     @FXML
-    private void verificarAcceso(){
+    public void initialize() {
 
-        String textoId = txtIdsocio.getText();
+        lblResultado.setText(
+                "Ingrese el número del socio"
+        );
+    }
 
-        if (textoId == null || textoId.isBlank()){
-            lblResultado.setText("Ingrese la identificacion del socio.");
+    /**
+     * Recibe el servicio que contiene las membresías y pagos
+     * registrados en el sistema.
+     *
+     * @param controlAcceso servicio encargado de verificar el acceso
+     */
+    public void setControlAcceso(ControlAcceso controlAcceso) {
+
+        this.controlAcceso = controlAcceso;
+    }
+
+    /**
+     * Verifica si el socio ingresado puede acceder al gimnasio.
+     * Obtiene el identificador desde el campo de texto y consulta
+     * el servicio ControlAcceso.
+     * No retorna ningún valor.
+     */
+    @FXML
+    private void verificarAcceso() {
+
+        String textoNumero = txtNumeroSocio.getText();
+
+        if (textoNumero == null || textoNumero.isBlank()) {
+
+            lblResultado.setText(
+                    "Ingrese un número de socio."
+            );
+
             return;
         }
-        try{
-            int idSocio = Integer.parseInt(textoId);
+
+        try {
+
+            int idSocio =
+                    Integer.parseInt(textoNumero);
+
+            if (controlAcceso == null) {
+
+                lblResultado.setText(
+                        "Los datos del sistema no han sido cargados."
+                );
+
+                return;
+            }
+
             boolean accesoPermitido =
-                    controladorAcceso.verificarAcceso(idSocio);
-            if (accesoPermitido){
-                lblResultado.setText("Acceso perimitido");
+                    controlAcceso.verificarAcceso(idSocio);
+
+            if (accesoPermitido) {
+
+                lblResultado.setText(
+                        "ACCESO PERMITIDO"
+                );
+
+            } else {
+
+                lblResultado.setText(
+                        "ACCESO DENEGADO POR MOROSIDAD"
+                );
             }
-            else {
-                lblResultado.setText("Acceso denegado por morosidad");
-            }
+
+        } catch (NumberFormatException e) {
+
+            lblResultado.setText(
+                    "Ingrese un número de socio válido."
+            );
         }
-        catch(NumberFormatException e){
-            lblResultado.setText("Ingrese un numero de socio valido ");
-        }
-
-
-
-
-
     }
 }
