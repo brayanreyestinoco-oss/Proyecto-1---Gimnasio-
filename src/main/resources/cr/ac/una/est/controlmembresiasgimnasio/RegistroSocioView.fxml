@@ -18,6 +18,7 @@
       maxHeight="400.0"
       xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1">
+    fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.RegistroSocioController">
 
     <BorderPane prefWidth="600.0"
                 prefHeight="400.0"
@@ -176,6 +177,7 @@
 
                 <Button fx:id="btnGuardar"
                         text="💾 Guardar"
+                        onAction="#guardarSocio"
                         prefWidth="130.0"
                         prefHeight="35.0"
                         style="-fx-background-color: #1F2937;
@@ -185,6 +187,7 @@
 
                 <Button fx:id="btnCancelar"
                         text="Cancelar"
+                        onAction="#cancelar"
                         prefWidth="130.0"
                         prefHeight="35.0"
                         style="-fx-background-color: #DC2626;
