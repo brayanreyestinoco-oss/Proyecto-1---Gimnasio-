@@ -17,8 +17,8 @@
       maxWidth="600.0"
       maxHeight="400.0"
       xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1">
-    fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.RegistroSocioController">
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.RegistroSocioController">
 
     <BorderPane prefWidth="600.0"
                 prefHeight="400.0"
@@ -54,7 +54,6 @@
 
         <!-- FORMULARIO -->
         <center>
-
             <GridPane hgap="12.0"
                       vgap="8.0">
 
@@ -158,13 +157,10 @@
                           GridPane.rowSpan="2"/>
 
             </GridPane>
-
         </center>
 
         <!-- BOTONES -->
-
         <bottom>
-
             <HBox alignment="CENTER"
                   spacing="15.0">
 
@@ -196,7 +192,6 @@
                                -fx-background-radius: 6;"/>
 
             </HBox>
-
         </bottom>
 
     </BorderPane>
