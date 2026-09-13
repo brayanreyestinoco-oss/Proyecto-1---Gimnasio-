@@ -2,7 +2,9 @@ package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
 import cr.ac.una.est.controlmembresiasgimnasio.DatosAplicacion;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
+import cr.ac.una.est.controlmembresiasgimnasio.interfaces.IRenovable;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
+import cr.ac.una.est.controlmembresiasgimnasio.modelo.planes.Plan;
 import cr.ac.una.est.controlmembresiasgimnasio.service.PagoService;
 
 import javafx.collections.FXCollections;
@@ -52,6 +54,12 @@ public class ReportesController {
     @FXML
     private TableColumn<ReporteFila, String> colEstado;
 
+    @FXML
+    private TableColumn<ReporteFila, String> colRenovacionAutomatica;
+
+    @FXML
+    private TableColumn<ReporteFila, String> colCostoRenovacion;
+
     private static final DateTimeFormatter FORMATO_FECHA =
             DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -88,6 +96,14 @@ public class ReportesController {
 
         colEstado.setCellValueFactory(
                 new PropertyValueFactory<>("estado")
+        );
+
+        colRenovacionAutomatica.setCellValueFactory(
+                new PropertyValueFactory<>("renovacionAutomatica")
+        );
+
+        colCostoRenovacion.setCellValueFactory(
+                new PropertyValueFactory<>("costoRenovacion")
         );
 
         cargarReporte();
@@ -161,7 +177,8 @@ public class ReportesController {
                      )) {
 
             escritor.println(
-                    "Socio,Cedula,Plan,Fecha Inicio,Fecha Vencimiento,Estado"
+                    "Socio,Cedula,Plan,Fecha Inicio,Fecha Vencimiento,"
+                            + "Estado,Renovacion Automatica,Costo Renovacion"
             );
 
             for (ReporteFila fila : tablaReporte.getItems()) {
@@ -172,7 +189,9 @@ public class ReportesController {
                                 + escaparCsv(fila.getPlan()) + ","
                                 + escaparCsv(fila.getFechaInicio()) + ","
                                 + escaparCsv(fila.getFechaVencimiento()) + ","
-                                + escaparCsv(fila.getEstado())
+                                + escaparCsv(fila.getEstado()) + ","
+                                + escaparCsv(fila.getRenovacionAutomatica()) + ","
+                                + escaparCsv(fila.getCostoRenovacion())
                 );
             }
 
@@ -192,6 +211,10 @@ public class ReportesController {
     /**
      * Convierte una membresía en una fila
      * para mostrarla en la tabla.
+     *
+     * También consulta, si el plan implementa
+     * IRenovable, si se renueva automáticamente
+     * y cuánto costaría renovarlo.
      *
      * @param membresia membresía que se desea mostrar
      * @return fila preparada para la tabla
@@ -216,13 +239,42 @@ public class ReportesController {
                         ? "Vigente"
                         : "Vencida";
 
+        Plan plan =
+                membresia.getPlan();
+
+        /*
+         * Si el plan implementa IRenovable, consultamos
+         * si se renueva automáticamente y cuánto costaría
+         * la renovación. Si no implementa la interfaz,
+         * mostramos "N/A".
+         */
+        String renovacionAutomatica = "N/A";
+
+        String costoRenovacion = "N/A";
+
+        if (plan instanceof IRenovable renovable) {
+
+            renovacionAutomatica =
+                    renovable.esRenovableAutomaticamente()
+                            ? "Sí"
+                            : "No";
+
+            costoRenovacion =
+                    String.format(
+                            "₡%,.0f",
+                            renovable.costoRenovacion()
+                    );
+        }
+
         return new ReporteFila(
                 membresia.getSocio().getNombre(),
                 membresia.getSocio().getCedula(),
-                membresia.getPlan().getNombre(),
+                plan.getNombre(),
                 fechaInicio,
                 fechaVencimiento,
-                estado
+                estado,
+                renovacionAutomatica,
+                costoRenovacion
         );
     }
 
@@ -338,6 +390,10 @@ public class ReportesController {
 
         private final String estado;
 
+        private final String renovacionAutomatica;
+
+        private final String costoRenovacion;
+
         /**
          * Crea una fila para la tabla.
          */
@@ -347,7 +403,9 @@ public class ReportesController {
                 String plan,
                 String fechaInicio,
                 String fechaVencimiento,
-                String estado) {
+                String estado,
+                String renovacionAutomatica,
+                String costoRenovacion) {
 
             this.socio = socio;
             this.cedula = cedula;
@@ -355,6 +413,8 @@ public class ReportesController {
             this.fechaInicio = fechaInicio;
             this.fechaVencimiento = fechaVencimiento;
             this.estado = estado;
+            this.renovacionAutomatica = renovacionAutomatica;
+            this.costoRenovacion = costoRenovacion;
         }
 
         public String getSocio() {
@@ -379,6 +439,14 @@ public class ReportesController {
 
         public String getEstado() {
             return estado;
+        }
+
+        public String getRenovacionAutomatica() {
+            return renovacionAutomatica;
+        }
+
+        public String getCostoRenovacion() {
+            return costoRenovacion;
         }
     }
 }

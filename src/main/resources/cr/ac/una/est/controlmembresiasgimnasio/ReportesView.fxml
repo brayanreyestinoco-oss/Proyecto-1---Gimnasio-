@@ -1,53 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.ReportesController"
-            prefHeight="400"
-            prefWidth="600"
-            style="-fx-background-color: #F4F6F8;">
+<BorderPane prefHeight="400" prefWidth="793.0" style="-fx-background-color: #F4F6F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.ReportesController">
 
     <top>
-        <VBox spacing="10"
-              style="-fx-background-color: #1F2937;">
+        <VBox spacing="10" style="-fx-background-color: #1F2937;">
 
             <padding>
-                <Insets top="15" right="15" bottom="10" left="15"/>
+                <Insets bottom="10" left="15" right="15" top="15" />
             </padding>
 
-            <Label text="Reporte de Membresías"
-                   style="-fx-font-size: 20px;
-                          -fx-font-weight: bold;
-                          -fx-text-fill: white;"/>
+            <Label style="-fx-font-size: 20px;                           -fx-font-weight: bold;                           -fx-text-fill: white;" text="Reporte de Membresías" />
 
             <HBox spacing="10">
 
-                <Button fx:id="btnActualizar"
-                        text="Actualizar"
-                        onAction="#cargarReporte"
-                        style="-fx-background-color: white;
-                               -fx-text-fill: #1F2937;
-                               -fx-font-weight: bold;
-                               -fx-background-radius: 6;
-                               -fx-border-color: #D1D5DB;
-                               -fx-border-radius: 6;"/>
+                <Button fx:id="btnActualizar" onAction="#cargarReporte" style="-fx-background-color: white;                                -fx-text-fill: #1F2937;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-color: #D1D5DB;                                -fx-border-radius: 6;" text="Actualizar" />
 
-                <Button fx:id="btnExportarCsv"
-                        text="Exportar a CSV"
-                        onAction="#exportarCsv"
-                        style="-fx-background-color: #2563EB;
-                               -fx-text-fill: white;
-                               -fx-font-weight: bold;
-                               -fx-background-radius: 6;"/>
+                <Button fx:id="btnExportarCsv" onAction="#exportarCsv" style="-fx-background-color: #2563EB;                                -fx-text-fill: white;                                -fx-font-weight: bold;                                -fx-background-radius: 6;" text="Exportar a CSV" />
 
             </HBox>
 
@@ -55,37 +27,25 @@
     </top>
 
     <center>
-        <TableView fx:id="tablaReporte"
-                   style="-fx-background-color: white;
-                          -fx-border-color: #D1D5DB;
-                          -fx-border-radius: 6;
-                          -fx-background-radius: 6;">
+        <TableView fx:id="tablaReporte" prefHeight="268.0" prefWidth="799.0" style="-fx-background-color: white;                           -fx-border-color: #D1D5DB;                           -fx-border-radius: 6;                           -fx-background-radius: 6;">
 
             <columns>
 
-                <TableColumn fx:id="colSocio"
-                             text="Socio"
-                             prefWidth="130"/>
+                <TableColumn fx:id="colSocio" prefWidth="130" text="Socio" />
 
-                <TableColumn fx:id="colCedula"
-                             text="Cédula"
-                             prefWidth="90"/>
+                <TableColumn fx:id="colCedula" prefWidth="90" text="Cédula" />
 
-                <TableColumn fx:id="colPlan"
-                             text="Plan"
-                             prefWidth="90"/>
+                <TableColumn fx:id="colPlan" prefWidth="90" text="Plan" />
 
-                <TableColumn fx:id="colFechaInicio"
-                             text="Inicio"
-                             prefWidth="90"/>
+                <TableColumn fx:id="colFechaInicio" prefWidth="90" text="Inicio" />
 
-                <TableColumn fx:id="colFechaVencimiento"
-                             text="Vencimiento"
-                             prefWidth="100"/>
+                <TableColumn fx:id="colFechaVencimiento" prefWidth="100" text="Vencimiento" />
 
-                <TableColumn fx:id="colEstado"
-                             text="Estado"
-                             prefWidth="80"/>
+                <TableColumn fx:id="colEstado" prefWidth="80" text="Estado" />
+
+                <TableColumn fx:id="colRenovacionAutomatica" prefWidth="90" text="Renov. Auto." />
+
+                <TableColumn fx:id="colCostoRenovacion" prefWidth="110" text="Costo Renovación" />
 
             </columns>
 
@@ -95,18 +55,10 @@
     <bottom>
         <HBox alignment="BOTTOM_RIGHT">
             <padding>
-                <Insets bottom="10" right="10"/>
+                <Insets bottom="10" right="10" />
             </padding>
 
-            <Button fx:id="btnVolver"
-                    prefHeight="30"
-                    prefWidth="80"
-                    text="← Volver"
-                    onAction="#volverMenu"
-                    style="-fx-background-color: #6B7280;
-               -fx-text-fill: white;
-               -fx-font-weight: bold;
-               -fx-background-radius: 6;"/>
+            <Button fx:id="btnVolver" onAction="#volverMenu" prefHeight="30" prefWidth="80" style="-fx-background-color: #6B7280;                -fx-text-fill: white;                -fx-font-weight: bold;                -fx-background-radius: 6;" text="← Volver" />
         </HBox>
     </bottom>
 

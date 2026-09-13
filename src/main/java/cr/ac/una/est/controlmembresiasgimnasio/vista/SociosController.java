@@ -2,7 +2,9 @@ package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
 import cr.ac.una.est.controlmembresiasgimnasio.DatosAplicacion;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
+import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.socios.Socio;
+import cr.ac.una.est.controlmembresiasgimnasio.service.PagoService;
 import cr.ac.una.est.controlmembresiasgimnasio.service.SocioService;
 
 import javafx.collections.FXCollections;
@@ -52,6 +54,8 @@ public class SociosController {
 
     private SocioService socioService;
 
+    private PagoService pagoService;
+
     /**
      * Inicializa la pantalla de socios.
      */
@@ -60,6 +64,9 @@ public class SociosController {
 
         socioService =
                 DatosAplicacion.getSocioService();
+
+        pagoService =
+                DatosAplicacion.getPagoService();
 
         colCedula.setCellValueFactory(
                 new PropertyValueFactory<>("cedula")
@@ -98,7 +105,8 @@ public class SociosController {
      * Actualiza la tabla con todos
      * los socios registrados.
      */
-    private void actualizarTabla() {
+    @FXML
+    public void actualizarTabla() {
 
         tablaSocios.setItems(
                 FXCollections.observableArrayList(
@@ -106,107 +114,91 @@ public class SociosController {
                 )
         );
 
-        tablaSocios.refresh();
+        txtBuscar.clear();
     }
 
     /**
-     * Busca un socio por nombre o cédula.
+     * Busca un socio por cédula o nombre.
      */
     @FXML
-    private void buscarSocio() {
+    public void buscarSocio() {
 
-        String busqueda =
+        String texto =
                 txtBuscar
                         .getText()
-                        .trim();
+                        .trim()
+                        .toLowerCase();
 
-        if (busqueda.isBlank()) {
+        if (texto.isEmpty()) {
 
             actualizarTabla();
 
             return;
         }
 
-        for (Socio socio :
-                socioService.getSocios()) {
-
-            boolean coincideCedula =
-                    socio.getCedula()
-                            .equalsIgnoreCase(
-                                    busqueda
-                            );
-
-            boolean coincideNombre =
-                    socio.getNombre()
-                            .toLowerCase()
-                            .contains(
-                                    busqueda.toLowerCase()
-                            );
-
-            if (coincideCedula
-                    || coincideNombre) {
-
-                tablaSocios
-                        .getSelectionModel()
-                        .select(socio);
-
-                tablaSocios.scrollTo(
-                        socio
-                );
-
-                mostrarInformacion(
-                        socio
-                );
-
-                return;
-            }
-        }
-
-        mostrarMensaje(
-                Alert.AlertType.WARNING,
-                "Socio no encontrado",
-                "No se encontró ningún socio con esos datos."
-        );
-    }
-
-    /**
-     * Abre la pantalla para registrar
-     * un nuevo socio.
-     *
-     * @throws IOException si ocurre un error al cargar el FXML
-     */
-    @FXML
-    private void registrarSocio()
-            throws IOException {
-
-        FXMLLoader loader =
-                new FXMLLoader(
-                        HelloApplication.class
-                                .getResource(
-                                        "RegistroSocioView.fxml"
+        tablaSocios.setItems(
+                FXCollections.observableArrayList(
+                        socioService
+                                .getSocios()
+                                .stream()
+                                .filter(
+                                        s -> s.getCedula()
+                                                .toLowerCase()
+                                                .contains(texto)
+                                                || s.getNombre()
+                                                .toLowerCase()
+                                                .contains(texto)
                                 )
-                );
-
-        Parent root =
-                loader.load();
-
-        Stage stage =
-                (Stage)
-                        tablaSocios
-                                .getScene()
-                                .getWindow();
-
-        stage.setScene(
-                new Scene(
-                        root,
-                        600,
-                        400
+                                .toList()
                 )
         );
     }
 
     /**
+     * Muestra la información adicional
+     * del socio seleccionado.
+     *
+     * @param socio socio seleccionado en la tabla
+     */
+    private void mostrarInformacion(
+            Socio socio) {
+
+        if (socio == null) {
+
+            limpiarInformacion();
+
+            return;
+        }
+
+        lblContactoEmergencia.setText(
+                socio.getContactoEmergencia()
+        );
+
+        lblCondicionesMedicas.setText(
+                socio.getCondicionesMedicas()
+        );
+    }
+
+    /**
+     * Limpia la información adicional mostrada.
+     */
+    private void limpiarInformacion() {
+
+        lblContactoEmergencia.setText(
+                "-"
+        );
+
+        lblCondicionesMedicas.setText(
+                "-"
+        );
+    }
+
+    /**
      * Elimina el socio seleccionado.
+     *
+     * No permite eliminar a un socio que ya
+     * tenga una membresía registrada, para no
+     * dejar pagos o membresías huérfanas en el sistema.
      */
     @FXML
     private void eliminarSocio() {
@@ -222,6 +214,24 @@ public class SociosController {
                     Alert.AlertType.WARNING,
                     "Eliminar socio",
                     "Seleccione un socio de la tabla."
+            );
+
+            return;
+        }
+
+        Membresia membresia =
+                pagoService.buscarMembresiaPorSocio(
+                        seleccionado.getIdSocio()
+                );
+
+        if (membresia != null) {
+
+            mostrarMensaje(
+                    Alert.AlertType.WARNING,
+                    "No se puede eliminar",
+                    "Este socio ya tiene una membresía registrada.\n"
+                            + "Elimine o transfiera su membresía antes "
+                            + "de eliminar al socio."
             );
 
             return;
@@ -250,12 +260,9 @@ public class SociosController {
      * Abre el formulario de registro
      * cargando los datos del socio seleccionado
      * para poder modificarlos.
-     *
-     * @throws IOException si ocurre un error al cargar el FXML
      */
     @FXML
-    private void modificarSocio()
-            throws IOException {
+    private void modificarSocio() {
 
         Socio seleccionado =
                 tablaSocios
@@ -273,90 +280,91 @@ public class SociosController {
             return;
         }
 
-        FXMLLoader loader =
-                new FXMLLoader(
-                        HelloApplication.class
-                                .getResource(
-                                        "RegistroSocioView.fxml"
-                                )
-                );
+        try {
 
-        Parent root =
-                loader.load();
+            FXMLLoader loader =
+                    new FXMLLoader(
+                            HelloApplication.class
+                                    .getResource(
+                                            "RegistroSocioView.fxml"
+                                    )
+                    );
 
-        RegistroSocioController controller =
-                loader.getController();
+            Parent root =
+                    loader.load();
 
-        controller.setSocioModificar(
-                seleccionado
-        );
+            RegistroSocioController controlador =
+                    loader.getController();
 
-        Stage stage =
-                (Stage)
-                        tablaSocios
-                                .getScene()
-                                .getWindow();
+            controlador.setSocioModificar(
+                    seleccionado
+            );
 
-        stage.setScene(
-                new Scene(
-                        root,
-                        600,
-                        400
-                )
-        );
+            Stage stage =
+                    (Stage)
+                            tablaSocios
+                                    .getScene()
+                                    .getWindow();
+
+            stage.setScene(
+                    new Scene(
+                            root,
+                            600,
+                            400
+                    )
+            );
+
+        } catch (IOException e) {
+
+            mostrarMensaje(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "No se pudo abrir el formulario de modificación."
+            );
+        }
     }
 
     /**
-     * Muestra la información adicional
-     * del socio seleccionado.
-     *
-     * @param socio socio seleccionado
+     * Abre el formulario para registrar un nuevo socio.
      */
-    private void mostrarInformacion(
-            Socio socio) {
+    @FXML
+    private void registrarSocio() {
 
-        if (socio == null) {
+        try {
 
-            limpiarInformacion();
+            FXMLLoader loader =
+                    new FXMLLoader(
+                            HelloApplication.class
+                                    .getResource(
+                                            "RegistroSocioView.fxml"
+                                    )
+                    );
 
-            return;
+            Parent root =
+                    loader.load();
+
+            Stage stage =
+                    (Stage)
+                            tablaSocios
+                                    .getScene()
+                                    .getWindow();
+
+            stage.setScene(
+                    new Scene(
+                            root,
+                            600,
+                            400
+                    )
+            );
+
+        } catch (IOException e) {
+
+            mostrarMensaje(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "No se pudo abrir el formulario de registro."
+            );
         }
-
-        lblContactoEmergencia.setText(
-                "Contacto de emergencia: "
-                        + socio.getContactoEmergencia()
-                        + " - "
-                        + socio.getTelefonoEmergencia()
-        );
-
-        String condiciones =
-                socio.getCondicionesMedicas();
-
-        if (condiciones == null
-                || condiciones.isBlank()) {
-
-            condiciones =
-                    "Ninguna";
-        }
-
-        lblCondicionesMedicas.setText(
-                "Condiciones médicas: "
-                        + condiciones
-        );
-    }
-
-    /**
-     * Limpia la información adicional.
-     */
-    private void limpiarInformacion() {
-
-        lblContactoEmergencia.setText(
-                "Contacto de emergencia: -"
-        );
-
-        lblCondicionesMedicas.setText(
-                "Condiciones médicas: -"
-        );
     }
 
     /**
@@ -392,14 +400,16 @@ public class SociosController {
                         400
                 )
         );
+
+        stage.centerOnScreen();
     }
 
     /**
-     * Muestra mensajes al usuario.
+     * Muestra un mensaje al usuario.
      *
      * @param tipo tipo de alerta
-     * @param titulo título
-     * @param mensaje mensaje
+     * @param titulo título de la alerta
+     * @param mensaje mensaje que se mostrará
      */
     private void mostrarMensaje(
             Alert.AlertType tipo,
