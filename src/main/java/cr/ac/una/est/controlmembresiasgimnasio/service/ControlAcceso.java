@@ -1,108 +1,62 @@
 package cr.ac.una.est.controlmembresiasgimnasio.service;
 
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
-import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Pago;
 
-import java.time.LocalDate;
-import java.util.List;
-
+/**
+ * Servicio encargado de verificar si un socio
+ * puede ingresar al gimnasio.
+ */
 public class ControlAcceso {
 
-    private List<Membresia> membresias;
-    private List<Pago> pagos;
+    private PagoService pagoService;
 
-
-    public ControlAcceso(List<Membresia> membresias, List<Pago> pagos) {
-        this.membresias = membresias;
-        this.pagos = pagos;
+    /**
+     * Crea el servicio de control de acceso utilizando
+     * el servicio de pagos y membresías del sistema.
+     *
+     * @param pagoService servicio que administra pagos y membresías
+     */
+    public ControlAcceso(PagoService pagoService) {
+        this.pagoService = pagoService;
     }
 
     /**
-     * Busca una membresía asociada al número de un socio.
+     * Busca la membresía asociada a un socio.
      *
-     * @param idSocio identificador del socio que se desea buscar
+     * @param idSocio identificador del socio
      * @return la membresía encontrada o null si no existe
      */
     public Membresia buscarMembresia(int idSocio) {
-
-        for (Membresia membresia : membresias) {
-
-            if (membresia.getSocio() != null
-                    && membresia.getSocio().getIdSocio() == idSocio) {
-
-                return membresia;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Verifica si existe un pago registrado para una membresía.
-     *
-     * @param membresia membresía que se desea consultar
-     * @return true si existe un pago registrado, false si no existe
-     */
-    public boolean tienePagoRegistrado(Membresia membresia) {
-
-        for (Pago pago : pagos) {
-
-            if (pago.getMembresia() != null
-                    && pago.getMembresia().getIdMembresia()
-                    == membresia.getIdMembresia()) {
-
-                return true;
-            }
-        }
-
-        return false;
+        return pagoService.buscarMembresiaPorSocio(idSocio);
     }
 
     /**
      * Verifica si un socio puede ingresar al gimnasio.
-     * Para permitir el acceso debe existir una membresía asociada
-     * al socio, la membresía debe estar vigente y debe existir
-     * un pago registrado para dicha membresía.
+     * El acceso se permite cuando el socio posee
+     * una membresía vigente.
      *
-     * @param idSocio identificador del socio que desea ingresar
-     * @return true si el acceso está permitido, false si está denegado
+     * @param idSocio identificador del socio
+     * @return true si puede ingresar, false si el acceso es denegado
      */
     public boolean verificarAcceso(int idSocio) {
 
-        Membresia membresia = buscarMembresia(idSocio);
+        Membresia membresia =
+                buscarMembresia(idSocio);
 
         if (membresia == null) {
             return false;
         }
 
-        LocalDate fechaActual = LocalDate.now();
-
-        if (!membresia.estaVigente(fechaActual)) {
-            return false;
-        }
-
-        if (!tienePagoRegistrado(membresia)) {
-            return false;
-        }
-
-        return true;
+        return pagoService.membresiaEstaVigente(membresia);
     }
 
     /**
-     * Modifica la lista de membresías utilizada por el control de acceso.
+     * Cambia el servicio de pagos utilizado
+     * para comprobar el acceso.
      *
-     * @param membresias nueva lista de membresías
+     * @param pagoService nuevo servicio de pagos
      */
-    public void setMembresias(List<Membresia> membresias) {
-        this.membresias = membresias;
-    }
-
-    /**
-     * Modifica la lista de pagos utilizada por el control de acceso.
-     *
-     * @param pagos nueva lista de pagos
-     */
-    public void setPagos(List<Pago> pagos) {
-        this.pagos = pagos;
+    public void setPagoService(PagoService pagoService) {
+        this.pagoService = pagoService;
     }
 }

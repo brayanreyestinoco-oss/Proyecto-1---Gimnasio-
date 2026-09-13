@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-        <?import javafx.geometry.Insets?>
-        <?import javafx.scene.control.Button?>
-        <?import javafx.scene.control.Label?>
-        <?import javafx.scene.control.TableColumn?>
-        <?import javafx.scene.control.TableView?>
-        <?import javafx.scene.control.TextField?>
-        <?import javafx.scene.layout.BorderPane?>
-        <?import javafx.scene.layout.HBox?>
-        <?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -18,11 +16,15 @@
             style="-fx-background-color: #F4F6F8;">
 
     <top>
+
         <VBox spacing="10"
               style="-fx-background-color: #1F2937;">
 
             <padding>
-                <Insets top="15" right="15" bottom="10" left="15"/>
+                <Insets top="15"
+                        right="15"
+                        bottom="10"
+                        left="15"/>
             </padding>
 
             <Label text="Control de Accesos"
@@ -32,8 +34,8 @@
 
             <HBox spacing="10">
 
-                <TextField fx:id="txtCedula"
-                           promptText="Cédula del socio"
+                <TextField fx:id="txtNumeroSocio"
+                           promptText="Número del socio"
                            prefWidth="250"
                            style="-fx-background-color: white;
                                   -fx-border-color: #D1D5DB;
@@ -42,7 +44,7 @@
                                   -fx-padding: 7px;"/>
 
                 <Button fx:id="btnVerificar"
-                        text="🔎 Verificar acceso"
+                        text="Verificar acceso"
                         onAction="#verificarAcceso"
                         style="-fx-background-color: white;
                                -fx-text-fill: #1F2937;
@@ -52,76 +54,59 @@
                                -fx-border-radius: 6;"/>
 
             </HBox>
+
         </VBox>
+
     </top>
 
     <center>
-        <VBox spacing="10">
+
+        <VBox spacing="15"
+              alignment="CENTER">
 
             <padding>
-                <Insets top="15" right="15" bottom="15" left="15"/>
+                <Insets top="30"
+                        right="15"
+                        bottom="15"
+                        left="15"/>
             </padding>
 
-            <Label text="Información del socio"
-                   style="-fx-font-size: 16px;
-                          -fx-font-weight: bold;
-                          -fx-text-fill: #1F2937;"/>
-
-            <Label fx:id="lblSocio"
-                   text="Socio: ---"
-                   style="-fx-font-size: 14px;
-                          -fx-text-fill: #4B5563;"/>
-
-            <Label fx:id="lblPlan"
-                   text="Plan: ---"
-                   style="-fx-font-size: 14px;
-                          -fx-text-fill: #4B5563;"/>
-
-            <Label fx:id="lblEstado"
-                   text="Estado: ---"
-                   style="-fx-font-size: 14px;
-                          -fx-text-fill: #4B5563;"/>
-
-            <Label fx:id="lblVencimiento"
-                   text="Vencimiento: ---"
-                   style="-fx-font-size: 14px;
-                          -fx-text-fill: #4B5563;"/>
-
-            <Label fx:id="lblResultado"
-                   text="Esperando verificación..."
+            <Label text="Verificación de membresía"
                    style="-fx-font-size: 18px;
                           -fx-font-weight: bold;
                           -fx-text-fill: #1F2937;"/>
 
-            <Button fx:id="btnHistorial"
-                    text="📋 Ver historial de accesos"
-                    onAction="#mostrarHistorial"
-                    style="-fx-background-color: white;
-                           -fx-text-fill: #1F2937;
-                           -fx-font-weight: bold;
-                           -fx-background-radius: 6;
-                           -fx-border-color: #D1D5DB;
-                           -fx-border-radius: 6;"/>
+            <Label fx:id="lblResultado"
+                   text="Ingrese el número del socio"
+                   style="-fx-font-size: 18px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: #1F2937;"/>
 
         </VBox>
+
     </center>
 
     <bottom>
+
         <HBox alignment="BOTTOM_RIGHT">
+
             <padding>
-                <Insets bottom="10" right="10"/>
+                <Insets bottom="10"
+                        right="10"/>
             </padding>
 
             <Button fx:id="btnVolver"
                     text="← Volver"
+                    onAction="#volverMenu"
                     prefHeight="30"
-                    prefWidth="80"
+                    prefWidth="90"
                     style="-fx-background-color: #6B7280;
                            -fx-text-fill: white;
                            -fx-font-weight: bold;
                            -fx-background-radius: 6;"/>
+
         </HBox>
+
     </bottom>
 
 </BorderPane>
-

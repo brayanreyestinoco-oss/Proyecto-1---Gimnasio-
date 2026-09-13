@@ -1,11 +1,22 @@
 package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
+import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.service.ControlAcceso;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.io.IOException;
+
+/**
+ * Controlador encargado de manejar la pantalla
+ * de simulación de acceso al gimnasio.
+ */
 public class ControladorAcceso {
 
     @FXML
@@ -17,9 +28,7 @@ public class ControladorAcceso {
     private ControlAcceso controlAcceso;
 
     /**
-     * Inicializa los componentes de la pantalla de acceso.
-     * No recibe parámetros.
-     * No retorna ningún valor.
+     * Inicializa los componentes de la pantalla.
      */
     @FXML
     public void initialize() {
@@ -30,28 +39,29 @@ public class ControladorAcceso {
     }
 
     /**
-     * Recibe el servicio que contiene las membresías y pagos
-     * registrados en el sistema.
+     * Asigna el servicio utilizado para comprobar
+     * el acceso de los socios.
      *
-     * @param controlAcceso servicio encargado de verificar el acceso
+     * @param controlAcceso servicio de control de acceso
      */
-    public void setControlAcceso(ControlAcceso controlAcceso) {
+    public void setControlAcceso(
+            ControlAcceso controlAcceso) {
 
         this.controlAcceso = controlAcceso;
     }
 
     /**
-     * Verifica si el socio ingresado puede acceder al gimnasio.
-     * Obtiene el identificador desde el campo de texto y consulta
-     * el servicio ControlAcceso.
-     * No retorna ningún valor.
+     * Verifica si el número de socio ingresado
+     * posee una membresía vigente.
      */
     @FXML
     private void verificarAcceso() {
 
-        String textoNumero = txtNumeroSocio.getText();
+        String textoNumero =
+                txtNumeroSocio.getText();
 
-        if (textoNumero == null || textoNumero.isBlank()) {
+        if (textoNumero == null
+                || textoNumero.isBlank()) {
 
             lblResultado.setText(
                     "Ingrese un número de socio."
@@ -63,7 +73,9 @@ public class ControladorAcceso {
         try {
 
             int idSocio =
-                    Integer.parseInt(textoNumero);
+                    Integer.parseInt(
+                            textoNumero
+                    );
 
             if (controlAcceso == null) {
 
@@ -75,7 +87,9 @@ public class ControladorAcceso {
             }
 
             boolean accesoPermitido =
-                    controlAcceso.verificarAcceso(idSocio);
+                    controlAcceso.verificarAcceso(
+                            idSocio
+                    );
 
             if (accesoPermitido) {
 
@@ -96,5 +110,40 @@ public class ControladorAcceso {
                     "Ingrese un número de socio válido."
             );
         }
+    }
+
+    /**
+     * Regresa desde la pantalla de acceso
+     * hasta el menú principal.
+     *
+     * @throws IOException si ocurre un error al cargar el menú
+     */
+    @FXML
+    private void volverMenu() throws IOException {
+
+        FXMLLoader loader =
+                new FXMLLoader(
+                        HelloApplication.class.getResource(
+                                "MenuPrincipal.fxml"
+                        )
+                );
+
+        Parent root =
+                loader.load();
+
+        Stage stage =
+                (Stage)
+                        txtNumeroSocio
+                                .getScene()
+                                .getWindow();
+
+        Scene scene =
+                new Scene(
+                        root,
+                        600,
+                        400
+                );
+
+        stage.setScene(scene);
     }
 }
