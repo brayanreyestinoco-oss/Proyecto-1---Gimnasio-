@@ -1,4 +1,5 @@
-package modelo.socios;
+package cr.ac.una.est.controlmembresiasgimnasio.modelo.socios;
+
 
 public class Persona {
 
@@ -11,6 +12,7 @@ public class Persona {
         this.telefono = telefono;
         this.correo = correo;
     }
+
 
     public String getNombre() {
         return nombre;
@@ -31,6 +33,7 @@ public class Persona {
         this.telefono = telefono;
     }
 
+
     public String getCorreo() {
         return correo;
     }
@@ -38,4 +41,5 @@ public class Persona {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
 }
