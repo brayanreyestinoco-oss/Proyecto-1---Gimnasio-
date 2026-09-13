@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.ReportesController"
+            prefHeight="400"
+            prefWidth="600"
+            style="-fx-background-color: #F4F6F8;">
+
+    <top>
+        <VBox spacing="10"
+              style="-fx-background-color: #1F2937;">
+
+            <padding>
+                <Insets top="15" right="15" bottom="10" left="15"/>
+            </padding>
+
+            <Label text="Reporte de Membresías"
+                   style="-fx-font-size: 20px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: white;"/>
+
+            <HBox spacing="10">
+
+                <Button fx:id="btnActualizar"
+                        text="Actualizar"
+                        onAction="#cargarReporte"
+                        style="-fx-background-color: white;
+                               -fx-text-fill: #1F2937;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-border-color: #D1D5DB;
+                               -fx-border-radius: 6;"/>
+
+                <Button fx:id="btnExportarCsv"
+                        text="Exportar a CSV"
+                        onAction="#exportarCsv"
+                        style="-fx-background-color: #2563EB;
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;"/>
+
+            </HBox>
+
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="tablaReporte"
+                   style="-fx-background-color: white;
+                          -fx-border-color: #D1D5DB;
+                          -fx-border-radius: 6;
+                          -fx-background-radius: 6;">
+
+            <columns>
+
+                <TableColumn fx:id="colSocio"
+                             text="Socio"
+                             prefWidth="130"/>
+
+                <TableColumn fx:id="colCedula"
+                             text="Cédula"
+                             prefWidth="90"/>
+
+                <TableColumn fx:id="colPlan"
+                             text="Plan"
+                             prefWidth="90"/>
+
+                <TableColumn fx:id="colFechaInicio"
+                             text="Inicio"
+                             prefWidth="90"/>
+
+                <TableColumn fx:id="colFechaVencimiento"
+                             text="Vencimiento"
+                             prefWidth="100"/>
+
+                <TableColumn fx:id="colEstado"
+                             text="Estado"
+                             prefWidth="80"/>
+
+            </columns>
+
+        </TableView>
+    </center>
+
+    <bottom>
+        <HBox alignment="BOTTOM_RIGHT">
+            <padding>
+                <Insets bottom="10" right="10"/>
+            </padding>
+
+            <Button fx:id="btnVolver"
+                    prefHeight="30"
+                    prefWidth="80"
+                    text="← Volver"
+                    onAction="#volverMenu"
+                    style="-fx-background-color: #6B7280;
+               -fx-text-fill: white;
+               -fx-font-weight: bold;
+               -fx-background-radius: 6;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

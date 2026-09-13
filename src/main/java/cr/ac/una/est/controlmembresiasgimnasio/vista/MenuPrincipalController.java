@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -119,21 +118,21 @@ public class MenuPrincipalController {
     }
 
     /**
-     * Muestra un aviso de que la sección de reportes
-     * todavía no ha sido implementada.
+     * Abre la pantalla de reportes.
+     *
+     * @throws IOException si ocurre un error al cargar el FXML
      */
     @FXML
-    private void abrirReportes() {
+    private void abrirReportes() throws IOException {
 
-        Alert alerta =
-                new Alert(
-                        Alert.AlertType.INFORMATION,
-                        "La sección de Reportes aún no está disponible."
+        FXMLLoader loader =
+                new FXMLLoader(
+                        HelloApplication.class.getResource(
+                                "ReportesView.fxml"
+                        )
                 );
 
-        alerta.setHeaderText(null);
-
-        alerta.showAndWait();
+        cambiarVentana(loader);
     }
 
     /**
