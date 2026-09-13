@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+        <?import javafx.geometry.Insets?>
+        <?import javafx.scene.control.Button?>
+        <?import javafx.scene.control.Label?>
+        <?import javafx.scene.control.TableColumn?>
+        <?import javafx.scene.control.TableView?>
+        <?import javafx.scene.control.TextField?>
+        <?import javafx.scene.layout.BorderPane?>
+        <?import javafx.scene.layout.HBox?>
+        <?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.ControlAccesosController"
+            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.ControladorAcceso"
             prefWidth="600"
             prefHeight="400"
             style="-fx-background-color: #F4F6F8;">
@@ -106,4 +106,22 @@
         </VBox>
     </center>
 
+    <bottom>
+        <HBox alignment="BOTTOM_RIGHT">
+            <padding>
+                <Insets bottom="10" right="10"/>
+            </padding>
+
+            <Button fx:id="btnVolver"
+                    text="← Volver"
+                    prefHeight="30"
+                    prefWidth="80"
+                    style="-fx-background-color: #6B7280;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 6;"/>
+        </HBox>
+    </bottom>
+
 </BorderPane>
+

@@ -41,4 +41,13 @@
         </VBox>
     </center>
 
+    <!-- Botón Volver -->
+    <bottom>
+        <HBox alignment="BOTTOM_RIGHT" prefHeight="45" prefWidth="461.0">
+            <padding>
+                <Insets bottom="10" right="10" />
+            </padding>
+        </HBox>
+    </bottom>
+
 </BorderPane>
