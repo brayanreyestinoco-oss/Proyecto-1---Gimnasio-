@@ -193,12 +193,13 @@
 
                 <Button fx:id="btnVolver"
                         text="← Volver"
+                        onAction="#volverSocios"
                         prefWidth="100.0"
                         prefHeight="35.0"
                         style="-fx-background-color: #6B7280;
-                               -fx-text-fill: white;
-                               -fx-font-weight: bold;
-                               -fx-background-radius: 6;"/>
+               -fx-text-fill: white;
+               -fx-font-weight: bold;
+               -fx-background-radius: 6;"/>
 
             </HBox>
         </bottom>

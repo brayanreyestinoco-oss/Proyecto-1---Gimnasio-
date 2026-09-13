@@ -161,34 +161,66 @@ public class PagoService {
 
     /**
      * Actualiza la fecha de vencimiento de una membresía
-     * tomando en cuenta la duración del plan.
+     * después de realizar un pago.
      *
-     * @param membresia membresía que se desea actualizar
-     * @param fechaPago fecha en la que se realizó el pago
-     * @return no retorna ningún valor
+     * Si la membresía todavía está vigente, el nuevo período
+     * se suma a la fecha de vencimiento actual.
+     *
+     * Si está vencida o nunca ha sido pagada,
+     * el período comienza desde la fecha del pago.
+     *
+     * @param membresia membresía que recibe el pago
+     * @param fechaPago fecha en que se realizó el pago
      */
-    private void actualizarVencimiento(Membresia membresia,
-                                       LocalDate fechaPago) {
+    private void actualizarVencimiento(
+            Membresia membresia,
+            LocalDate fechaPago) {
 
         LocalDate fechaBase;
 
-        if (membresia.getFechaVencimiento() != null
-                && !membresia.getFechaVencimiento().isBefore(fechaPago)) {
+        /*
+         * Si la membresía ya estaba activa,
+         * tiene vencimiento y todavía no ha vencido,
+         * renovamos desde su vencimiento actual.
+         */
+        if (membresia.isActiva()
+                && membresia.getFechaVencimiento() != null
+                && !membresia
+                .getFechaVencimiento()
+                .isBefore(fechaPago)) {
 
-            fechaBase = membresia.getFechaVencimiento();
+            fechaBase =
+                    membresia.getFechaVencimiento();
 
         } else {
 
-            fechaBase = fechaPago;
-            membresia.setFechaInicio(fechaPago);
+            /*
+             * Si es el primer pago o la membresía
+             * ya había vencido, comenzamos desde
+             * la fecha del nuevo pago.
+             */
+            fechaBase =
+                    fechaPago;
+
+            membresia.setFechaInicio(
+                    fechaPago
+            );
         }
 
-        LocalDate nuevoVencimiento = fechaBase.plusMonths(
-                membresia.getPlan().getDuracionEnMeses()
+        LocalDate nuevoVencimiento =
+                fechaBase.plusMonths(
+                        membresia
+                                .getPlan()
+                                .getDuracionEnMeses()
+                );
+
+        membresia.setFechaVencimiento(
+                nuevoVencimiento
         );
 
-        membresia.setFechaVencimiento(nuevoVencimiento);
-        membresia.setActiva(true);
+        membresia.setActiva(
+                true
+        );
     }
 
     /**

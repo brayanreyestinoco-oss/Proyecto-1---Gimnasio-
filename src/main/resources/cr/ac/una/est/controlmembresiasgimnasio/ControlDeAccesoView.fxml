@@ -3,17 +3,21 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.ControladorAcceso"
             prefWidth="600"
             prefHeight="400"
             style="-fx-background-color: #F4F6F8;">
+
+    <!-- ENCABEZADO -->
 
     <top>
 
@@ -21,22 +25,28 @@
               style="-fx-background-color: #1F2937;">
 
             <padding>
+
                 <Insets top="15"
                         right="15"
-                        bottom="10"
+                        bottom="15"
                         left="15"/>
+
             </padding>
 
-            <Label text="Control de Accesos"
+            <Label text="🚪 CONTROL DE ACCESO"
                    style="-fx-font-size: 20px;
                           -fx-font-weight: bold;
                           -fx-text-fill: white;"/>
+
+            <Label text="Verificación de membresías del gimnasio"
+                   style="-fx-font-size: 12px;
+                          -fx-text-fill: #D1D5DB;"/>
 
             <HBox spacing="10">
 
                 <TextField fx:id="txtNumeroSocio"
                            promptText="Número del socio"
-                           prefWidth="250"
+                           prefWidth="300"
                            style="-fx-background-color: white;
                                   -fx-border-color: #D1D5DB;
                                   -fx-border-radius: 6;
@@ -44,8 +54,9 @@
                                   -fx-padding: 7px;"/>
 
                 <Button fx:id="btnVerificar"
-                        text="Verificar acceso"
+                        text="🔎 Verificar acceso"
                         onAction="#verificarAcceso"
+                        prefWidth="160"
                         style="-fx-background-color: white;
                                -fx-text-fill: #1F2937;
                                -fx-font-weight: bold;
@@ -59,40 +70,114 @@
 
     </top>
 
+
+    <!-- INFORMACIÓN DEL SOCIO -->
+
     <center>
 
-        <VBox spacing="15"
-              alignment="CENTER">
+        <VBox spacing="12"
+              alignment="TOP_CENTER">
 
             <padding>
-                <Insets top="30"
-                        right="15"
-                        bottom="15"
-                        left="15"/>
+
+                <Insets top="20"
+                        right="40"
+                        bottom="10"
+                        left="40"/>
+
             </padding>
 
-            <Label text="Verificación de membresía"
-                   style="-fx-font-size: 18px;
+            <Label text="Información de la membresía"
+                   style="-fx-font-size: 17px;
                           -fx-font-weight: bold;
                           -fx-text-fill: #1F2937;"/>
+
+            <GridPane hgap="20"
+                      vgap="12">
+
+                <!-- NOMBRE -->
+
+                <Label text="Socio:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="0"
+                       style="-fx-font-weight: bold;
+                              -fx-text-fill: #4B5563;"/>
+
+                <Label fx:id="lblNombre"
+                       text="-"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="0"
+                       style="-fx-text-fill: #1F2937;"/>
+
+
+                <!-- PLAN -->
+
+                <Label text="Plan:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="1"
+                       style="-fx-font-weight: bold;
+                              -fx-text-fill: #4B5563;"/>
+
+                <Label fx:id="lblPlan"
+                       text="-"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="1"
+                       style="-fx-text-fill: #1F2937;"/>
+
+
+                <!-- VENCIMIENTO -->
+
+                <Label text="Vencimiento:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="2"
+                       style="-fx-font-weight: bold;
+                              -fx-text-fill: #4B5563;"/>
+
+                <Label fx:id="lblVencimiento"
+                       text="-"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="2"
+                       style="-fx-text-fill: #1F2937;"/>
+
+            </GridPane>
+
+            <Separator prefWidth="450"/>
+
+            <Label text="Estado del acceso:"
+                   style="-fx-font-size: 13px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: #4B5563;"/>
 
             <Label fx:id="lblResultado"
                    text="Ingrese el número del socio"
+                   wrapText="true"
+                   alignment="CENTER"
+                   prefWidth="450"
                    style="-fx-font-size: 18px;
                           -fx-font-weight: bold;
-                          -fx-text-fill: #1F2937;"/>
+                          -fx-text-fill: #1F2937;
+                          -fx-background-color: white;
+                          -fx-border-color: #D1D5DB;
+                          -fx-border-radius: 7;
+                          -fx-background-radius: 7;
+                          -fx-padding: 12px;"/>
 
         </VBox>
 
     </center>
+
+
+    <!-- VOLVER -->
 
     <bottom>
 
         <HBox alignment="BOTTOM_RIGHT">
 
             <padding>
+
                 <Insets bottom="10"
                         right="10"/>
+
             </padding>
 
             <Button fx:id="btnVolver"

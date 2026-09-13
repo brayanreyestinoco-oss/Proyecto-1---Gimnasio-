@@ -1,75 +1,169 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-        <?import javafx.geometry.*?>
-        <?import javafx.scene.control.*?>
-        <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="400" prefWidth="600" style="-fx-background-color: #F4F6F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PagosController">
+<BorderPane prefHeight="400"
+            prefWidth="600"
+            style="-fx-background-color: #F4F6F8;"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PagosController">
 
+    <!-- ENCABEZADO -->
     <top>
-        <VBox spacing="10" style="-fx-background-color: #1F2937;">
+
+        <VBox spacing="10"
+              style="-fx-background-color: #1F2937;">
 
             <padding>
-                <Insets bottom="10" left="15" right="15" top="15" />
+                <Insets bottom="10"
+                        left="15"
+                        right="15"
+                        top="15"/>
             </padding>
 
-            <Label style="-fx-font-size: 20px;                           -fx-font-weight: bold;                           -fx-text-fill: white;" text="Gestión de Pagos" />
+            <Label text="💳 GESTIÓN DE PAGOS"
+                   style="-fx-font-size: 20px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: white;"/>
 
+            <Label text="Administración de pagos y membresías"
+                   style="-fx-font-size: 12px;
+                          -fx-text-fill: #D1D5DB;"/>
+
+            <!-- BUSCADOR -->
             <HBox spacing="10">
 
-                <TextField fx:id="txtBuscar" prefWidth="250" promptText="Buscar por cédula o nombre" style="-fx-background-color: white;                                   -fx-border-color: #D1D5DB;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-padding: 7px;" />
+                <TextField fx:id="txtBuscar"
+                           prefWidth="300"
+                           promptText="Buscar por cédula o nombre"
+                           style="-fx-background-color: white;
+                                  -fx-border-color: #D1D5DB;
+                                  -fx-border-radius: 6;
+                                  -fx-background-radius: 6;
+                                  -fx-padding: 7px;"/>
 
-                <Button fx:id="btnBuscar" onAction="#buscarPago" style="-fx-background-color: white;                                -fx-text-fill: #1F2937;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-color: #D1D5DB;                                -fx-border-radius: 6;" text="🔎 Buscar" />
+                <Button fx:id="btnBuscar"
+                        text="🔎 Buscar"
+                        onAction="#buscarPago"
+                        style="-fx-background-color: white;
+                               -fx-text-fill: #1F2937;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-border-color: #D1D5DB;
+                               -fx-border-radius: 6;"/>
 
-                <Button fx:id="btnEliminar" onAction="#eliminarPago" style="-fx-background-color: #DC2626;                                -fx-text-fill: white;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-radius: 6;" text="🗑Eliminar" />
-
-                <Button fx:id="btnModificar" onAction="#modificarPago" style="-fx-background-color: white;                                -fx-text-fill: #1F2937;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-color: #D1D5DB;                                -fx-border-radius: 6;" text="✏ Modificar" />
+                <Button fx:id="btnMostrarTodos"
+                        text="Mostrar todos"
+                        onAction="#mostrarTodos"
+                        style="-fx-background-color: white;
+                               -fx-text-fill: #1F2937;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-border-color: #D1D5DB;
+                               -fx-border-radius: 6;"/>
 
             </HBox>
+
         </VBox>
+
     </top>
 
+
+    <!-- CONTENIDO -->
     <center>
+
         <VBox spacing="10">
+
             <padding>
-                <Insets bottom="10" left="10" right="10" top="10" />
+                <Insets bottom="10"
+                        left="10"
+                        right="10"
+                        top="10"/>
             </padding>
 
-            <HBox spacing="10" />
-
-            <TableView fx:id="tablaPagos" style="-fx-background-color: white;                               -fx-border-color: #D1D5DB;                               -fx-border-radius: 6;                               -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
+            <TableView fx:id="tablaPagos"
+                       style="-fx-background-color: white;
+                              -fx-border-color: #D1D5DB;
+                              -fx-border-radius: 6;
+                              -fx-background-radius: 6;"
+                       VBox.vgrow="ALWAYS">
 
                 <columns>
 
-                    <TableColumn fx:id="colCedula" prefWidth="90" text="Cédula" />
+                    <TableColumn fx:id="colCedula"
+                                 prefWidth="85"
+                                 text="Cédula"/>
 
-                    <TableColumn fx:id="colSocio" prefWidth="120" text="Socio" />
+                    <TableColumn fx:id="colSocio"
+                                 prefWidth="120"
+                                 text="Socio"/>
 
-                    <TableColumn fx:id="colPlan" prefWidth="90" text="Plan" />
+                    <TableColumn fx:id="colPlan"
+                                 prefWidth="80"
+                                 text="Plan"/>
 
-                    <TableColumn fx:id="colFechaPago" prefWidth="100" text="Fecha de pago" />
+                    <TableColumn fx:id="colFechaPago"
+                                 prefWidth="100"
+                                 text="Fecha pago"/>
 
-                    <TableColumn fx:id="colMonto" prefWidth="90" text="Monto" />
+                    <TableColumn fx:id="colMonto"
+                                 prefWidth="85"
+                                 text="Monto"/>
 
-                    <TableColumn fx:id="colVencimiento" prefWidth="110" text="Vencimiento" />
+                    <TableColumn fx:id="colVencimiento"
+                                 prefWidth="105"
+                                 text="Vencimiento"/>
 
                 </columns>
 
             </TableView>
 
-            <Button fx:id="btnRegistrar" onAction="#registrarPago" prefHeight="27.0" prefWidth="580.0" style="-fx-background-color: white;                                -fx-text-fill: #1F2937;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-color: #D1D5DB;                                -fx-border-radius: 6;" text="➕ Registrar pago" />
+            <Button fx:id="btnRegistrar"
+                    text="➕ Registrar pago"
+                    onAction="#registrarPago"
+                    prefHeight="30"
+                    prefWidth="580"
+                    style="-fx-background-color: #1F2937;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 6;"/>
 
         </VBox>
+
     </center>
 
+
+    <!-- BOTÓN VOLVER -->
     <bottom>
+
         <HBox alignment="BOTTOM_RIGHT">
+
             <padding>
-                <Insets bottom="10" right="10" />
+                <Insets bottom="10"
+                        right="10"/>
             </padding>
 
-            <Button fx:id="btnVolver" prefHeight="30" prefWidth="80" style="-fx-background-color: #6B7280; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6;" text="← Volver" />
+            <Button fx:id="btnVolver"
+                    prefHeight="30"
+                    prefWidth="80"
+                    text="← Volver"
+                    onAction="#volverMenu"
+                    style="-fx-background-color: #6B7280;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 6;"/>
+
         </HBox>
+
     </bottom>
 
 </BorderPane>

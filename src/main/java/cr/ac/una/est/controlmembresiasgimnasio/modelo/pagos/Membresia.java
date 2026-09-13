@@ -6,40 +6,60 @@ import cr.ac.una.est.controlmembresiasgimnasio.modelo.socios.Socio;
 import java.time.LocalDate;
 
 /**
- * Representa la membresía que tiene un socio del gimnasio.s
- * Una membresía relaciona un socio con un plan y mantiene
+ * Representa la membresía de un socio del gimnasio.
+ * Relaciona un socio con un plan y mantiene
  * las fechas de inicio y vencimiento.
  */
 public class Membresia {
 
     private int idMembresia;
+
     private Socio socio;
+
     private Plan plan;
+
     private LocalDate fechaInicio;
+
     private LocalDate fechaVencimiento;
+
     private boolean activa;
 
     /**
      * Crea una nueva membresía.
      *
+     * La membresía se crea inicialmente inactiva.
+     * Se activa cuando el socio realiza su primer pago.
+     *
      * @param idMembresia identificador de la membresía
-     * @param socio socio al que pertenece la membresía
-     * @param plan plan contratado por el socio
-     * @param fechaInicio fecha en la que inicia la membresía
+     * @param socio socio propietario de la membresía
+     * @param plan plan contratado
+     * @param fechaInicio fecha indicada para iniciar
      */
-    public Membresia(int idMembresia, Socio socio, Plan plan,
-                     LocalDate fechaInicio) {
+    public Membresia(
+            int idMembresia,
+            Socio socio,
+            Plan plan,
+            LocalDate fechaInicio) {
 
         this.idMembresia = idMembresia;
+
         this.socio = socio;
+
         this.plan = plan;
+
         this.fechaInicio = fechaInicio;
 
-        // Calcula automáticamente el vencimiento según la duración del plan.
-        this.fechaVencimiento =
-                fechaInicio.plusMonths(plan.getDuracionEnMeses());
+        /*
+         * Todavía no existe vencimiento
+         * porque aún no se ha realizado un pago.
+         */
+        this.fechaVencimiento = null;
 
-        this.activa = true;
+        /*
+         * La membresía comienza inactiva.
+         * El pago será el encargado de activarla.
+         */
+        this.activa = false;
     }
 
     /**
@@ -48,36 +68,43 @@ public class Membresia {
      * @return identificador de la membresía
      */
     public int getIdMembresia() {
+
         return idMembresia;
     }
 
     /**
-     * Modifica el identificador de la membresía.
+     * Cambia el identificador de la membresía.
      *
      * @param idMembresia nuevo identificador
-     * @return no retorna ningún valor
      */
-    public void setIdMembresia(int idMembresia) {
-        this.idMembresia = idMembresia;
+    public void setIdMembresia(
+            int idMembresia) {
+
+        this.idMembresia =
+                idMembresia;
     }
 
     /**
-     * Obtiene el socio asociado a la membresía.
+     * Obtiene el socio relacionado
+     * con la membresía.
      *
      * @return socio de la membresía
      */
     public Socio getSocio() {
+
         return socio;
     }
 
     /**
-     * Modifica el socio asociado a la membresía.
+     * Cambia el socio de la membresía.
      *
      * @param socio nuevo socio
-     * @return no retorna ningún valor
      */
-    public void setSocio(Socio socio) {
-        this.socio = socio;
+    public void setSocio(
+            Socio socio) {
+
+        this.socio =
+                socio;
     }
 
     /**
@@ -86,36 +113,42 @@ public class Membresia {
      * @return plan de la membresía
      */
     public Plan getPlan() {
+
         return plan;
     }
 
     /**
-     * Modifica el plan de la membresía.
+     * Cambia el plan de la membresía.
      *
      * @param plan nuevo plan
-     * @return no retorna ningún valor
      */
-    public void setPlan(Plan plan) {
-        this.plan = plan;
+    public void setPlan(
+            Plan plan) {
+
+        this.plan =
+                plan;
     }
 
     /**
-     * Obtiene la fecha de inicio de la membresía.
+     * Obtiene la fecha de inicio.
      *
      * @return fecha de inicio
      */
     public LocalDate getFechaInicio() {
+
         return fechaInicio;
     }
 
     /**
-     * Modifica la fecha de inicio de la membresía.
+     * Cambia la fecha de inicio.
      *
-     * @param fechaInicio nueva fecha de inicio
-     * @return no retorna ningún valor
+     * @param fechaInicio nueva fecha
      */
-    public void setFechaInicio(LocalDate fechaInicio) {
-        this.fechaInicio = fechaInicio;
+    public void setFechaInicio(
+            LocalDate fechaInicio) {
+
+        this.fechaInicio =
+                fechaInicio;
     }
 
     /**
@@ -124,45 +157,72 @@ public class Membresia {
      * @return fecha de vencimiento
      */
     public LocalDate getFechaVencimiento() {
+
         return fechaVencimiento;
     }
 
     /**
-     * Modifica la fecha de vencimiento.
+     * Cambia la fecha de vencimiento.
      *
-     * @param fechaVencimiento nueva fecha de vencimiento
-     * @return no retorna ningún valor
+     * @param fechaVencimiento nueva fecha
      */
-    public void setFechaVencimiento(LocalDate fechaVencimiento) {
-        this.fechaVencimiento = fechaVencimiento;
+    public void setFechaVencimiento(
+            LocalDate fechaVencimiento) {
+
+        this.fechaVencimiento =
+                fechaVencimiento;
     }
 
     /**
      * Indica si la membresía está activa.
      *
-     * @return true si está activa, false si está inactiva
+     * @return true si está activa
      */
     public boolean isActiva() {
+
         return activa;
     }
 
     /**
      * Cambia el estado de la membresía.
      *
-     * @param activa nuevo estado de la membresía
-     * @return no retorna ningún valor
+     * @param activa nuevo estado
      */
-    public void setActiva(boolean activa) {
-        this.activa = activa;
+    public void setActiva(
+            boolean activa) {
+
+        this.activa =
+                activa;
     }
 
     /**
-     * Verifica si la membresía se encuentra vigente en una fecha.
+     * Verifica si la membresía está vigente
+     * en una fecha determinada.
+     *
+     * Para estar vigente debe:
+     *
+     * 1. Estar activa.
+     * 2. Tener fecha de vencimiento.
+     * 3. No haber vencido.
      *
      * @param fecha fecha que se desea verificar
-     * @return true si la membresía está vigente, false si está vencida
+     * @return true si la membresía está vigente
      */
-    public boolean estaVigente(LocalDate fecha) {
-        return activa && !fecha.isAfter(fechaVencimiento);
+    public boolean estaVigente(
+            LocalDate fecha) {
+
+        if (!activa) {
+
+            return false;
+        }
+
+        if (fechaVencimiento == null) {
+
+            return false;
+        }
+
+        return !fecha.isAfter(
+                fechaVencimiento
+        );
     }
 }

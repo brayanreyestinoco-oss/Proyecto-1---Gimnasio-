@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-        <?import javafx.geometry.Insets?>
-        <?import javafx.scene.control.Button?>
-        <?import javafx.scene.control.ComboBox?>
-        <?import javafx.scene.control.DatePicker?>
-        <?import javafx.scene.control.Label?>
-        <?import javafx.scene.control.TextField?>
-        <?import javafx.scene.layout.BorderPane?>
-        <?import javafx.scene.layout.GridPane?>
-        <?import javafx.scene.layout.HBox?>
-        <?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17.0.12"
             xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.RegistrarPagoController"
             prefWidth="600"
             prefHeight="400"
             style="-fx-background-color: #F4F6F8;">
 
     <top>
+
         <VBox spacing="5"
               style="-fx-background-color: #1F2937;">
 
             <padding>
-                <Insets top="15" right="15" bottom="15" left="15"/>
+                <Insets top="15"
+                        right="15"
+                        bottom="15"
+                        left="15"/>
             </padding>
 
             <Label text="➕ REGISTRAR PAGO"
@@ -30,21 +35,31 @@
                           -fx-font-weight: bold;
                           -fx-text-fill: white;"/>
 
-            <Label text="Registro de un nuevo pago"
+            <Label text="Registro de un nuevo pago de membresía"
                    style="-fx-font-size: 13px;
                           -fx-text-fill: #D1D5DB;"/>
 
         </VBox>
+
     </top>
 
+
     <center>
-        <VBox spacing="15">
+
+        <VBox spacing="12">
 
             <padding>
-                <Insets top="20" right="30" bottom="15" left="30"/>
+                <Insets top="15"
+                        right="30"
+                        bottom="10"
+                        left="30"/>
             </padding>
 
-            <GridPane hgap="15" vgap="12">
+            <GridPane hgap="15"
+                      vgap="10">
+
+
+                <!-- CÉDULA -->
 
                 <Label text="Cédula del socio:"
                        GridPane.columnIndex="0"
@@ -64,6 +79,8 @@
                                   -fx-padding: 7px;"/>
 
 
+                <!-- PLAN -->
+
                 <Label text="Plan:"
                        GridPane.columnIndex="0"
                        GridPane.rowIndex="1"
@@ -77,6 +94,8 @@
                           GridPane.rowIndex="1"/>
 
 
+                <!-- MONTO -->
+
                 <Label text="Monto:"
                        GridPane.columnIndex="0"
                        GridPane.rowIndex="2"
@@ -84,8 +103,9 @@
                               -fx-text-fill: #1F2937;"/>
 
                 <TextField fx:id="txtMonto"
-                           promptText="Ingrese el monto"
+                           promptText="Monto del plan"
                            prefWidth="300"
+                           editable="false"
                            GridPane.columnIndex="1"
                            GridPane.rowIndex="2"
                            style="-fx-background-color: white;
@@ -95,7 +115,9 @@
                                   -fx-padding: 7px;"/>
 
 
-                <Label text="Fecha de inicio:"
+                <!-- FECHA -->
+
+                <Label text="Fecha de pago:"
                        GridPane.columnIndex="0"
                        GridPane.rowIndex="3"
                        style="-fx-font-weight: bold;
@@ -107,9 +129,26 @@
                             GridPane.rowIndex="3"/>
 
 
-                <Label text="Vencimiento:"
+                <!-- MÉTODO DE PAGO -->
+
+                <Label text="Método de pago:"
                        GridPane.columnIndex="0"
                        GridPane.rowIndex="4"
+                       style="-fx-font-weight: bold;
+                              -fx-text-fill: #1F2937;"/>
+
+                <ComboBox fx:id="cmbMetodoPago"
+                          prefWidth="300"
+                          promptText="Seleccione el método"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="4"/>
+
+
+                <!-- VENCIMIENTO -->
+
+                <Label text="Vencimiento:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="5"
                        style="-fx-font-weight: bold;
                               -fx-text-fill: #1F2937;"/>
 
@@ -117,7 +156,7 @@
                        text="Se calculará automáticamente"
                        prefWidth="300"
                        GridPane.columnIndex="1"
-                       GridPane.rowIndex="4"
+                       GridPane.rowIndex="5"
                        style="-fx-background-color: white;
                               -fx-border-color: #D1D5DB;
                               -fx-border-radius: 6;
@@ -127,12 +166,16 @@
 
             </GridPane>
 
+
+            <!-- BOTONES -->
+
             <HBox spacing="10"
                   alignment="CENTER_RIGHT">
 
                 <Button fx:id="btnCancelar"
                         text="Cancelar"
                         prefWidth="100"
+                        onAction="#cancelar"
                         style="-fx-background-color: white;
                                -fx-text-fill: #1F2937;
                                -fx-font-weight: bold;
@@ -143,6 +186,7 @@
                 <Button fx:id="btnGuardar"
                         text="💾 Guardar"
                         prefWidth="100"
+                        onAction="#guardarPago"
                         style="-fx-background-color: #1F2937;
                                -fx-text-fill: white;
                                -fx-font-weight: bold;
@@ -151,24 +195,31 @@
             </HBox>
 
         </VBox>
+
     </center>
 
+
     <bottom>
+
         <HBox alignment="BOTTOM_RIGHT">
+
             <padding>
-                <Insets bottom="10" right="10"/>
+                <Insets bottom="10"
+                        right="10"/>
             </padding>
 
             <Button fx:id="btnVolver"
                     prefHeight="30"
                     prefWidth="80"
                     text="← Volver"
+                    onAction="#volverPagos"
                     style="-fx-background-color: #6B7280;
                            -fx-text-fill: white;
                            -fx-font-weight: bold;
                            -fx-background-radius: 6;"/>
+
         </HBox>
+
     </bottom>
 
 </BorderPane>
-

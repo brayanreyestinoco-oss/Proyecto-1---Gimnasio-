@@ -102,10 +102,11 @@
                     prefHeight="30"
                     prefWidth="80"
                     text="← Volver"
+                    onAction="#volverMenu"
                     style="-fx-background-color: #6B7280;
-                           -fx-text-fill: white;
-                           -fx-font-weight: bold;
-                           -fx-background-radius: 6;"/>
+               -fx-text-fill: white;
+               -fx-font-weight: bold;
+               -fx-background-radius: 6;"/>
         </HBox>
     </bottom>
 
