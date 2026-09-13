@@ -1,23 +1,28 @@
-package modelo.socios;
+package cr.ac.una.est.controlmembresiasgimnasio.modelo.socios;
+import java.time.LocalDate;
 
 public class Socio extends Persona {
 
     private int idSocio;
+    private String cedula;
     private String contactoEmergencia;
     private String telefonoEmergencia;
     private String condicionesMedicas;
+    private LocalDate expiraMembrecia;
 
 
-    public Socio(int idSocio, String nombre, String telefono, String correo,
+    public Socio(String cedula, String nombre, String telefono, String correo,
                  String contactoEmergencia, String telefonoEmergencia,
                  String condicionesMedicas) {
 
         super(nombre, telefono, correo);
 
-        this.idSocio = idSocio;
+        this.idSocio = 0;
+        this.cedula = cedula;
         this.contactoEmergencia = contactoEmergencia;
         this.telefonoEmergencia = telefonoEmergencia;
         this.condicionesMedicas = condicionesMedicas;
+        this.expiraMembrecia = null;
     }
 
 
@@ -28,6 +33,13 @@ public class Socio extends Persona {
 
     public void setIdSocio(int idSocio) {
         this.idSocio = idSocio;
+    }
+    public String getCedula() {
+        return cedula;
+    }
+
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
     }
 
     public String getContactoEmergencia() {
@@ -56,5 +68,19 @@ public class Socio extends Persona {
 
     public void setCondicionesMedicas(String condicionesMedicas) {
         this.condicionesMedicas = condicionesMedicas;
+    }
+
+
+    public LocalDate getExpiraMembrecia() {
+        return expiraMembrecia;
+    }
+
+
+    public void setExpiraMembrecia(LocalDate expiraMembrecia) {
+        this.expiraMembrecia = expiraMembrecia;
+    }
+
+    public String getNombreSocio() {
+        return getNombre();
     }
 }
