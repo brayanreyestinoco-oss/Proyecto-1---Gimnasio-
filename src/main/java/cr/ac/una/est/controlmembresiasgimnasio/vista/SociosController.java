@@ -372,7 +372,7 @@ public class SociosController {
                 new FXMLLoader(
                         HelloApplication.class
                                 .getResource(
-                                        "MenuPrincipal.fxml"
+                                        "MenuPrincipalView.fxml"
                                 )
                 );
 

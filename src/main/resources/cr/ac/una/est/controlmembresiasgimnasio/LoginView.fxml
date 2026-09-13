@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="400" prefWidth="600" style="-fx-background-color: #F4F6F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="400" prefWidth="600" style="-fx-background-color: #F4F6F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.LoginController">
 
     <center>
         <VBox alignment="CENTER" prefHeight="400" prefWidth="600" spacing="15">
@@ -36,7 +36,7 @@
             <Label fx:id="lblMensaje" style="-fx-text-fill: #DC2626;                           -fx-font-size: 12px;" text="" />
 
             <!-- Botón -->
-            <Button fx:id="btnIngresar" prefHeight="40" prefWidth="350" style="-fx-background-color: #1F2937;                            -fx-text-fill: white;                            -fx-font-weight: bold;                            -fx-background-radius: 6;" text="🔐 Ingresar" />
+            <Button fx:id="btnIngresar" onAction="#ingresar" prefHeight="40" prefWidth="350" style="-fx-background-color: #1F2937;                            -fx-text-fill: white;                            -fx-font-weight: bold;                            -fx-background-radius: 6;" text="🔐 Ingresar" />
 
         </VBox>
     </center>

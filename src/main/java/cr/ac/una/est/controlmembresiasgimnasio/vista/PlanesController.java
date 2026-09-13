@@ -175,7 +175,7 @@ public class PlanesController {
                     new FXMLLoader(
                             HelloApplication.class
                                     .getResource(
-                                            "MenuPrincipal.fxml"
+                                            "MenuPrincipalView.fxml"
                                     )
                     );
 

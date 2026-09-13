@@ -14,7 +14,7 @@ import java.io.IOException;
 public class HelloApplication extends Application {
 
     /**
-     * Inicia la aplicación mostrando el menú principal.
+     * Inicia la aplicación mostrando la pantalla de inicio de sesión.
      *
      * @param stage ventana principal
      * @throws IOException si ocurre un error al cargar el FXML
@@ -25,7 +25,7 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader =
                 new FXMLLoader(
                         HelloApplication.class.getResource(
-                                "MenuPrincipal.fxml"
+                                "LoginView.fxml"
                         )
                 );
 

@@ -280,7 +280,7 @@ public class PagosController {
                     new FXMLLoader(
                             HelloApplication.class
                                     .getResource(
-                                            "MenuPrincipal.fxml"
+                                            "MenuPrincipalView.fxml"
                                     )
                     );
 

@@ -4,10 +4,12 @@ import cr.ac.una.est.controlmembresiasgimnasio.DatosAplicacion;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.service.ControlAcceso;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -115,6 +117,34 @@ public class MenuPrincipalController {
 
         stage.setScene(scene);
     }
+
+    /**
+     * Muestra un aviso de que la sección de reportes
+     * todavía no ha sido implementada.
+     */
+    @FXML
+    private void abrirReportes() {
+
+        Alert alerta =
+                new Alert(
+                        Alert.AlertType.INFORMATION,
+                        "La sección de Reportes aún no está disponible."
+                );
+
+        alerta.setHeaderText(null);
+
+        alerta.showAndWait();
+    }
+
+    /**
+     * Cierra la aplicación.
+     */
+    @FXML
+    private void salir() {
+
+        Platform.exit();
+    }
+
     /**
      * Carga una nueva pantalla en la ventana actual.
      *

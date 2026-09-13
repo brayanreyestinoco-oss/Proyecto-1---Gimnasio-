@@ -233,7 +233,7 @@ public class ControladorAcceso {
                     new FXMLLoader(
                             HelloApplication.class
                                     .getResource(
-                                            "MenuPrincipal.fxml"
+                                            "MenuPrincipalView.fxml"
                                     )
                     );
 
