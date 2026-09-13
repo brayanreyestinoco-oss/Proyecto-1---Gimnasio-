@@ -1,8 +1,7 @@
 package cr.ac.una.est.controlmembresiasgimnasio.service;
-
-import cr.ac.una.est.controlmembresiasgimnasio.modelo.Membresia;
-import cr.ac.una.est.controlmembresiasgimnasio.modelo.Pago;
-import cr.ac.una.est.controlmembresiasgimnasio.modelo.Socio;
+import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
+import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Pago;
+import cr.ac.una.est.controlmembresiasgimnasio.modelo.socios.Socio;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.planes.Plan;
 
 import java.time.LocalDate;

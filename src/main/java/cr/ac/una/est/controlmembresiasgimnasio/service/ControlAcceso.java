@@ -1,7 +1,7 @@
 package cr.ac.una.est.controlmembresiasgimnasio.service;
 
-import cr.ac.una.est.controlmembresiasgimnasio.modelo.Membresia;
-import cr.ac.una.est.controlmembresiasgimnasio.modelo.Pago;
+import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
+import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Pago;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,12 +11,7 @@ public class ControlAcceso {
     private List<Membresia> membresias;
     private List<Pago> pagos;
 
-    /**
-     * Crea el servicio encargado de verificar el acceso al gimnasio.
-     *
-     * @param membresias lista de membresías registradas en el sistema
-     * @param pagos lista de pagos registrados en el sistema
-     */
+
     public ControlAcceso(List<Membresia> membresias, List<Pago> pagos) {
         this.membresias = membresias;
         this.pagos = pagos;

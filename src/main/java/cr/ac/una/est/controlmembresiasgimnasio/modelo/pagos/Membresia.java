@@ -1,6 +1,7 @@
-package cr.ac.una.est.controlmembresiasgimnasio.modelo;
+package cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos;
 
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.planes.Plan;
+import cr.ac.una.est.controlmembresiasgimnasio.modelo.socios.Socio;
 
 import java.time.LocalDate;
 
