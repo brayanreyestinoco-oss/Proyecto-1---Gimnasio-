@@ -365,8 +365,8 @@ public class SociosController {
             stage.setScene(
                     new Scene(
                             root,
-                            600,
-                            400
+                            850,
+                            500
                     )
             );
 
@@ -413,8 +413,8 @@ public class SociosController {
             stage.setScene(
                     new Scene(
                             root,
-                            600,
-                            400
+                            850,
+                            500
                     )
             );
 

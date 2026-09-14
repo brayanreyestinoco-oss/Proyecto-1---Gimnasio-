@@ -5,12 +5,14 @@
 <?import javafx.scene.layout.*?>
 
 <!-- Contenedor principal de la pantalla de reportes. -->
-<BorderPane prefHeight="400" prefWidth="793.0" style="-fx-background-color: #F4F6F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.ReportesController">
+
+<BorderPane maxHeight="550.0" maxWidth="1100.0" minHeight="550.0" minWidth="1100.0" prefHeight="550.0" prefWidth="1100.0" style="-fx-background-color: #F4F6F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.ReportesController">
 
     <!-- ENCABEZADO -->
     <!-- Contiene el título y los botones de acciones del reporte. -->
     <top>
-        <VBox spacing="10" style="-fx-background-color: #1F2937;">
+
+        <VBox prefWidth="1100.0" spacing="10" style="-fx-background-color: #1F2937;">
 
             <!-- Espaciado interno del encabezado. -->
             <padding>
@@ -18,63 +20,72 @@
             </padding>
 
             <!-- Título principal de la pantalla de reportes. -->
-            <Label style="-fx-font-size: 20px;                           -fx-font-weight: bold;                           -fx-text-fill: white;" text="Reporte de Membresías" />
+            <Label style="-fx-font-size: 20px;                        -fx-font-weight: bold;                        -fx-text-fill: white;" text="Reporte de Membresías" />
 
             <!-- Contenedor horizontal para los botones del reporte. -->
             <HBox spacing="10">
 
                 <!-- Botón utilizado para actualizar los datos de la tabla. -->
-                <Button fx:id="btnActualizar" onAction="#cargarReporte" style="-fx-background-color: white;                                -fx-text-fill: #1F2937;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-color: #D1D5DB;                                -fx-border-radius: 6;" text="Actualizar" />
+                <Button fx:id="btnActualizar" onAction="#cargarReporte" style="-fx-background-color: white;                            -fx-text-fill: #1F2937;                            -fx-font-weight: bold;                            -fx-background-radius: 6;                            -fx-border-color: #D1D5DB;                            -fx-border-radius: 6;" text="Actualizar" />
 
                 <!-- Botón utilizado para exportar el reporte a un archivo CSV. -->
-                <Button fx:id="btnExportarCsv" onAction="#exportarCsv" style="-fx-background-color: #2563EB;                                -fx-text-fill: white;                                -fx-font-weight: bold;                                -fx-background-radius: 6;" text="Exportar a CSV" />
+                <Button fx:id="btnExportarCsv" onAction="#exportarCsv" style="-fx-background-color: #2563EB;                            -fx-text-fill: white;                            -fx-font-weight: bold;                            -fx-background-radius: 6;" text="Exportar a CSV" />
 
             </HBox>
 
         </VBox>
+
     </top>
+
 
     <!-- CONTENIDO -->
     <!-- Contiene la tabla con la información de las membresías. -->
     <center>
+
         <!-- Tabla donde se muestran los datos del reporte. -->
-        <TableView fx:id="tablaReporte" prefHeight="268.0" prefWidth="799.0" style="-fx-background-color: white;                           -fx-border-color: #D1D5DB;                           -fx-border-radius: 6;                           -fx-background-radius: 6;">
+        <TableView fx:id="tablaReporte" minWidth="1050.0" prefHeight="400.0" prefWidth="1050.0" style="-fx-background-color: white;                         -fx-border-color: #D1D5DB;                         -fx-border-radius: 6;                         -fx-background-radius: 6;">
 
             <!-- Define las columnas que forman parte del reporte. -->
             <columns>
 
                 <!-- Columna que muestra el nombre del socio. -->
-                <TableColumn fx:id="colSocio" prefWidth="130" text="Socio" />
+                <TableColumn fx:id="colSocio" prefWidth="145.0" text="Socio" />
 
                 <!-- Columna que muestra la cédula del socio. -->
-                <TableColumn fx:id="colCedula" prefWidth="90" text="Cédula" />
+                <TableColumn fx:id="colCedula" prefWidth="105.0" text="Cédula" />
 
                 <!-- Columna que muestra el plan de la membresía. -->
-                <TableColumn fx:id="colPlan" prefWidth="90" text="Plan" />
+                <TableColumn fx:id="colPlan" prefWidth="100.0" text="Plan" />
 
                 <!-- Columna que muestra la fecha de inicio de la membresía. -->
-                <TableColumn fx:id="colFechaInicio" prefWidth="90" text="Inicio" />
+                <TableColumn fx:id="colFechaInicio" prefWidth="110.0" text="Inicio" />
 
                 <!-- Columna que muestra la fecha de vencimiento de la membresía. -->
-                <TableColumn fx:id="colFechaVencimiento" prefWidth="100" text="Vencimiento" />
+                <TableColumn fx:id="colFechaVencimiento" prefWidth="120.0" text="Vencimiento" />
 
                 <!-- Columna que muestra el estado de la membresía. -->
-                <TableColumn fx:id="colEstado" prefWidth="80" text="Estado" />
+                <TableColumn fx:id="colEstado" prefWidth="90.0" text="Estado" />
 
                 <!-- Columna que muestra si existe renovación automática. -->
-                <TableColumn fx:id="colRenovacionAutomatica" prefWidth="90" text="Renov. Auto." />
+                <TableColumn fx:id="colRenovacionAutomatica" prefWidth="105.0" text="Renov. Auto." />
 
                 <!-- Columna que muestra el costo de renovación. -->
-                <TableColumn fx:id="colCostoRenovacion" prefWidth="110" text="Costo Renovación" />
+                <TableColumn fx:id="colCostoRenovacion" prefWidth="135.0" text="Costo Renovación" />
+
+                <!-- Columna que muestra el método utilizado para realizar el pago. -->
+                <TableColumn fx:id="colMetodoPago" prefWidth="188.0" text="Método de Pago" />
 
             </columns>
 
         </TableView>
+
     </center>
+
 
     <!-- BOTÓN VOLVER -->
     <!-- Contiene el botón para regresar al menú principal. -->
     <bottom>
+
         <!-- Contenedor que posiciona el botón en la parte inferior derecha. -->
         <HBox alignment="BOTTOM_RIGHT">
 
@@ -84,8 +95,10 @@
             </padding>
 
             <!-- Botón que regresa al menú principal. -->
-            <Button fx:id="btnVolver" onAction="#volverMenu" prefHeight="30" prefWidth="80" style="-fx-background-color: #6B7280;                -fx-text-fill: white;                -fx-font-weight: bold;                -fx-background-radius: 6;" text="← Volver" />
+            <Button fx:id="btnVolver" onAction="#volverMenu" prefHeight="30" prefWidth="80" style="-fx-background-color: #6B7280;                         -fx-text-fill: white;                         -fx-font-weight: bold;                         -fx-background-radius: 6;" text="← Volver" />
+
         </HBox>
+
     </bottom>
 
 </BorderPane>

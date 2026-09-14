@@ -94,29 +94,8 @@ public class ControladorAcceso {
             return;
         }
 
-        // Variable que almacenará el identificador numérico del socio.
-        int idSocio;
-
-        try {
-
-            // Convierte el texto ingresado a un número entero.
-            idSocio =
-                    Integer.parseInt(
-                            textoNumero
-                    );
-
-        } catch (NumberFormatException e) {
-
-            // Limpia la información si el dato ingresado no es válido.
-            limpiarInformacion();
-
-            // Muestra un mensaje indicando que debe ingresar un número válido.
-            lblResultado.setText(
-                    "Ingrese un número cedula de socio válido."
-            );
-
-            return;
-        }
+        // Guarda la cédula ingresada por el usuario.
+        String cedula = textoNumero;
 
         // Verifica que el servicio de control de acceso haya sido asignado.
         if (controlAcceso == null) {
@@ -137,8 +116,8 @@ public class ControladorAcceso {
          * al número de socio.
          */
         Membresia membresia =
-                controlAcceso.buscarMembresia(
-                        idSocio
+                controlAcceso.buscarMembresiaPorCedula(
+                        cedula
                 );
 
         /*
@@ -165,8 +144,8 @@ public class ControladorAcceso {
 
         // Solicita al servicio que determine si el socio puede ingresar.
         boolean accesoPermitido =
-                controlAcceso.verificarAcceso(
-                        idSocio
+                controlAcceso.verificarAccesoPorCedula(
+                        cedula
                 );
 
         // Comprueba si el acceso fue autorizado.

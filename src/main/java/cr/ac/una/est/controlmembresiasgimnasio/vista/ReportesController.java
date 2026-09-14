@@ -4,6 +4,7 @@ import cr.ac.una.est.controlmembresiasgimnasio.DatosAplicacion;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.interfaces.IRenovable;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
+import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Pago;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.planes.Plan;
 import cr.ac.una.est.controlmembresiasgimnasio.service.PagoService;
 
@@ -69,6 +70,10 @@ public class ReportesController {
     @FXML
     private TableColumn<ReporteFila, String> colCostoRenovacion;
 
+    // Columna que muestra el método utilizado para realizar el pago.
+    @FXML
+    private TableColumn<ReporteFila, String> colMetodoPago;
+
     // Formato utilizado para mostrar las fechas en el reporte.
     private static final DateTimeFormatter FORMATO_FECHA =
             DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -124,6 +129,11 @@ public class ReportesController {
         // Indica que la columna del costo utilizará el atributo correspondiente.
         colCostoRenovacion.setCellValueFactory(
                 new PropertyValueFactory<>("costoRenovacion")
+        );
+
+        // Indica que la columna del método de pago utilizará el atributo correspondiente.
+        colMetodoPago.setCellValueFactory(
+                new PropertyValueFactory<>("metodoPago")
         );
 
         // Carga los datos de las membresías en la tabla.
@@ -213,7 +223,7 @@ public class ReportesController {
             // Escribe la primera fila del CSV con los nombres de las columnas.
             escritor.println(
                     "Socio,Cedula,Plan,Fecha Inicio,Fecha Vencimiento,"
-                            + "Estado,Renovacion Automatica,Costo Renovacion"
+                            + "Estado,Renovacion Automatica,Costo Renovacion,Metodo Pago"
             );
 
             // Recorre todas las filas que actualmente aparecen en la tabla.
@@ -228,7 +238,8 @@ public class ReportesController {
                                 + escaparCsv(fila.getFechaVencimiento()) + ","
                                 + escaparCsv(fila.getEstado()) + ","
                                 + escaparCsv(fila.getRenovacionAutomatica()) + ","
-                                + escaparCsv(fila.getCostoRenovacion())
+                                + escaparCsv(fila.getCostoRenovacion()) + ","
+                                + escaparCsv(fila.getMetodoPago())
                 );
             }
 
@@ -315,6 +326,21 @@ public class ReportesController {
                     );
         }
 
+        // Variable donde se almacenará el método del último pago.
+        String metodoPago = "-";
+
+        // Busca el pago asociado a la membresía.
+        for (Pago pago : pagoService.getPagos()) {
+
+            // Comprueba que el pago pertenezca a la membresía actual.
+            if (pago.getMembresia() == membresia) {
+
+                // Guarda el método de pago utilizado.
+                metodoPago =
+                        pago.getMetodoPago();
+            }
+        }
+
         // Crea y devuelve una fila con toda la información de la membresía.
         return new ReporteFila(
                 membresia.getSocio().getNombre(),
@@ -324,7 +350,8 @@ public class ReportesController {
                 fechaVencimiento,
                 estado,
                 renovacionAutomatica,
-                costoRenovacion
+                costoRenovacion,
+                metodoPago
         );
     }
 
@@ -468,6 +495,9 @@ public class ReportesController {
         // Costo de la renovación del plan.
         private final String costoRenovacion;
 
+        // Método utilizado para realizar el pago.
+        private final String metodoPago;
+
         /**
          * Crea una fila para la tabla.
          */
@@ -479,7 +509,8 @@ public class ReportesController {
                 String fechaVencimiento,
                 String estado,
                 String renovacionAutomatica,
-                String costoRenovacion) {
+                String costoRenovacion,
+                String metodoPago) {
 
             // Guarda el nombre del socio.
             this.socio = socio;
@@ -504,6 +535,9 @@ public class ReportesController {
 
             // Guarda el costo de renovación.
             this.costoRenovacion = costoRenovacion;
+
+            // Guarda el método de pago.
+            this.metodoPago = metodoPago;
         }
 
         // Obtiene el nombre del socio.
@@ -560,6 +594,13 @@ public class ReportesController {
 
             // Devuelve el costo de renovación almacenado.
             return costoRenovacion;
+        }
+
+        // Obtiene el método de pago.
+        public String getMetodoPago() {
+
+            // Devuelve el método de pago almacenado.
+            return metodoPago;
         }
     }
 }

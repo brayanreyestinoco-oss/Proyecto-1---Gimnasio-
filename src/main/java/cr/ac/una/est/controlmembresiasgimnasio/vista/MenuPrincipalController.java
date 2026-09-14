@@ -175,12 +175,12 @@ public class MenuPrincipalController {
          * que las demás, así que necesita una ventana
          * más ancha para que no se vea recortada.
          */
-        // Crea una escena con un ancho mayor para mostrar las columnas.
+        // Crea una escena con el tamaño adecuado para la pantalla de reportes.
         Scene scene =
                 new Scene(
                         root,
-                        850,
-                        460
+                        1100,
+                        550
                 );
 
         // Establece la escena de reportes en la ventana actual.

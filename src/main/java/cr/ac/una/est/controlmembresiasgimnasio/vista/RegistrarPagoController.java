@@ -304,7 +304,7 @@ public class RegistrarPagoController {
         LocalDate fechaPago =
                 dpFechaInicio.getValue();
 
-        // Obtiene el método de pago seleccionado.
+        // Obtiene el metodo de pago seleccionado.
         String metodoPago =
                 cmbMetodoPago.getValue();
 
@@ -317,8 +317,8 @@ public class RegistrarPagoController {
             // Busca una membresía asociada al socio.
             Membresia membresia =
                     pagoService
-                            .buscarMembresiaPorSocio(
-                                    socio.getIdSocio()
+                            .buscarMembresiaPorCedula(
+                                    txtCedula.getText().trim()
                             );
 
             /*
