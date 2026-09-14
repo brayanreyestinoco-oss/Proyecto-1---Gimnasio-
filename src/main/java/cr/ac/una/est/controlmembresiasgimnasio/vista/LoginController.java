@@ -2,6 +2,7 @@ package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -114,5 +115,13 @@ public class LoginController {
                     "No se pudo abrir el menú principal."
             );
         }
+    }
+    /**
+     * Cierra la aplicación por completo.
+     */
+    @FXML
+    private void salir() {
+
+        Platform.exit();
     }
 }

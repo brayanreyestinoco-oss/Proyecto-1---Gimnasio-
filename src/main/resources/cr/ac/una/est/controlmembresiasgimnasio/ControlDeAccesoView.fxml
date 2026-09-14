@@ -14,8 +14,9 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.ControladorAcceso"
             prefWidth="600"
-            prefHeight="400"
+            prefHeight="520"
             style="-fx-background-color: #F4F6F8;">
+
 
     <!-- ENCABEZADO -->
 
@@ -44,7 +45,7 @@
 
             <HBox spacing="10">
 
-                <TextField fx:id="txtNumeroSocio"
+                <TextField fx:id="txtCedula"
                            promptText="Número del socio"
                            prefWidth="300"
                            style="-fx-background-color: white;
@@ -149,7 +150,7 @@
                           -fx-text-fill: #4B5563;"/>
 
             <Label fx:id="lblResultado"
-                   text="Ingrese el número del socio"
+                   text="Ingrese el número de cedula del socio"
                    wrapText="true"
                    alignment="CENTER"
                    prefWidth="450"

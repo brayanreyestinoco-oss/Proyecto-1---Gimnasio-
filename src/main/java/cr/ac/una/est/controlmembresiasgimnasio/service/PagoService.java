@@ -286,4 +286,28 @@ public class PagoService {
         return membresia != null
                 && membresiaEstaVigente(membresia);
     }
+    /**
+     * Busca una membresía utilizando la cédula del socio.
+     *
+     * @param cedula cédula del socio que se desea buscar
+     * @return membresía encontrada o null si no existe
+     */
+    public Membresia buscarMembresiaPorCedula(String cedula) {
+
+        if (cedula == null) {
+            return null;
+        }
+
+        for (Membresia membresia : membresias) {
+
+            if (membresia.getSocio()
+                    .getCedula()
+                    .equalsIgnoreCase(cedula)) {
+
+                return membresia;
+            }
+        }
+
+        return null;
+    }
 }

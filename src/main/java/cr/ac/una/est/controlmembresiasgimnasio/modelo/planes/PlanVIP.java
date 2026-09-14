@@ -13,7 +13,7 @@ public class PlanVIP extends Plan implements IRenovable {
      * Crea un plan VIP con precio base mensual más el recargo VIP.
      */
     public PlanVIP() {
-        super("VIP", 15000);
+        super("VIP Mensual", 15000);
     }
 
     /**

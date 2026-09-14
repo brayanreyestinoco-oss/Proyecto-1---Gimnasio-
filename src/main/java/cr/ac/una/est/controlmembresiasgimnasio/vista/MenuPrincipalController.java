@@ -79,6 +79,12 @@ public class MenuPrincipalController {
      *
      * @throws IOException si ocurre un error al cargar el FXML
      */
+    /**
+     * Abre la pantalla utilizada para simular
+     * el acceso de un socio al gimnasio.
+     *
+     * @throws IOException si ocurre un error al cargar el FXML
+     */
     @FXML
     private void abrirAcceso() throws IOException {
 
@@ -107,14 +113,22 @@ public class MenuPrincipalController {
         Stage stage =
                 obtenerStage();
 
+        /*
+         * Esta pantalla tiene más contenido vertical
+         * que las demás (encabezado + información de la
+         * membresía + resultado), así que necesita una
+         * ventana más alta para que no se vea recortada.
+         */
         Scene scene =
                 new Scene(
                         root,
                         600,
-                        400
+                        520
                 );
 
         stage.setScene(scene);
+
+        stage.centerOnScreen();
     }
 
     /**
@@ -132,16 +146,46 @@ public class MenuPrincipalController {
                         )
                 );
 
-        cambiarVentana(loader);
+        Parent root =
+                loader.load();
+
+        Stage stage =
+                obtenerStage();
+
+        /*
+         * La pantalla de Reportes tiene más columnas
+         * que las demás, así que necesita una ventana
+         * más ancha para que no se vea recortada.
+         */
+        Scene scene =
+                new Scene(
+                        root,
+                        850,
+                        460
+                );
+
+        stage.setScene(scene);
+
+        stage.centerOnScreen();
     }
 
     /**
-     * Cierra la aplicación.
+     * Cierra la sesión actual y regresa
+     * a la pantalla de inicio de sesión.
+     *
+     * @throws IOException si ocurre un error al cargar el login
      */
     @FXML
-    private void salir() {
+    private void cerrarSesion() throws IOException {
 
-        Platform.exit();
+        FXMLLoader loader =
+                new FXMLLoader(
+                        HelloApplication.class.getResource(
+                                "LoginView.fxml"
+                        )
+                );
+
+        cambiarVentana(loader);
     }
 
     /**

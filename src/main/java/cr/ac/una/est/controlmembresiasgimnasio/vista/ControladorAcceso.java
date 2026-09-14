@@ -21,7 +21,7 @@ import java.io.IOException;
 public class ControladorAcceso {
 
     @FXML
-    private TextField txtNumeroSocio;
+    private TextField txtCedula;
 
     @FXML
     private Label lblNombre;
@@ -67,7 +67,7 @@ public class ControladorAcceso {
     private void verificarAcceso() {
 
         String textoNumero =
-                txtNumeroSocio
+                txtCedula
                         .getText()
                         .trim();
 
@@ -76,7 +76,7 @@ public class ControladorAcceso {
             limpiarInformacion();
 
             lblResultado.setText(
-                    "Ingrese un número de socio."
+                    "Ingrese el numero de cedula del socio."
             );
 
             return;
@@ -96,7 +96,7 @@ public class ControladorAcceso {
             limpiarInformacion();
 
             lblResultado.setText(
-                    "Ingrese un número de socio válido."
+                    "Ingrese un número cedula de socio válido."
             );
 
             return;
@@ -217,7 +217,7 @@ public class ControladorAcceso {
         );
 
         lblResultado.setText(
-                "Ingrese el número del socio"
+                "Ingrese el número de cedula del socio"
         );
     }
 
@@ -242,7 +242,7 @@ public class ControladorAcceso {
 
             Stage stage =
                     (Stage)
-                            txtNumeroSocio
+                            txtCedula
                                     .getScene()
                                     .getWindow();
 

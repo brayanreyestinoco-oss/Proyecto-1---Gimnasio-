@@ -59,4 +59,34 @@ public class ControlAcceso {
     public void setPagoService(PagoService pagoService) {
         this.pagoService = pagoService;
     }
+    /**
+     * Busca la membresía asociada a un socio
+     * utilizando su número de cédula.
+     *
+     * @param cedula cédula del socio
+     * @return la membresía encontrada o null si no existe
+     */
+    public Membresia buscarMembresiaPorCedula(String cedula) {
+        return pagoService.buscarMembresiaPorCedula(cedula);
+    }
+
+    /**
+     * Verifica si un socio puede ingresar al gimnasio
+     * a partir de su número de cédula. El acceso se
+     * permite cuando el socio posee una membresía vigente.
+     *
+     * @param cedula cédula del socio
+     * @return true si puede ingresar, false si el acceso es denegado
+     */
+    public boolean verificarAccesoPorCedula(String cedula) {
+
+        Membresia membresia =
+                buscarMembresiaPorCedula(cedula);
+
+        if (membresia == null) {
+            return false;
+        }
+
+        return pagoService.membresiaEstaVigente(membresia);
+    }
 }

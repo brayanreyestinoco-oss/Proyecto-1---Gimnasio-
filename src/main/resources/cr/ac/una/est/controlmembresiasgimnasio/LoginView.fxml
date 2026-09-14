@@ -41,12 +41,14 @@
         </VBox>
     </center>
 
-    <!-- Botón Volver -->
+    <!-- Botón Salir -->
     <bottom>
         <HBox alignment="BOTTOM_RIGHT" prefHeight="45" prefWidth="461.0">
             <padding>
                 <Insets bottom="10" right="10" />
             </padding>
+
+            <Button fx:id="btnSalir" onAction="#salir" prefHeight="30" prefWidth="90" style="-fx-background-color: #DC2626;                           -fx-text-fill: white;                           -fx-font-weight: bold;                           -fx-background-radius: 6;" text="🚪 Salir" />
         </HBox>
     </bottom>
 

@@ -127,17 +127,17 @@
                                            -fx-border-color: #D1D5DB;"
                                     text="📖  Reportes"/>
 
-                            <!-- SALIR -->
+                            <!-- CERRAR SESIÓN -->
                             <Button maxWidth="Infinity"
                                     mnemonicParsing="false"
                                     prefHeight="42.0"
-                                    onAction="#salir"
+                                    onAction="#cerrarSesion"
                                     style="-fx-background-color: #DC2626;
                                            -fx-text-fill: white;
                                            -fx-font-size: 15px;
                                            -fx-font-weight: bold;
                                            -fx-background-radius: 8px;"
-                                    text="🚪  SALIR"/>
+                                    text="🔒  Cerrar Sesión"/>
 
                         </VBox>
                     </content>
