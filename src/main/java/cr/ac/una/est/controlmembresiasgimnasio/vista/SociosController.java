@@ -201,12 +201,14 @@ public class SociosController {
 
         // Muestra el nombre del contacto de emergencia.
         lblContactoEmergencia.setText(
-                socio.getContactoEmergencia()
+                "Contacto de emergencia: "
+                        + socio.getContactoEmergencia()
         );
 
         // Muestra las condiciones médicas del socio.
         lblCondicionesMedicas.setText(
-                socio.getCondicionesMedicas()
+                "Condiciones médicas: "
+                        + socio.getCondicionesMedicas()
         );
     }
 
@@ -217,12 +219,12 @@ public class SociosController {
 
         // Coloca un guion cuando no hay contacto de emergencia seleccionado.
         lblContactoEmergencia.setText(
-                "-"
+                "Contacto de emergencia: -"
         );
 
         // Coloca un guion cuando no hay condiciones médicas seleccionadas.
         lblCondicionesMedicas.setText(
-                "-"
+                "Condiciones médicas: -"
         );
     }
 
