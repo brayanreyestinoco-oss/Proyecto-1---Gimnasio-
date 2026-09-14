@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- Importa Insets para configurar los espacios internos de los contenedores. -->
 <?import javafx.geometry.Insets?>
+<!-- Importa Button para crear los botones de la interfaz. -->
 <?import javafx.scene.control.Button?>
+<!-- Importa Label para mostrar textos informativos. -->
 <?import javafx.scene.control.Label?>
+<!-- Importa Separator para crear una línea divisoria entre secciones. -->
 <?import javafx.scene.control.Separator?>
+<!-- Importa TextField para permitir el ingreso de la cédula del socio. -->
 <?import javafx.scene.control.TextField?>
+<!-- Importa BorderPane para dividir la interfaz en diferentes regiones. -->
 <?import javafx.scene.layout.BorderPane?>
+<!-- Importa GridPane para organizar la información en filas y columnas. -->
 <?import javafx.scene.layout.GridPane?>
+<!-- Importa HBox para organizar elementos horizontalmente. -->
 <?import javafx.scene.layout.HBox?>
+<!-- Importa VBox para organizar elementos verticalmente. -->
 <?import javafx.scene.layout.VBox?>
 
+<!-- Contenedor principal de la pantalla de control de acceso. -->
+<!-- El controlador asociado se encarga de manejar la verificación de acceso. -->
 <BorderPane xmlns="http://javafx.com/javafx/17.0.12"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.ControladorAcceso"
@@ -20,11 +31,14 @@
 
     <!-- ENCABEZADO -->
 
+    <!-- Parte superior donde se encuentra el título, descripción y campo de búsqueda. -->
     <top>
 
+        <!-- Contenedor vertical utilizado para organizar los elementos del encabezado. -->
         <VBox spacing="10"
               style="-fx-background-color: #1F2937;">
 
+            <!-- Espaciado interno del encabezado. -->
             <padding>
 
                 <Insets top="15"
@@ -34,17 +48,21 @@
 
             </padding>
 
+            <!-- Título principal de la pantalla de control de acceso. -->
             <Label text="🚪 CONTROL DE ACCESO"
                    style="-fx-font-size: 20px;
                           -fx-font-weight: bold;
                           -fx-text-fill: white;"/>
 
+            <!-- Descripción de la función de esta pantalla. -->
             <Label text="Verificación de membresías del gimnasio"
                    style="-fx-font-size: 12px;
                           -fx-text-fill: #D1D5DB;"/>
 
+            <!-- Contenedor horizontal para el campo de cédula y el botón de verificación. -->
             <HBox spacing="10">
 
+                <!-- Campo donde se ingresa el número o cédula del socio. -->
                 <TextField fx:id="txtCedula"
                            promptText="Número del socio"
                            prefWidth="300"
@@ -54,6 +72,8 @@
                                   -fx-background-radius: 6;
                                   -fx-padding: 7px;"/>
 
+                <!-- Botón utilizado para verificar si el socio tiene acceso. -->
+                <!-- Ejecuta el método verificarAcceso del controlador. -->
                 <Button fx:id="btnVerificar"
                         text="🔎 Verificar acceso"
                         onAction="#verificarAcceso"
@@ -74,11 +94,14 @@
 
     <!-- INFORMACIÓN DEL SOCIO -->
 
+    <!-- Parte central donde se muestra la información de la membresía del socio. -->
     <center>
 
+        <!-- Contenedor vertical que organiza la información del socio y el resultado del acceso. -->
         <VBox spacing="12"
               alignment="TOP_CENTER">
 
+            <!-- Espaciado interno alrededor de la información. -->
             <padding>
 
                 <Insets top="20"
@@ -88,22 +111,26 @@
 
             </padding>
 
+            <!-- Título de la sección donde se muestra la información de la membresía. -->
             <Label text="Información de la membresía"
                    style="-fx-font-size: 17px;
                           -fx-font-weight: bold;
                           -fx-text-fill: #1F2937;"/>
 
+            <!-- Organiza los datos del socio en filas y columnas. -->
             <GridPane hgap="20"
                       vgap="12">
 
                 <!-- NOMBRE -->
 
+                <!-- Etiqueta que identifica el nombre del socio. -->
                 <Label text="Socio:"
                        GridPane.columnIndex="0"
                        GridPane.rowIndex="0"
                        style="-fx-font-weight: bold;
                               -fx-text-fill: #4B5563;"/>
 
+                <!-- Muestra el nombre del socio encontrado. -->
                 <Label fx:id="lblNombre"
                        text="-"
                        GridPane.columnIndex="1"
@@ -113,12 +140,14 @@
 
                 <!-- PLAN -->
 
+                <!-- Etiqueta que identifica el plan de membresía. -->
                 <Label text="Plan:"
                        GridPane.columnIndex="0"
                        GridPane.rowIndex="1"
                        style="-fx-font-weight: bold;
                               -fx-text-fill: #4B5563;"/>
 
+                <!-- Muestra el plan asociado al socio. -->
                 <Label fx:id="lblPlan"
                        text="-"
                        GridPane.columnIndex="1"
@@ -128,12 +157,14 @@
 
                 <!-- VENCIMIENTO -->
 
+                <!-- Etiqueta que identifica la fecha de vencimiento. -->
                 <Label text="Vencimiento:"
                        GridPane.columnIndex="0"
                        GridPane.rowIndex="2"
                        style="-fx-font-weight: bold;
                               -fx-text-fill: #4B5563;"/>
 
+                <!-- Muestra la fecha de vencimiento de la membresía. -->
                 <Label fx:id="lblVencimiento"
                        text="-"
                        GridPane.columnIndex="1"
@@ -142,13 +173,16 @@
 
             </GridPane>
 
+            <!-- Línea divisoria entre la información de la membresía y el resultado. -->
             <Separator prefWidth="450"/>
 
+            <!-- Etiqueta que identifica la sección donde se muestra el resultado del acceso. -->
             <Label text="Estado del acceso:"
                    style="-fx-font-size: 13px;
                           -fx-font-weight: bold;
                           -fx-text-fill: #4B5563;"/>
 
+            <!-- Muestra el resultado de la verificación de acceso del socio. -->
             <Label fx:id="lblResultado"
                    text="Ingrese el número de cedula del socio"
                    wrapText="true"
@@ -170,10 +204,13 @@
 
     <!-- VOLVER -->
 
+    <!-- Parte inferior de la pantalla donde se encuentra el botón para regresar al menú. -->
     <bottom>
 
+        <!-- Contenedor horizontal que coloca el botón en la esquina inferior derecha. -->
         <HBox alignment="BOTTOM_RIGHT">
 
+            <!-- Espaciado interno alrededor del botón. -->
             <padding>
 
                 <Insets bottom="10"
@@ -181,6 +218,8 @@
 
             </padding>
 
+            <!-- Botón utilizado para regresar al menú principal. -->
+            <!-- Ejecuta el metodo volvermenu del controlador. -->
             <Button fx:id="btnVolver"
                     text="← Volver"
                     onAction="#volverMenu"

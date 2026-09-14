@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- Importa las clases de geometría necesarias para configurar espacios y posiciones. -->
 <?import javafx.geometry.*?>
+<!-- Importa los controles utilizados en la interfaz, como botones, campos y tablas. -->
 <?import javafx.scene.control.*?>
+<!-- Importa los contenedores utilizados para organizar los elementos visuales. -->
 <?import javafx.scene.layout.*?>
 
+<!-- Contenedor principal de la pantalla de gestión de planes. -->
 <BorderPane prefHeight="400" prefWidth="700.0" style="-fx-background-color: #F4F6F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PlanesController">
 
+    <!-- ENCABEZADO -->
+    <!-- Parte superior de la pantalla que contiene el título y las opciones de búsqueda. -->
     <top>
+        <!-- Contenedor vertical utilizado para organizar el título y la barra de búsqueda. -->
         <VBox spacing="10" style="-fx-background-color: #1F2937;">
 
+            <!-- Espaciado interno del encabezado. -->
             <padding>
                 <Insets bottom="10" left="15" right="15" top="15" />
             </padding>
 
+            <!-- Título principal de la pantalla de gestión de planes. -->
             <Label style="-fx-font-size: 20px;                           -fx-font-weight: bold;                           -fx-text-fill: white;" text="Gestión de Planes" />
 
+            <!-- Contenedor horizontal que agrupa los elementos de búsqueda. -->
             <HBox spacing="10">
 
+                <!-- Campo de texto utilizado para buscar un plan por su nombre. -->
                 <TextField fx:id="txtBuscar" prefWidth="250" promptText="Nombre del plan (Mensual, Anual, VIP)" style="-fx-background-color: white;                                   -fx-border-color: #D1D5DB;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-padding: 7px;" />
 
+                <!-- Botón utilizado para ejecutar la búsqueda de un plan. -->
+                <!-- Ejecuta el método buscarPlan del controlador. -->
                 <Button fx:id="btnBuscar" onAction="#buscarPlan" style="-fx-background-color: white;                                -fx-text-fill: #1F2937;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-color: #D1D5DB;                                -fx-border-radius: 6;" text="Buscar" />
 
+                <!-- Botón utilizado para volver a mostrar todos los planes registrados. -->
+                <!-- Ejecuta el método mostrarTodos del controlador. -->
                 <Button fx:id="btnMostrarTodos" onAction="#mostrarTodos" style="-fx-background-color: white;                                -fx-text-fill: #1F2937;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-color: #D1D5DB;                                -fx-border-radius: 6;" text="Mostrar todos" />
 
             </HBox>
@@ -28,15 +43,22 @@
         </VBox>
     </top>
 
+    <!-- CONTENIDO PRINCIPAL -->
+    <!-- Contiene la tabla donde se muestran los planes disponibles. -->
     <center>
+        <!-- Tabla utilizada para mostrar la información de los planes. -->
         <TableView fx:id="tablaPlanes" style="-fx-background-color: white;                           -fx-border-color: #D1D5DB;                           -fx-border-radius: 6;                           -fx-background-radius: 6;">
 
+            <!-- Columnas que forman parte de la tabla de planes. -->
             <columns>
 
+                <!-- Columna donde se muestra el nombre del plan. -->
                 <TableColumn fx:id="colNombre" prefWidth="150" text="Plan" />
 
+                <!-- Columna donde se muestra el precio del plan. -->
                 <TableColumn fx:id="colPrecio" prefWidth="150" text="Precio" />
 
+                <!-- Columna donde se muestran los beneficios incluidos en el plan. -->
                 <TableColumn fx:id="colBeneficios" prefWidth="400.0" text="Beneficios" />
 
             </columns>
@@ -44,12 +66,19 @@
         </TableView>
     </center>
 
+    <!-- PARTE INFERIOR -->
+    <!-- Contiene el botón para regresar al menú principal. -->
     <bottom>
+        <!-- Contenedor horizontal que coloca el botón en la parte inferior derecha. -->
         <HBox alignment="BOTTOM_RIGHT">
+
+            <!-- Espaciado interno alrededor del botón. -->
             <padding>
                 <Insets bottom="10" right="10" />
             </padding>
 
+            <!-- Botón utilizado para regresar al menú principal. -->
+            <!-- Ejecuta el método volverMenu del controlador. -->
             <Button fx:id="btnVolver" onAction="#volverMenu" prefHeight="30" prefWidth="80" style="-fx-background-color: #6B7280;                -fx-text-fill: white;                -fx-font-weight: bold;                -fx-background-radius: 6;" text="← Volver" />
         </HBox>
     </bottom>

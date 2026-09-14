@@ -1,53 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- Importa las clases de geometría utilizadas para configurar espacios y posiciones. -->
 <?import javafx.geometry.*?>
+<!-- Importa los controles utilizados en la interfaz, como botones, etiquetas y campos de texto. -->
 <?import javafx.scene.control.*?>
+<!-- Importa los contenedores utilizados para organizar los elementos visuales. -->
 <?import javafx.scene.layout.*?>
 
+<!-- Contenedor principal de la pantalla de inicio de sesión. -->
+<!-- Utiliza LoginController para manejar las acciones de esta vista. -->
 <BorderPane prefHeight="400" prefWidth="600" style="-fx-background-color: #F4F6F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.LoginController">
 
+    <!-- CONTENIDO PRINCIPAL -->
+    <!-- Contiene los campos y controles utilizados para iniciar sesión. -->
     <center>
+        <!-- Contenedor vertical que organiza los elementos del formulario de inicio de sesión. -->
         <VBox alignment="CENTER" prefHeight="400" prefWidth="600" spacing="15">
 
+            <!-- Espaciado interno alrededor del formulario. -->
             <padding>
                 <Insets bottom="30" left="80" right="80" top="30" />
             </padding>
 
             <!-- Título -->
+            <!-- Título principal de la pantalla de inicio de sesión. -->
             <Label style="-fx-font-size: 28px;                           -fx-font-weight: bold;                           -fx-text-fill: #1F2937;" text="🏋GIMNASIO" />
 
             <!-- Usuario -->
+            <!-- Contenedor que agrupa la etiqueta y el campo para ingresar el usuario. -->
             <VBox prefWidth="350" spacing="5">
 
+                <!-- Etiqueta que identifica el campo de usuario. -->
                 <Label style="-fx-font-size: 13px;                               -fx-font-weight: bold;                               -fx-text-fill: #1F2937;" text="Usuario" />
 
+                <!-- Campo donde el usuario ingresa su nombre de usuario. -->
                 <TextField fx:id="txtUsuario" prefHeight="38" promptText="Ingrese su usuario" style="-fx-background-color: white;                                   -fx-border-color: #D1D5DB;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-padding: 8px;" />
             </VBox>
 
             <!-- Contraseña -->
+            <!-- Contenedor que agrupa la etiqueta y el campo de contraseña. -->
             <VBox prefWidth="350" spacing="5">
 
+                <!-- Etiqueta que identifica el campo de contraseña. -->
                 <Label style="-fx-font-size: 13px;                               -fx-font-weight: bold;                               -fx-text-fill: #1F2937;" text="Contraseña" />
 
+                <!-- Campo donde el usuario ingresa su contraseña. -->
+                <!-- PasswordField oculta los caracteres ingresados. -->
                 <PasswordField fx:id="txtContrasena" prefHeight="38" promptText="Ingrese su contraseña" style="-fx-background-color: white;                                       -fx-border-color: #D1D5DB;                                       -fx-border-radius: 6;                                       -fx-background-radius: 6;                                       -fx-padding: 8px;" />
             </VBox>
 
             <!-- Mensaje -->
+            <!-- Etiqueta utilizada para mostrar mensajes relacionados con el inicio de sesión. -->
             <Label fx:id="lblMensaje" style="-fx-text-fill: #DC2626;                           -fx-font-size: 12px;" text="" />
 
             <!-- Botón -->
+            <!-- Botón utilizado para validar las credenciales e iniciar sesión. -->
+            <!-- Ejecuta el método ingresar del controlador. -->
             <Button fx:id="btnIngresar" onAction="#ingresar" prefHeight="40" prefWidth="350" style="-fx-background-color: #1F2937;                            -fx-text-fill: white;                            -fx-font-weight: bold;                            -fx-background-radius: 6;" text="🔐 Ingresar" />
 
         </VBox>
     </center>
 
     <!-- Botón Salir -->
+    <!-- Parte inferior de la pantalla que contiene la opción para cerrar la aplicación. -->
     <bottom>
+        <!-- Contenedor horizontal que coloca el botón en la esquina inferior derecha. -->
         <HBox alignment="BOTTOM_RIGHT" prefHeight="45" prefWidth="461.0">
+
+            <!-- Espaciado interno alrededor del botón de salida. -->
             <padding>
                 <Insets bottom="10" right="10" />
             </padding>
 
+            <!-- Botón utilizado para salir de la aplicación. -->
+            <!-- Ejecuta el método salir del controlador. -->
             <Button fx:id="btnSalir" onAction="#salir" prefHeight="30" prefWidth="90" style="-fx-background-color: #DC2626;                           -fx-text-fill: white;                           -fx-font-weight: bold;                           -fx-background-radius: 6;" text="🚪 Salir" />
         </HBox>
     </bottom>

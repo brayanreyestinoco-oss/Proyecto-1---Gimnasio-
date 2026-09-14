@@ -4,6 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!-- Contenedor principal de la pantalla de socios. -->
 <VBox maxHeight="400.0"
       maxWidth="600.0"
       minHeight="400.0"
@@ -14,6 +15,7 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.SociosController">
 
+   <!-- Panel principal que organiza el encabezado, contenido y botón inferior. -->
    <BorderPane maxHeight="400.0"
                maxWidth="600.0"
                minHeight="400.0"
@@ -22,14 +24,17 @@
                prefWidth="600.0">
 
       <!-- ENCABEZADO -->
+      <!-- Contiene el título y subtítulo de la pantalla. -->
       <top>
 
+         <!-- Contenedor vertical utilizado para organizar los textos del encabezado. -->
          <VBox alignment="CENTER"
                prefHeight="74.0"
                prefWidth="600.0"
                spacing="4.0"
                style="-fx-background-color: #1F2937;">
 
+            <!-- Espaciado interno del encabezado. -->
             <padding>
                <Insets bottom="12.0"
                        left="15.0"
@@ -37,11 +42,13 @@
                        top="12.0" />
             </padding>
 
+            <!-- Título principal de la pantalla de socios. -->
             <Label text="👥 MENÚ SOCIOS"
                    style="-fx-text-fill: white;
                           -fx-font-size: 22px;
                           -fx-font-weight: bold;" />
 
+            <!-- Subtítulo que describe la función de la pantalla. -->
             <Label text="Gestión de socios del gimnasio"
                    style="-fx-text-fill: #D1D5DB;
                           -fx-font-size: 12px;" />
@@ -52,10 +59,13 @@
 
 
       <!-- CONTENIDO -->
+      <!-- Contiene el buscador, botones, tabla e información adicional. -->
       <center>
 
+         <!-- Contenedor vertical que organiza los elementos principales. -->
          <VBox spacing="8.0">
 
+            <!-- Espaciado interno del contenido principal. -->
             <padding>
                <Insets bottom="10.0"
                        left="15.0"
@@ -65,8 +75,10 @@
 
 
             <!-- BUSCADOR -->
+            <!-- Contiene el campo de búsqueda y los botones de acciones. -->
             <HBox spacing="8.0">
 
+               <!-- Campo utilizado para buscar socios por nombre o cédula. -->
                <TextField fx:id="txtBuscar"
                           promptText="Buscar por nombre o cédula"
                           HBox.hgrow="ALWAYS"
@@ -77,6 +89,7 @@
                                  -fx-padding: 7px;" />
 
 
+               <!-- Botón que ejecuta la búsqueda de socios. -->
                <Button fx:id="btnBuscar"
                        prefHeight="33.0"
                        prefWidth="89.0"
@@ -90,6 +103,7 @@
                               -fx-font-weight: bold;" />
 
 
+               <!-- Botón que permite modificar el socio seleccionado. -->
                <Button fx:id="btnModificar"
                        prefHeight="33.0"
                        prefWidth="98.0"
@@ -103,6 +117,7 @@
                               -fx-font-weight: bold;" />
 
 
+               <!-- Botón que permite eliminar el socio seleccionado. -->
                <Button fx:id="btnEliminar"
                        prefHeight="33.0"
                        prefWidth="96.0"
@@ -117,6 +132,7 @@
 
 
             <!-- REGISTRAR -->
+            <!-- Botón utilizado para abrir el formulario de registro de socios. -->
             <Button fx:id="btnRegistrar"
                     prefHeight="27.0"
                     prefWidth="639.0"
@@ -131,30 +147,37 @@
 
 
             <!-- TABLA -->
+            <!-- Título que identifica la tabla de socios registrados. -->
             <Label text="Socios registrados"
                    style="-fx-text-fill: #1F2937;
                           -fx-font-size: 15px;
                           -fx-font-weight: bold;" />
 
 
+            <!-- Tabla donde se muestran los socios registrados. -->
             <TableView fx:id="tablaSocios"
                        prefHeight="145.0"
                        VBox.vgrow="NEVER">
 
+               <!-- Define las columnas que forman parte de la tabla. -->
                <columns>
 
+                  <!-- Columna que muestra la cédula del socio. -->
                   <TableColumn fx:id="colCedula"
                                prefWidth="105.0"
                                text="Cédula" />
 
+                  <!-- Columna que muestra el nombre del socio. -->
                   <TableColumn fx:id="colNombre"
                                prefWidth="155.0"
                                text="Nombre" />
 
+                  <!-- Columna que muestra el teléfono del socio. -->
                   <TableColumn fx:id="colTelefono"
                                prefWidth="110.0"
                                text="Teléfono" />
 
+                  <!-- Columna que muestra el correo electrónico del socio. -->
                   <TableColumn fx:id="colCorreo"
                                prefWidth="200.0"
                                text="Correo" />
@@ -165,23 +188,28 @@
 
 
             <!-- INFORMACIÓN DEL SOCIO SELECCIONADO -->
+            <!-- Contenedor que muestra información adicional del socio seleccionado. -->
             <VBox spacing="3.0"
                   style="-fx-background-color: #F3F4F6;
                          -fx-background-radius: 7;
                          -fx-padding: 7;">
 
+               <!-- Título de la sección de información adicional. -->
                <Label text="Información adicional"
                       style="-fx-text-fill: #1F2937;
                              -fx-font-size: 12px;
                              -fx-font-weight: bold;" />
 
+               <!-- Contenedor horizontal para mostrar los datos adicionales. -->
                <HBox spacing="20.0">
 
+                  <!-- Muestra el contacto de emergencia del socio seleccionado. -->
                   <Label fx:id="lblContactoEmergencia"
                          text="Contacto de emergencia: -"
                          style="-fx-text-fill: #4B5563;
                                 -fx-font-size: 11px;" />
 
+                  <!-- Muestra las condiciones médicas del socio seleccionado. -->
                   <Label fx:id="lblCondicionesMedicas"
                          text="Condiciones médicas: -"
                          style="-fx-text-fill: #4B5563;
@@ -197,15 +225,19 @@
 
 
       <!-- BOTÓN VOLVER -->
+      <!-- Contiene el botón utilizado para regresar al menú principal. -->
       <bottom>
 
+         <!-- Alinea el botón de volver hacia la parte inferior derecha. -->
          <HBox alignment="BOTTOM_RIGHT">
 
+            <!-- Espaciado del botón con respecto a los bordes de la ventana. -->
             <padding>
                <Insets bottom="10.0"
                        right="10.0" />
             </padding>
 
+            <!-- Botón que regresa al menú principal. -->
             <Button fx:id="btnVolver"
                     prefHeight="30.0"
                     prefWidth="80.0"

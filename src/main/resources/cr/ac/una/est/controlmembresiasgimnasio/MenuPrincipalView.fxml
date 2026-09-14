@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- Importa las clases de geometría utilizadas para configurar espacios y posiciones. -->
 <?import javafx.geometry.*?>
+<!-- Importa los controles utilizados en la interfaz, como botones, etiquetas y ScrollPane. -->
 <?import javafx.scene.control.*?>
+<!-- Importa los contenedores utilizados para organizar los elementos visuales. -->
 <?import javafx.scene.layout.*?>
 
+<!-- Contenedor principal de la pantalla del menú principal. -->
+<!-- Mantiene un tamaño fijo de 600x400 píxeles. -->
 <VBox prefHeight="400.0" prefWidth="600.0"
       style="-fx-background-color: #F4F6F8;"
       xmlns="http://javafx.com/javafx/17.0.12"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.MenuPrincipalController">
 
+    <!-- Contiene los elementos principales de la pantalla. -->
     <children>
 
+        <!-- Contenedor que divide el menú en encabezado, contenido y parte inferior. -->
         <BorderPane prefHeight="400.0" prefWidth="600.0">
 
             <!-- ENCABEZADO -->
+            <!-- Parte superior donde se muestra el nombre del sistema. -->
             <top>
+                <!-- Contenedor vertical utilizado para organizar el título y subtítulo. -->
                 <VBox alignment="CENTER"
                       spacing="5.0"
                       style="-fx-background-color: #1F2937;">
 
+                    <!-- Espaciado interno del encabezado. -->
                     <padding>
                         <Insets bottom="15.0"
                                 left="20.0"
@@ -27,11 +37,13 @@
                                 top="15.0"/>
                     </padding>
 
+                    <!-- Título principal del menú. -->
                     <Label style="-fx-text-fill: white;
                                    -fx-font-size: 22px;
                                    -fx-font-weight: bold;"
                            text="MENU PRINCIPAL 📚"/>
 
+                    <!-- Subtítulo que identifica el sistema. -->
                     <Label style="-fx-text-fill: #D1D5DB;
                                    -fx-font-size: 12px;"
                            text="Sistema de Gestión de Membresías"/>
@@ -39,17 +51,22 @@
             </top>
 
             <!-- MENÚ -->
+            <!-- Parte central que contiene las opciones disponibles del sistema. -->
             <center>
+                <!-- Permite desplazarse verticalmente si se agregan más opciones al menú. -->
                 <ScrollPane fitToHeight="true"
                             fitToWidth="true"
                             hbarPolicy="NEVER"
                             style="-fx-background-color: transparent;"
                             vbarPolicy="AS_NEEDED">
 
+                    <!-- Contenido que se mostrará dentro del ScrollPane. -->
                     <content>
+                        <!-- Organiza verticalmente todos los botones del menú. -->
                         <VBox alignment="TOP_CENTER"
                               spacing="10.0">
 
+                            <!-- Espaciado interno alrededor de las opciones del menú. -->
                             <padding>
                                 <Insets bottom="20.0"
                                         left="30.0"
@@ -58,6 +75,7 @@
                             </padding>
 
                             <!-- SOCIOS -->
+                            <!-- Botón que permite acceder a la gestión de socios. -->
                             <Button maxWidth="Infinity"
                                     mnemonicParsing="false"
                                     prefHeight="42.0"
@@ -72,6 +90,7 @@
                                     text="👥  Socios"/>
 
                             <!-- PLANES -->
+                            <!-- Botón que permite acceder a la gestión de planes. -->
                             <Button maxWidth="Infinity"
                                     mnemonicParsing="false"
                                     prefHeight="42.0"
@@ -86,6 +105,7 @@
                                     text="📋  Planes"/>
 
                             <!-- PAGOS -->
+                            <!-- Botón que permite acceder a la gestión de pagos. -->
                             <Button maxWidth="Infinity"
                                     mnemonicParsing="false"
                                     prefHeight="42.0"
@@ -100,6 +120,7 @@
                                     text="💰  Pagos"/>
 
                             <!-- CONTROL DE ACCESOS -->
+                            <!-- Botón que permite acceder al control de entrada de los socios. -->
                             <Button maxWidth="Infinity"
                                     mnemonicParsing="false"
                                     prefHeight="42.0"
@@ -114,6 +135,7 @@
                                     text="🛡  Control de Accesos"/>
 
                             <!-- REPORTES -->
+                            <!-- Botón que permite acceder a la generación y consulta de reportes. -->
                             <Button maxWidth="Infinity"
                                     mnemonicParsing="false"
                                     prefHeight="42.0"
@@ -128,6 +150,7 @@
                                     text="📖  Reportes"/>
 
                             <!-- CERRAR SESIÓN -->
+                            <!-- Botón utilizado para cerrar la sesión actual. -->
                             <Button maxWidth="Infinity"
                                     mnemonicParsing="false"
                                     prefHeight="42.0"
@@ -146,11 +169,14 @@
             </center>
 
             <!-- BOTÓN VOLVER -->
+            <!-- Parte inferior reservada para controles adicionales. -->
             <bottom>
+                <!-- Contenedor horizontal ubicado en la parte inferior derecha. -->
                 <HBox alignment="BOTTOM_RIGHT"
                       prefHeight="45.0"
                       prefWidth="600.0">
 
+                    <!-- Espaciado interno de la parte inferior. -->
                     <padding>
                         <Insets bottom="10.0"
                                 right="10.0"/>
