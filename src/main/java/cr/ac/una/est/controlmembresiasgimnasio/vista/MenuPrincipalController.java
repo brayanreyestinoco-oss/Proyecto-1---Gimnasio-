@@ -4,7 +4,6 @@ import cr.ac.una.est.controlmembresiasgimnasio.DatosAplicacion;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.service.ControlAcceso;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -75,16 +74,32 @@ public class MenuPrincipalController {
                         )
                 );
 
-        // Cambia la ventana actual por la pantalla de pagos.
-        cambiarVentana(loader);
+        // Carga la estructura visual de la pantalla de pagos.
+        Parent root =
+                loader.load();
+
+        // Obtiene la ventana principal actualmente abierta.
+        Stage stage =
+                obtenerStage();
+
+        /*
+         * La tabla de pagos tiene más columnas
+         * que las demás pantallas (incluye el método
+         * de pago), así que necesita una ventana
+         * más ancha para que no se vea recortada.
+         */
+        Scene scene =
+                new Scene(
+                        root,
+                        690,
+                        420
+                );
+
+        stage.setScene(scene);
+
+        stage.centerOnScreen();
     }
 
-    /**
-     * Abre la pantalla utilizada para simular
-     * el acceso de un socio al gimnasio.
-     *
-     * @throws IOException si ocurre un error al cargar el FXML
-     */
     /**
      * Abre la pantalla utilizada para simular
      * el acceso de un socio al gimnasio.

@@ -33,6 +33,10 @@ public class PagosController {
     @FXML
     private TextField txtBuscar;
 
+    // Columna que muestra el metodo utilizado para el pago.
+    @FXML
+    private TableColumn<Pago, String> colMetodoPago;
+
     // Tabla donde se muestran los pagos registrados.
     @FXML
     private TableView<Pago> tablaPagos;
@@ -145,6 +149,14 @@ public class PagosController {
                                 dato.getValue()
                                         .getMembresia()
                                         .getFechaVencimiento()
+                        )
+        );
+        // Configura la columna para mostrar el método utilizado en el pago.
+        colMetodoPago.setCellValueFactory(
+                dato ->
+                        new SimpleStringProperty(
+                                dato.getValue()
+                                        .getMetodoPago()
                         )
         );
     }

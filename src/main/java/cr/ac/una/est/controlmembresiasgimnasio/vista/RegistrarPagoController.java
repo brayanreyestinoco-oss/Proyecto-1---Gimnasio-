@@ -557,10 +557,13 @@ public class RegistrarPagoController {
             stage.setScene(
                     new Scene(
                             root,
-                            600,
-                            400
+                            690,
+                            420
                     )
             );
+
+            // Centra nuevamente la ventana en la pantalla.
+            stage.centerOnScreen();
 
         } catch (IOException e) {
 
