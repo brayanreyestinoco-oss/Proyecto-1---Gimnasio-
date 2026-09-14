@@ -22,6 +22,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
+        // Crea el cargador para obtener la vista de inicio de sesión.
         FXMLLoader fxmlLoader =
                 new FXMLLoader(
                         HelloApplication.class.getResource(
@@ -29,6 +30,7 @@ public class HelloApplication extends Application {
                         )
                 );
 
+        // Crea la escena utilizando la vista cargada y establece sus dimensiones.
         Scene scene =
                 new Scene(
                         fxmlLoader.load(),
@@ -36,12 +38,15 @@ public class HelloApplication extends Application {
                         400
                 );
 
+        // Establece el título que aparecerá en la ventana principal.
         stage.setTitle(
                 "Control de Membresías - Gimnasio"
         );
 
+        // Asigna la escena creada a la ventana principal.
         stage.setScene(scene);
 
+        // Muestra la ventana principal de la aplicación.
         stage.show();
     }
 
@@ -52,6 +57,7 @@ public class HelloApplication extends Application {
      */
     public static void main(String[] args) {
 
+        // Inicia la aplicación JavaFX.
         launch();
     }
 }

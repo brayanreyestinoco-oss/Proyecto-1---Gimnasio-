@@ -30,28 +30,37 @@ import java.time.LocalDate;
  */
 public class RegistrarPagoController {
 
+    // Campo donde se ingresa la cédula del socio.
     @FXML
     private TextField txtCedula;
 
+    // Lista desplegable donde se selecciona el plan.
     @FXML
     private ComboBox<String> cmbPlan;
 
+    // Campo donde se muestra o ingresa el monto del pago.
     @FXML
     private TextField txtMonto;
 
+    // Selector utilizado para elegir la fecha de inicio del pago.
     @FXML
     private DatePicker dpFechaInicio;
 
+    // Lista desplegable donde se selecciona el método de pago.
     @FXML
     private ComboBox<String> cmbMetodoPago;
 
+    // Etiqueta donde se muestra la fecha de vencimiento calculada.
     @FXML
     private Label lblVencimiento;
 
+    // Servicio encargado de buscar y gestionar los socios.
     private SocioService socioService;
 
+    // Servicio encargado de consultar los planes disponibles.
     private PlanService planService;
 
+    // Servicio encargado de registrar pagos y membresías.
     private PagoService pagoService;
 
     /**
@@ -61,19 +70,25 @@ public class RegistrarPagoController {
     @FXML
     public void initialize() {
 
+        // Obtiene el servicio de socios de la aplicación.
         socioService =
                 DatosAplicacion.getSocioService();
 
+        // Obtiene el servicio de planes de la aplicación.
         planService =
                 DatosAplicacion.getPlanService();
 
+        // Obtiene el servicio de pagos de la aplicación.
         pagoService =
                 DatosAplicacion.getPagoService();
 
+        // Carga los planes disponibles en el ComboBox.
         cargarPlanes();
 
+        // Carga los métodos de pago disponibles.
         cargarMetodosPago();
 
+        // Establece la fecha actual como fecha inicial.
         dpFechaInicio.setValue(
                 LocalDate.now()
         );
@@ -82,6 +97,7 @@ public class RegistrarPagoController {
          * Cuando el usuario selecciona un plan,
          * mostramos automáticamente su precio.
          */
+        // Ejecuta la actualización de datos cuando cambia el plan seleccionado.
         cmbPlan.setOnAction(
                 event -> actualizarDatosPlan()
         );
@@ -90,6 +106,7 @@ public class RegistrarPagoController {
          * Si cambia la fecha también actualizamos
          * la fecha estimada de vencimiento.
          */
+        // Ejecuta la actualización cuando cambia la fecha seleccionada.
         dpFechaInicio.setOnAction(
                 event -> actualizarDatosPlan()
         );
@@ -101,11 +118,14 @@ public class RegistrarPagoController {
      */
     private void cargarPlanes() {
 
+        // Elimina cualquier elemento que estuviera previamente cargado.
         cmbPlan.getItems().clear();
 
+        // Recorre todos los planes disponibles.
         for (Plan plan :
                 planService.getPlanesDisponibles()) {
 
+            // Agrega el nombre del plan al ComboBox.
             cmbPlan.getItems().add(
                     plan.getNombre()
             );
@@ -117,6 +137,7 @@ public class RegistrarPagoController {
      */
     private void cargarMetodosPago() {
 
+        // Agrega las opciones disponibles para realizar el pago.
         cmbMetodoPago
                 .getItems()
                 .addAll(
@@ -133,40 +154,51 @@ public class RegistrarPagoController {
      */
     private void actualizarDatosPlan() {
 
+        // Obtiene el nombre del plan seleccionado.
         String nombrePlan =
                 cmbPlan.getValue();
 
+        // Obtiene la fecha seleccionada como inicio de la membresía.
         LocalDate fecha =
                 dpFechaInicio.getValue();
 
+        // Comprueba si todavía no se ha seleccionado ningún plan.
         if (nombrePlan == null) {
 
+            // Finaliza el método porque no hay un plan que consultar.
             return;
         }
 
+        // Busca el plan seleccionado por su nombre.
         Plan plan =
                 planService.buscarPorNombre(
                         nombrePlan
                 );
 
+        // Comprueba si el plan no fue encontrado.
         if (plan == null) {
 
+            // Finaliza el método porque no existe un plan válido.
             return;
         }
 
+        // Muestra automáticamente el precio final del plan.
         txtMonto.setText(
                 String.valueOf(
                         plan.calcularPrecioFinal()
                 )
         );
 
+        // Comprueba que exista una fecha de inicio.
         if (fecha != null) {
 
+            // Calcula la fecha de vencimiento según la duración del plan.
             LocalDate vencimiento =
                     fecha.plusMonths(
                             plan.getDuracionEnMeses()
                     );
 
+            // Muestra la fecha de vencimiento calculada.
             lblVencimiento.setText(
                     vencimiento.toString()
             );
@@ -179,14 +211,17 @@ public class RegistrarPagoController {
     @FXML
     private void guardarPago() {
 
+        // Comprueba que todos los campos necesarios estén completos.
         if (!camposValidos()) {
 
+            // Muestra una advertencia si faltan datos.
             mostrarMensaje(
                     Alert.AlertType.WARNING,
                     "Datos incompletos",
                     "Debe completar todos los datos del pago."
             );
 
+            // Detiene el proceso de registro.
             return;
         }
 
@@ -194,6 +229,7 @@ public class RegistrarPagoController {
          * Primero buscamos al socio utilizando
          * la cédula escrita en el formulario.
          */
+        // Busca al socio utilizando la cédula ingresada.
         Socio socio =
                 socioService.buscarPorCedula(
                         txtCedula
@@ -201,40 +237,49 @@ public class RegistrarPagoController {
                                 .trim()
                 );
 
+        // Comprueba si el socio no existe.
         if (socio == null) {
 
+            // Muestra una advertencia indicando que no se encontró el socio.
             mostrarMensaje(
                     Alert.AlertType.WARNING,
                     "Socio no encontrado",
                     "No existe un socio registrado con esa cédula."
             );
 
+            // Detiene el proceso de registro.
             return;
         }
 
         /*
          * Obtenemos el plan seleccionado.
          */
+        // Busca el plan seleccionado por su nombre.
         Plan plan =
                 planService.buscarPorNombre(
                         cmbPlan.getValue()
                 );
 
+        // Comprueba si el plan no es válido.
         if (plan == null) {
 
+            // Informa al usuario que debe seleccionar un plan válido.
             mostrarMensaje(
                     Alert.AlertType.WARNING,
                     "Plan inválido",
                     "Debe seleccionar un plan válido."
             );
 
+            // Detiene el proceso de registro.
             return;
         }
 
+        // Variable que almacenará el monto del pago.
         double monto;
 
         try {
 
+            // Convierte el texto del monto a un número decimal.
             monto =
                     Double.parseDouble(
                             txtMonto
@@ -244,18 +289,22 @@ public class RegistrarPagoController {
 
         } catch (NumberFormatException e) {
 
+            // Muestra una advertencia si el monto no tiene un formato válido.
             mostrarMensaje(
                     Alert.AlertType.WARNING,
                     "Monto inválido",
                     "El monto debe ser un número válido."
             );
 
+            // Detiene el proceso de registro.
             return;
         }
 
+        // Obtiene la fecha seleccionada para realizar el pago.
         LocalDate fechaPago =
                 dpFechaInicio.getValue();
 
+        // Obtiene el método de pago seleccionado.
         String metodoPago =
                 cmbMetodoPago.getValue();
 
@@ -265,6 +314,7 @@ public class RegistrarPagoController {
              * Buscamos si el socio ya posee
              * una membresía.
              */
+            // Busca una membresía asociada al socio.
             Membresia membresia =
                     pagoService
                             .buscarMembresiaPorSocio(
@@ -275,11 +325,14 @@ public class RegistrarPagoController {
              * Si todavía no tiene membresía,
              * se crea una nueva.
              */
+            // Comprueba si el socio todavía no tiene una membresía.
             if (membresia == null) {
 
+                // Obtiene un identificador disponible para la nueva membresía.
                 int idMembresia =
                         obtenerSiguienteIdMembresia();
 
+                // Registra una nueva membresía para el socio.
                 membresia =
                         pagoService.registrarMembresia(
                                 idMembresia,
@@ -295,14 +348,17 @@ public class RegistrarPagoController {
                  * el plan antes de registrar
                  * la nueva renovación.
                  */
+                // Actualiza el plan de la membresía existente.
                 membresia.setPlan(
                         plan
                 );
             }
 
+            // Obtiene un identificador disponible para el nuevo pago.
             int idPago =
                     obtenerSiguienteIdPago();
 
+            // Registra el nuevo pago asociado a la membresía.
             Pago pago =
                     pagoService.registrarPago(
                             idPago,
@@ -312,12 +368,14 @@ public class RegistrarPagoController {
                             metodoPago
                     );
 
+            // Muestra la fecha de vencimiento de la membresía actualizada.
             lblVencimiento.setText(
                     membresia
                             .getFechaVencimiento()
                             .toString()
             );
 
+            // Muestra un mensaje confirmando que el pago fue registrado.
             mostrarMensaje(
                     Alert.AlertType.INFORMATION,
                     "Pago registrado",
@@ -328,10 +386,12 @@ public class RegistrarPagoController {
                             + membresia.getFechaVencimiento()
             );
 
+            // Limpia los datos ingresados después de registrar el pago.
             limpiarFormulario();
 
         } catch (IllegalArgumentException e) {
 
+            // Muestra el mensaje generado cuando ocurre un error de validación.
             mostrarMensaje(
                     Alert.AlertType.ERROR,
                     "No se pudo registrar",
@@ -348,19 +408,24 @@ public class RegistrarPagoController {
      */
     private int obtenerSiguienteIdMembresia() {
 
+        // Variable utilizada para almacenar el identificador más alto encontrado.
         int mayorId = 0;
 
+        // Recorre todas las membresías registradas.
         for (Membresia membresia :
                 pagoService.getMembresias()) {
 
+            // Comprueba si el identificador actual es mayor que el registrado.
             if (membresia.getIdMembresia()
                     > mayorId) {
 
+                // Actualiza el mayor identificador encontrado.
                 mayorId =
                         membresia.getIdMembresia();
             }
         }
 
+        // Devuelve el siguiente identificador disponible.
         return mayorId + 1;
     }
 
@@ -372,19 +437,24 @@ public class RegistrarPagoController {
      */
     private int obtenerSiguienteIdPago() {
 
+        // Variable utilizada para almacenar el identificador más alto encontrado.
         int mayorId = 0;
 
+        // Recorre todos los pagos registrados.
         for (Pago pago :
                 pagoService.getPagos()) {
 
+            // Comprueba si el identificador actual es mayor que el registrado.
             if (pago.getIdPago()
                     > mayorId) {
 
+                // Actualiza el mayor identificador encontrado.
                 mayorId =
                         pago.getIdPago();
             }
         }
 
+        // Devuelve el siguiente identificador disponible.
         return mayorId + 1;
     }
 
@@ -396,6 +466,9 @@ public class RegistrarPagoController {
      */
     private boolean camposValidos() {
 
+        // Comprueba que la cédula no esté vacía,
+        // que exista un plan, que haya un monto,
+        // que exista una fecha y que se haya seleccionado un método de pago.
         return !txtCedula
                 .getText()
                 .isBlank()
@@ -417,6 +490,7 @@ public class RegistrarPagoController {
     @FXML
     private void cancelar() {
 
+        // Limpia todos los datos ingresados en el formulario.
         limpiarFormulario();
     }
 
@@ -425,21 +499,27 @@ public class RegistrarPagoController {
      */
     private void limpiarFormulario() {
 
+        // Limpia el campo de cédula.
         txtCedula.clear();
 
+        // Quita la selección actual del plan.
         cmbPlan.getSelectionModel()
                 .clearSelection();
 
+        // Limpia el campo del monto.
         txtMonto.clear();
 
+        // Restablece la fecha de inicio a la fecha actual.
         dpFechaInicio.setValue(
                 LocalDate.now()
         );
 
+        // Quita la selección actual del método de pago.
         cmbMetodoPago
                 .getSelectionModel()
                 .clearSelection();
 
+        // Restablece el mensaje de vencimiento.
         lblVencimiento.setText(
                 "Se calculará automáticamente"
         );
@@ -453,6 +533,7 @@ public class RegistrarPagoController {
 
         try {
 
+            // Crea el cargador para abrir la vista de pagos.
             FXMLLoader loader =
                     new FXMLLoader(
                             HelloApplication.class
@@ -461,15 +542,18 @@ public class RegistrarPagoController {
                                     )
                     );
 
+            // Carga la estructura visual de la pantalla de pagos.
             Parent root =
                     loader.load();
 
+            // Obtiene la ventana actual desde el campo de cédula.
             Stage stage =
                     (Stage)
                             txtCedula
                                     .getScene()
                                     .getWindow();
 
+            // Cambia la escena actual por la pantalla de pagos.
             stage.setScene(
                     new Scene(
                             root,
@@ -480,6 +564,7 @@ public class RegistrarPagoController {
 
         } catch (IOException e) {
 
+            // Muestra una alerta si no se pudo cargar la pantalla de pagos.
             mostrarMensaje(
                     Alert.AlertType.ERROR,
                     "Error",
@@ -500,21 +585,26 @@ public class RegistrarPagoController {
             String titulo,
             String mensaje) {
 
+        // Crea una alerta utilizando el tipo indicado.
         Alert alerta =
                 new Alert(tipo);
 
+        // Establece el título de la ventana de alerta.
         alerta.setTitle(
                 titulo
         );
 
+        // Elimina el encabezado de la alerta.
         alerta.setHeaderText(
                 null
         );
 
+        // Establece el mensaje que se mostrará al usuario.
         alerta.setContentText(
                 mensaje
         );
 
+        // Muestra la alerta y espera a que el usuario la cierre.
         alerta.showAndWait();
     }
 }

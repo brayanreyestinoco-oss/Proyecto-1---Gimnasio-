@@ -12,16 +12,22 @@ import java.time.LocalDate;
  */
 public class Membresia {
 
+    // Identificador único de la membresía.
     private int idMembresia;
 
+    // Socio al que pertenece la membresía.
     private Socio socio;
 
+    // Plan que tiene contratado el socio.
     private Plan plan;
 
+    // Fecha en la que comienza la membresía.
     private LocalDate fechaInicio;
 
+    // Fecha hasta la cual estará vigente la membresía.
     private LocalDate fechaVencimiento;
 
+    // Indica si la membresía se encuentra activa.
     private boolean activa;
 
     /**
@@ -41,12 +47,16 @@ public class Membresia {
             Plan plan,
             LocalDate fechaInicio) {
 
+        // Guarda el identificador recibido para la membresía.
         this.idMembresia = idMembresia;
 
+        // Guarda el socio asociado a la membresía.
         this.socio = socio;
 
+        // Guarda el plan contratado por el socio.
         this.plan = plan;
 
+        // Guarda la fecha establecida para iniciar la membresía.
         this.fechaInicio = fechaInicio;
 
         /*
@@ -69,6 +79,7 @@ public class Membresia {
      */
     public int getIdMembresia() {
 
+        // Retorna el identificador de la membresía.
         return idMembresia;
     }
 
@@ -80,6 +91,7 @@ public class Membresia {
     public void setIdMembresia(
             int idMembresia) {
 
+        // Actualiza el identificador de la membresía.
         this.idMembresia =
                 idMembresia;
     }
@@ -92,6 +104,7 @@ public class Membresia {
      */
     public Socio getSocio() {
 
+        // Retorna el socio relacionado con la membresía.
         return socio;
     }
 
@@ -103,6 +116,7 @@ public class Membresia {
     public void setSocio(
             Socio socio) {
 
+        // Actualiza el socio relacionado con la membresía.
         this.socio =
                 socio;
     }
@@ -114,6 +128,7 @@ public class Membresia {
      */
     public Plan getPlan() {
 
+        // Retorna el plan contratado.
         return plan;
     }
 
@@ -125,6 +140,7 @@ public class Membresia {
     public void setPlan(
             Plan plan) {
 
+        // Actualiza el plan asociado a la membresía.
         this.plan =
                 plan;
     }
@@ -136,6 +152,7 @@ public class Membresia {
      */
     public LocalDate getFechaInicio() {
 
+        // Retorna la fecha de inicio de la membresía.
         return fechaInicio;
     }
 
@@ -147,6 +164,7 @@ public class Membresia {
     public void setFechaInicio(
             LocalDate fechaInicio) {
 
+        // Actualiza la fecha de inicio.
         this.fechaInicio =
                 fechaInicio;
     }
@@ -158,6 +176,7 @@ public class Membresia {
      */
     public LocalDate getFechaVencimiento() {
 
+        // Retorna la fecha de vencimiento.
         return fechaVencimiento;
     }
 
@@ -169,6 +188,7 @@ public class Membresia {
     public void setFechaVencimiento(
             LocalDate fechaVencimiento) {
 
+        // Actualiza la fecha de vencimiento de la membresía.
         this.fechaVencimiento =
                 fechaVencimiento;
     }
@@ -180,6 +200,7 @@ public class Membresia {
      */
     public boolean isActiva() {
 
+        // Retorna el estado actual de la membresía.
         return activa;
     }
 
@@ -191,6 +212,7 @@ public class Membresia {
     public void setActiva(
             boolean activa) {
 
+        // Actualiza el estado de la membresía.
         this.activa =
                 activa;
     }
@@ -211,16 +233,19 @@ public class Membresia {
     public boolean estaVigente(
             LocalDate fecha) {
 
+        // Si la membresía no está activa, no puede estar vigente.
         if (!activa) {
 
             return false;
         }
 
+        // Si no existe una fecha de vencimiento, no se puede considerar vigente.
         if (fechaVencimiento == null) {
 
             return false;
         }
 
+        // Comprueba que la fecha indicada no sea posterior a la fecha de vencimiento.
         return !fecha.isAfter(
                 fechaVencimiento
         );

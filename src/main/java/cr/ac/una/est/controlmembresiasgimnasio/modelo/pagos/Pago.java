@@ -10,10 +10,19 @@ import java.time.LocalDate;
  */
 public class Pago {
 
+    // Identificador único del pago.
     private int idPago;
+
+    // Membresía a la que está asociado este pago.
     private Membresia membresia;
+
+    // Cantidad de dinero pagada.
     private double monto;
+
+    // Fecha en la que se realizó el pago.
     private LocalDate fechaPago;
+
+    // Método utilizado para realizar el pago.
     private String metodoPago;
 
     /**
@@ -28,10 +37,19 @@ public class Pago {
     public Pago(int idPago, Membresia membresia, double monto,
                 LocalDate fechaPago, String metodoPago) {
 
+        // Guarda el identificador del pago.
         this.idPago = idPago;
+
+        // Guarda la membresía relacionada con el pago.
         this.membresia = membresia;
+
+        // Guarda el monto que fue pagado.
         this.monto = monto;
+
+        // Guarda la fecha en la que se realizó el pago.
         this.fechaPago = fechaPago;
+
+        // Guarda el método utilizado para realizar el pago.
         this.metodoPago = metodoPago;
     }
 
@@ -41,6 +59,8 @@ public class Pago {
      * @return identificador del pago
      */
     public int getIdPago() {
+
+        // Retorna el identificador del pago.
         return idPago;
     }
 
@@ -51,6 +71,8 @@ public class Pago {
      * @return no retorna ningún valor
      */
     public void setIdPago(int idPago) {
+
+        // Actualiza el identificador del pago.
         this.idPago = idPago;
     }
 
@@ -60,6 +82,8 @@ public class Pago {
      * @return membresía del pago
      */
     public Membresia getMembresia() {
+
+        // Retorna la membresía asociada al pago.
         return membresia;
     }
 
@@ -70,6 +94,8 @@ public class Pago {
      * @return no retorna ningún valor
      */
     public void setMembresia(Membresia membresia) {
+
+        // Actualiza la membresía asociada al pago.
         this.membresia = membresia;
     }
 
@@ -79,6 +105,8 @@ public class Pago {
      * @return monto pagado
      */
     public double getMonto() {
+
+        // Retorna el monto registrado en el pago.
         return monto;
     }
 
@@ -89,6 +117,8 @@ public class Pago {
      * @return no retorna ningún valor
      */
     public void setMonto(double monto) {
+
+        // Actualiza el monto del pago.
         this.monto = monto;
     }
 
@@ -98,6 +128,8 @@ public class Pago {
      * @return fecha del pago
      */
     public LocalDate getFechaPago() {
+
+        // Retorna la fecha en la que se realizó el pago.
         return fechaPago;
     }
 
@@ -108,6 +140,8 @@ public class Pago {
      * @return no retorna ningún valor
      */
     public void setFechaPago(LocalDate fechaPago) {
+
+        // Actualiza la fecha en la que se realizó el pago.
         this.fechaPago = fechaPago;
     }
 
@@ -117,6 +151,8 @@ public class Pago {
      * @return método de pago
      */
     public String getMetodoPago() {
+
+        // Retorna el método utilizado para realizar el pago.
         return metodoPago;
     }
 
@@ -127,6 +163,8 @@ public class Pago {
      * @return no retorna ningún valor
      */
     public void setMetodoPago(String metodoPago) {
+
+        // Actualiza el método utilizado para realizar el pago.
         this.metodoPago = metodoPago;
     }
 }

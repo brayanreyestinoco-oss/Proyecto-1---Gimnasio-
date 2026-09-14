@@ -27,6 +27,7 @@ public class MenuPrincipalController {
     @FXML
     private void abrirSocios() throws IOException {
 
+        // Crea el cargador para abrir la vista de socios.
         FXMLLoader loader =
                 new FXMLLoader(
                         HelloApplication.class.getResource(
@@ -34,6 +35,7 @@ public class MenuPrincipalController {
                         )
                 );
 
+        // Cambia la ventana actual por la pantalla de socios.
         cambiarVentana(loader);
     }
 
@@ -45,6 +47,7 @@ public class MenuPrincipalController {
     @FXML
     private void abrirPlanes() throws IOException {
 
+        // Crea el cargador para abrir la vista de planes.
         FXMLLoader loader =
                 new FXMLLoader(
                         HelloApplication.class.getResource(
@@ -52,6 +55,7 @@ public class MenuPrincipalController {
                         )
                 );
 
+        // Cambia la ventana actual por la pantalla de planes.
         cambiarVentana(loader);
     }
 
@@ -63,6 +67,7 @@ public class MenuPrincipalController {
     @FXML
     private void abrirPagos() throws IOException {
 
+        // Crea el cargador para abrir la vista de pagos.
         FXMLLoader loader =
                 new FXMLLoader(
                         HelloApplication.class.getResource(
@@ -70,6 +75,7 @@ public class MenuPrincipalController {
                         )
                 );
 
+        // Cambia la ventana actual por la pantalla de pagos.
         cambiarVentana(loader);
     }
 
@@ -88,6 +94,7 @@ public class MenuPrincipalController {
     @FXML
     private void abrirAcceso() throws IOException {
 
+        // Crea el cargador para abrir la vista de control de acceso.
         FXMLLoader loader =
                 new FXMLLoader(
                         HelloApplication.class.getResource(
@@ -95,21 +102,26 @@ public class MenuPrincipalController {
                         )
                 );
 
+        // Carga la estructura visual de la pantalla.
         Parent root =
                 loader.load();
 
+        // Obtiene el controlador asociado al archivo FXML.
         ControladorAcceso controlador =
                 loader.getController();
 
+        // Crea el servicio encargado de controlar los accesos.
         ControlAcceso controlAcceso =
                 new ControlAcceso(
                         DatosAplicacion.getPagoService()
                 );
 
+        // Asigna el servicio de control de acceso al controlador.
         controlador.setControlAcceso(
                 controlAcceso
         );
 
+        // Obtiene la ventana principal actualmente abierta.
         Stage stage =
                 obtenerStage();
 
@@ -119,6 +131,7 @@ public class MenuPrincipalController {
          * membresía + resultado), así que necesita una
          * ventana más alta para que no se vea recortada.
          */
+        // Crea una escena con el tamaño adecuado para la pantalla de acceso.
         Scene scene =
                 new Scene(
                         root,
@@ -126,8 +139,10 @@ public class MenuPrincipalController {
                         520
                 );
 
+        // Establece la nueva escena en la ventana principal.
         stage.setScene(scene);
 
+        // Centra la ventana en la pantalla.
         stage.centerOnScreen();
     }
 
@@ -139,6 +154,7 @@ public class MenuPrincipalController {
     @FXML
     private void abrirReportes() throws IOException {
 
+        // Crea el cargador para abrir la vista de reportes.
         FXMLLoader loader =
                 new FXMLLoader(
                         HelloApplication.class.getResource(
@@ -146,9 +162,11 @@ public class MenuPrincipalController {
                         )
                 );
 
+        // Carga la estructura visual de la pantalla de reportes.
         Parent root =
                 loader.load();
 
+        // Obtiene la ventana principal actualmente abierta.
         Stage stage =
                 obtenerStage();
 
@@ -157,6 +175,7 @@ public class MenuPrincipalController {
          * que las demás, así que necesita una ventana
          * más ancha para que no se vea recortada.
          */
+        // Crea una escena con un ancho mayor para mostrar las columnas.
         Scene scene =
                 new Scene(
                         root,
@@ -164,8 +183,10 @@ public class MenuPrincipalController {
                         460
                 );
 
+        // Establece la escena de reportes en la ventana actual.
         stage.setScene(scene);
 
+        // Centra la ventana en la pantalla.
         stage.centerOnScreen();
     }
 
@@ -178,6 +199,7 @@ public class MenuPrincipalController {
     @FXML
     private void cerrarSesion() throws IOException {
 
+        // Crea el cargador para abrir nuevamente la pantalla de inicio de sesión.
         FXMLLoader loader =
                 new FXMLLoader(
                         HelloApplication.class.getResource(
@@ -185,6 +207,7 @@ public class MenuPrincipalController {
                         )
                 );
 
+        // Cambia la ventana actual por la pantalla de inicio de sesión.
         cambiarVentana(loader);
     }
 
@@ -197,15 +220,19 @@ public class MenuPrincipalController {
     private void cambiarVentana(
             FXMLLoader loader) throws IOException {
 
+        // Carga la estructura visual del archivo FXML indicado.
         Parent root =
                 loader.load();
 
+        // Obtiene la ventana principal actualmente abierta.
         Stage stage =
                 obtenerStage();
 
+        // Crea una nueva escena con el tamaño estándar de las pantallas.
         Scene scene =
                 new Scene(root, 600, 400);
 
+        // Reemplaza la escena actual por la nueva escena.
         stage.setScene(scene);
     }
 
@@ -216,6 +243,7 @@ public class MenuPrincipalController {
      */
     private Stage obtenerStage() {
 
+        // Busca entre las ventanas de JavaFX aquella que actualmente está visible.
         return (Stage)
                 javafx.stage.Window
                         .getWindows()
