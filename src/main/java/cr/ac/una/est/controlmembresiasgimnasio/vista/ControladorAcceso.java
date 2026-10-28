@@ -1,6 +1,3 @@
-package cr.ac.una.est.controlmembresiasgimnasio.vista;
-
-import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
 import cr.ac.una.est.controlmembresiasgimnasio.service.ControlAcceso;
 
@@ -88,7 +85,7 @@ public class ControladorAcceso {
 
             // Indica al usuario que debe ingresar el número de cédula.
             lblResultado.setText(
-                    "Ingrese el numero de cedula del socio."
+                    "Ingrese el número de cédula del socio."
             );
 
             return;
@@ -113,7 +110,7 @@ public class ControladorAcceso {
 
         /*
          * Buscamos la membresía asociada
-         * al número de socio.
+         * a la cédula del socio.
          */
         Membresia membresia =
                 controlAcceso.buscarMembresiaPorCedula(
@@ -231,7 +228,7 @@ public class ControladorAcceso {
 
         // Restablece el mensaje inicial de la pantalla.
         lblResultado.setText(
-                "Ingrese el número de cedula del socio"
+                "Ingrese el número de cédula del socio"
         );
     }
 

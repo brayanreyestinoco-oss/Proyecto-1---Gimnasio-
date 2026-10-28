@@ -158,6 +158,42 @@ public class RegistroSocioController {
             return;
         }
 
+        /*
+         * CORRECCIÓN:
+         * Verifica que el teléfono del socio
+         * contenga únicamente números.
+         */
+        if (!txtTelefono.getText().trim().matches("[0-9]+")) {
+
+            mostrarMensaje(
+                    Alert.AlertType.WARNING,
+                    "Teléfono inválido",
+                    "El teléfono del socio debe contener únicamente números."
+            );
+
+            return;
+        }
+
+        /*
+         * CORRECCIÓN:
+         * El teléfono de emergencia puede estar vacío.
+         * Si contiene información, solo acepta números.
+         */
+        String telefonoEmergencia =
+                txtTelefonoEmergencia.getText().trim();
+
+        if (!telefonoEmergencia.isEmpty()
+                && !telefonoEmergencia.matches("[0-9]+")) {
+
+            mostrarMensaje(
+                    Alert.AlertType.WARNING,
+                    "Teléfono de emergencia inválido",
+                    "El teléfono de emergencia debe contener únicamente números."
+            );
+
+            return;
+        }
+
         // Obtiene la cédula ingresada y elimina espacios innecesarios.
         String cedula =
                 txtCedula.getText().trim();
