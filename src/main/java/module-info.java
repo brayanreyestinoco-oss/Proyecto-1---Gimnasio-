@@ -4,10 +4,14 @@ module cr.ac.una.est.controlmembresiasgimnasio {
     requires javafx.fxml;
     requires com.dlsc.fxmlkit;
 
+
     /*
      * Permite que JavaFX cargue los controladores
      * y archivos FXML.
      */
+    requires java.sql;
+    // Permite utilizar JDBC y las clases de java.sql.
+
     opens cr.ac.una.est.controlmembresiasgimnasio
             to javafx.fxml;
 
