@@ -15,6 +15,9 @@ module cr.ac.una.est.controlmembresiasgimnasio {
     opens cr.ac.una.est.controlmembresiasgimnasio.modelo.socios
             to javafx.base;
 
+    opens cr.ac.una.est.controlmembresiasgimnasio.modelo.reportes
+            to javafx.base;
+
     opens cr.ac.una.est.controlmembresiasgimnasio.service
             to javafx.fxml;
 

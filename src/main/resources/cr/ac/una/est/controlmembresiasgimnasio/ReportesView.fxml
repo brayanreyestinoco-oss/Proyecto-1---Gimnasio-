@@ -23,7 +23,13 @@
             <Label style="-fx-font-size: 20px;                        -fx-font-weight: bold;                        -fx-text-fill: white;" text="Reporte de Membresías" />
 
             <!-- Contenedor horizontal para los botones del reporte. -->
-            <HBox spacing="10">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+
+                <Label style="-fx-text-fill: white; -fx-font-weight: bold;"
+                       text="Vencimientos:" />
+
+                <ComboBox fx:id="selectorPlazo" prefWidth="110.0"
+                          promptText="Todas" />
 
                 <!-- Botón utilizado para actualizar los datos de la tabla. -->
                 <Button fx:id="btnActualizar" onAction="#cargarReporte" style="-fx-background-color: white;                            -fx-text-fill: #1F2937;                            -fx-font-weight: bold;                            -fx-background-radius: 6;                            -fx-border-color: #D1D5DB;                            -fx-border-radius: 6;" text="Actualizar" />
@@ -32,6 +38,9 @@
                 <Button fx:id="btnExportarCsv" onAction="#exportarCsv" style="-fx-background-color: #2563EB;                            -fx-text-fill: white;                            -fx-font-weight: bold;                            -fx-background-radius: 6;" text="Exportar a CSV" />
 
             </HBox>
+
+            <Label fx:id="lblEstadoConsulta" style="-fx-text-fill: white;"
+                   text="Seleccione un plazo o consulte todas las membresías." />
 
         </VBox>
 
