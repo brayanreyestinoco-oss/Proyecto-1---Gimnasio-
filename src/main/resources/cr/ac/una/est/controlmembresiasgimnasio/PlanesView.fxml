@@ -4,80 +4,158 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="400" prefWidth="600.0" style="-fx-background-color: #F4F6F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PlanesController">
+<BorderPane prefHeight="550.0"
+            prefWidth="1000.0"
+            minHeight="550.0"
+            minWidth="1000.0"
+            style="-fx-background-color: #F4F6F8;"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PlanesController">
 
-    <!-- ENCABEZADO: título y búsqueda por nombre. -->
+    <!-- ENCABEZADO -->
     <top>
-        <VBox spacing="10" style="-fx-background-color: #1F2937;">
+        <VBox spacing="10"
+              style="-fx-background-color: #1F2937;">
+
             <padding>
-                <Insets bottom="10" left="15" right="15" top="15" />
+                <Insets bottom="10"
+                        left="15"
+                        right="15"
+                        top="15"/>
             </padding>
 
-            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;" text="Gestión de Planes" />
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"
+                   text="Gestión de Planes"/>
 
             <HBox spacing="10">
-                <TextField fx:id="txtBuscar" prefWidth="250" promptText="Nombre del plan" style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 7px;" />
 
-                <Button fx:id="btnBuscar" onAction="#buscarPlan" style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;" text="Buscar" />
+                <TextField fx:id="txtBuscar"
+                           prefWidth="250"
+                           promptText="Nombre del plan"
+                           style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 7px;"/>
 
-                <Button fx:id="btnMostrarTodos" onAction="#mostrarTodos" style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;" text="Mostrar todos" />
+                <Button fx:id="btnBuscar"
+                        onAction="#buscarPlan"
+                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;"
+                        text="Buscar"/>
+
+                <Button fx:id="btnMostrarTodos"
+                        onAction="#mostrarTodos"
+                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;"
+                        text="Mostrar todos"/>
+
             </HBox>
         </VBox>
     </top>
 
-    <!-- CONTENIDO: tabla con los planes guardados en MySQL. -->
+    <!-- TABLA DE PLANES -->
     <center>
-        <TableView fx:id="tablaPlanes" style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6;">
+        <TableView fx:id="tablaPlanes"
+                   style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6;">
+
             <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
             </columnResizePolicy>
+
             <columns>
-                <TableColumn fx:id="colNombre" prefWidth="90" text="Plan" />
-                <TableColumn fx:id="colPrecio" prefWidth="80" text="Precio" />
-                <TableColumn fx:id="colBeneficios" prefWidth="220" text="Beneficios" />
+
+                <TableColumn fx:id="colNombre"
+                             prefWidth="150"
+                             text="Plan"/>
+
+                <TableColumn fx:id="colPrecio"
+                             prefWidth="120"
+                             text="Precio"/>
+
+                <TableColumn fx:id="colBeneficios"
+                             prefWidth="300"
+                             text="Beneficios"/>
+
             </columns>
         </TableView>
     </center>
 
-    <!-- FORMULARIO: crear, modificar y eliminar el plan seleccionado. -->
+    <!-- FORMULARIO -->
     <right>
-        <VBox spacing="6" prefWidth="220" style="-fx-background-color: #F4F6F8;">
+        <VBox spacing="8"
+              prefWidth="260"
+              minWidth="260"
+              style="-fx-background-color: #F4F6F8;">
+
             <padding>
-                <Insets bottom="8" left="10" right="10" top="10" />
+                <Insets bottom="12"
+                        left="15"
+                        right="15"
+                        top="15"/>
             </padding>
 
-            <Label style="-fx-font-weight: bold;" text="Datos del plan" />
+            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;"
+                   text="Datos del plan"/>
 
-            <Label text="Tipo" />
-            <ComboBox fx:id="cmbTipo" maxWidth="Infinity" />
+            <Label text="Tipo"/>
 
-            <Label text="Nombre" />
-            <TextField fx:id="txtNombre" promptText="Ej. Mensual Plus" />
+            <ComboBox fx:id="cmbTipo"
+                      maxWidth="Infinity"/>
 
-            <Label text="Precio base (₡)" />
-            <TextField fx:id="txtPrecioBase" promptText="Ej. 15000" />
+            <Label text="Nombre"/>
 
-            <Label fx:id="lblAjuste" text="Ajuste" />
-            <TextField fx:id="txtAjuste" />
+            <TextField fx:id="txtNombre"
+                       promptText="Ej. Mensual Plus"/>
 
-            <Label text="Beneficios" />
-            <TextField fx:id="txtBeneficios" promptText="Qué incluye el plan" />
+            <Label text="Precio base (₡)"/>
+
+            <TextField fx:id="txtPrecioBase"
+                       promptText="Ej. 15000"/>
+
+            <Label fx:id="lblAjuste"
+                   text="Ajuste"/>
+
+            <TextField fx:id="txtAjuste"/>
+
+            <Label text="Beneficios"/>
+
+            <TextField fx:id="txtBeneficios"
+                       promptText="Qué incluye el plan"/>
 
             <HBox spacing="6">
-                <Button fx:id="btnGuardar" onAction="#guardarPlan" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6;" text="Guardar" />
-                <Button fx:id="btnNuevo" onAction="#nuevoPlan" style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6;" text="Nuevo" />
-                <Button fx:id="btnEliminar" onAction="#eliminarPlan" style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6;" text="Eliminar" />
+
+                <Button fx:id="btnGuardar"
+                        onAction="#guardarPlan"
+                        style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6;"
+                        text="Guardar"/>
+
+                <Button fx:id="btnNuevo"
+                        onAction="#nuevoPlan"
+                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6;"
+                        text="Nuevo"/>
+
+                <Button fx:id="btnEliminar"
+                        onAction="#eliminarPlan"
+                        style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6;"
+                        text="Eliminar"/>
+
             </HBox>
+
         </VBox>
     </right>
 
-    <!-- PARTE INFERIOR: volver al menú principal. -->
+    <!-- BOTÓN VOLVER -->
     <bottom>
         <HBox alignment="BOTTOM_RIGHT">
+
             <padding>
-                <Insets bottom="10" right="10" />
+                <Insets bottom="10"
+                        right="10"/>
             </padding>
-            <Button fx:id="btnVolver" onAction="#volverMenu" prefHeight="30" prefWidth="80" style="-fx-background-color: #6B7280; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6;" text="← Volver" />
+
+            <Button fx:id="btnVolver"
+                    onAction="#volverMenu"
+                    prefHeight="30"
+                    prefWidth="80"
+                    style="-fx-background-color: #6B7280; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6;"
+                    text="← Volver"/>
+
         </HBox>
     </bottom>
 

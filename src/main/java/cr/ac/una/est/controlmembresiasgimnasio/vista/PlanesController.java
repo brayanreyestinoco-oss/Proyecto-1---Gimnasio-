@@ -379,20 +379,35 @@ public class PlanesController {
     private void volverMenu() {
 
         try {
+
             FXMLLoader loader = new FXMLLoader(
-                    HelloApplication.class.getResource("MenuPrincipalView.fxml"));
+                    HelloApplication.class.getResource(
+                            "MenuPrincipalView.fxml"
+                    )
+            );
 
             Parent root = loader.load();
 
             Stage stage = (Stage) tablaPlanes.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 400));
+
+            stage.setMaximized(false);
+
+            Scene scene = new Scene(root, 600, 400);
+
+            stage.setScene(scene);
+            stage.sizeToScene();
             stage.centerOnScreen();
 
         } catch (IOException e) {
-            mostrarAlerta(Alert.AlertType.ERROR,
-                    "No se pudo regresar al menú principal.");
+
+            mostrarAlerta(
+                    Alert.AlertType.ERROR,
+                    "No se pudo regresar al menú principal."
+            );
         }
+
     }
+
 
     /**
      * Muestra una alerta del tipo indicado.
