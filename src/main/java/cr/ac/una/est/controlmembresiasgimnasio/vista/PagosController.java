@@ -22,300 +22,318 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
- * Controlador encargado de administrar
- * la pantalla principal de pagos.
+ * Controlador de la pantalla de gestión de pagos.
+ *
+ * Consulta los pagos a través de PagoService,
+ * que utiliza los repositorios JDBC de MySQL.
+ *
+ * Conserva la búsqueda, las columnas y la navegación
+ * existentes en la interfaz original.
  */
 public class PagosController {
 
-    // Campo de texto utilizado para buscar pagos.
+    // Campo utilizado para buscar por cédula o nombre.
     @FXML
     private TextField txtBuscar;
 
-    // Columna que muestra el metodo utilizado para el pago.
-    @FXML
-    private TableColumn<Pago, String> colMetodoPago;
-
-    // Tabla donde se muestran los pagos registrados.
+    // Tabla principal de pagos.
     @FXML
     private TableView<Pago> tablaPagos;
 
-    // Columna que muestra la cédula del socio.
+    // Columna de la cédula del socio.
     @FXML
     private TableColumn<Pago, String> colCedula;
 
-    // Columna que muestra el nombre del socio.
+    // Columna del nombre del socio.
     @FXML
     private TableColumn<Pago, String> colSocio;
 
-    // Columna que muestra el nombre del plan contratado.
+    // Columna del plan contratado.
     @FXML
     private TableColumn<Pago, String> colPlan;
 
-    // Columna que muestra la fecha en que se realizó el pago.
+    // Columna de la fecha del pago.
     @FXML
     private TableColumn<Pago, LocalDate> colFechaPago;
 
-    // Columna que muestra el monto del pago.
+    // Columna del monto pagado.
     @FXML
     private TableColumn<Pago, Number> colMonto;
 
-    // Columna que muestra la fecha de vencimiento de la membresía.
+    // Columna de la fecha de vencimiento.
     @FXML
     private TableColumn<Pago, LocalDate> colVencimiento;
 
-    // Servicio encargado de gestionar los pagos.
+    // Columna del método de pago.
+    @FXML
+    private TableColumn<Pago, String> colMetodoPago;
+
+    // Servicio compartido de pagos.
     private PagoService pagoService;
 
     /**
-     * Inicializa el controlador de pagos.
+     * Se ejecuta automáticamente al cargar el FXML.
      */
     @FXML
     public void initialize() {
 
-        // Obtiene el servicio de pagos utilizado por la aplicación.
-        pagoService =
-                DatosAplicacion.getPagoService();
+        // Recuperamos la instancia compartida del servicio.
+        pagoService = DatosAplicacion.getPagoService();
 
-        // Configura la información que mostrará cada columna.
+        // Indicamos qué información muestra cada columna.
         configurarColumnas();
 
-        // Carga los pagos registrados en la tabla.
+        // Intentamos cargar los pagos desde MySQL.
         actualizarTabla();
     }
 
     /**
-     * Configura las columnas de la tabla
-     * para mostrar la información de cada pago.
+     * Configura las columnas de la tabla.
+     *
+     * Cada columna extrae su valor de un objeto Pago
+     * y de sus objetos relacionados: Membresia y Socio.
      */
     private void configurarColumnas() {
 
-        // Configura la columna para mostrar la cédula del socio.
-        colCedula.setCellValueFactory(
-                dato ->
-                        new SimpleStringProperty(
-                                dato.getValue()
-                                        .getMembresia()
-                                        .getSocio()
-                                        .getCedula()
-                        )
-        );
-
-        // Configura la columna para mostrar el nombre del socio.
-        colSocio.setCellValueFactory(
-                dato ->
-                        new SimpleStringProperty(
-                                dato.getValue()
-                                        .getMembresia()
-                                        .getSocio()
-                                        .getNombre()
-                        )
-        );
-
-        // Configura la columna para mostrar el nombre del plan.
-        colPlan.setCellValueFactory(
-                dato ->
-                        new SimpleStringProperty(
-                                dato.getValue()
-                                        .getMembresia()
-                                        .getPlan()
-                                        .getNombre()
-                        )
-        );
-
-        // Configura la columna para mostrar la fecha del pago.
-        colFechaPago.setCellValueFactory(
-                dato ->
-                        new SimpleObjectProperty<>(
-                                dato.getValue()
-                                        .getFechaPago()
-                        )
-        );
-
-        // Configura la columna para mostrar el monto pagado.
-        colMonto.setCellValueFactory(
-                dato ->
-                        new SimpleDoubleProperty(
-                                dato.getValue()
-                                        .getMonto()
-                        )
-        );
-
-        // Configura la columna para mostrar la fecha de vencimiento.
-        colVencimiento.setCellValueFactory(
-                dato ->
-                        new SimpleObjectProperty<>(
-                                dato.getValue()
-                                        .getMembresia()
-                                        .getFechaVencimiento()
-                        )
-        );
-        // Configura la columna para mostrar el método utilizado en el pago.
-        colMetodoPago.setCellValueFactory(
-                dato ->
-                        new SimpleStringProperty(
-                                dato.getValue()
-                                        .getMetodoPago()
-                        )
-        );
-    }
-
-    /**
-     * Muestra todos los pagos registrados
-     * en la tabla.
-     */
-    private void actualizarTabla() {
-
-        // Obtiene la lista de pagos registrados y la convierte en una lista observable.
-        tablaPagos.setItems(
-                FXCollections.observableArrayList(
-                        pagoService.getPagos()
+        // Mostrar la cédula del socio.
+        colCedula.setCellValueFactory(dato ->
+                new SimpleStringProperty(
+                        dato.getValue()
+                                .getMembresia()
+                                .getSocio()
+                                .getCedula()
                 )
         );
 
-        // Actualiza visualmente el contenido de la tabla.
-        tablaPagos.refresh();
+        // Mostrar el nombre del socio.
+        colSocio.setCellValueFactory(dato ->
+                new SimpleStringProperty(
+                        dato.getValue()
+                                .getMembresia()
+                                .getSocio()
+                                .getNombre()
+                )
+        );
+
+        // Mostrar el nombre del plan.
+        colPlan.setCellValueFactory(dato ->
+                new SimpleStringProperty(
+                        dato.getValue()
+                                .getMembresia()
+                                .getPlan()
+                                .getNombre()
+                )
+        );
+
+        // Mostrar la fecha del pago.
+        colFechaPago.setCellValueFactory(dato ->
+                new SimpleObjectProperty<>(
+                        dato.getValue().getFechaPago()
+                )
+        );
+
+        // Mostrar el monto pagado.
+        colMonto.setCellValueFactory(dato ->
+                new SimpleDoubleProperty(
+                        dato.getValue().getMonto()
+                )
+        );
+
+        // Mostrar el vencimiento de la membresía.
+        colVencimiento.setCellValueFactory(dato ->
+                new SimpleObjectProperty<>(
+                        dato.getValue()
+                                .getMembresia()
+                                .getFechaVencimiento()
+                )
+        );
+
+        // Mostrar el método utilizado para pagar.
+        colMetodoPago.setCellValueFactory(dato ->
+                new SimpleStringProperty(
+                        dato.getValue().getMetodoPago()
+                )
+        );
     }
 
     /**
-     * Busca pagos utilizando la cédula
-     * o el nombre del socio.
+     * Consulta todos los pagos de MySQL y los muestra.
+     *
+     * Si ocurre un error JDBC, muestra una alerta
+     * y evita que la pantalla falle inesperadamente.
      */
-    @FXML
-    private void buscarPago() {
+    private void actualizarTabla() {
 
-        // Obtiene el texto de búsqueda, elimina espacios y lo convierte a minúsculas.
-        String busqueda =
-                txtBuscar
-                        .getText()
-                        .trim()
-                        .toLowerCase();
+        try {
 
-        /*
-         * Si el campo está vacío mostramos
-         * nuevamente todos los pagos.
-         */
-        if (busqueda.isBlank()) {
+            // Solicitar los pagos al servicio.
+            List<Pago> pagos = pagoService.getPagos();
 
-            // Vuelve a cargar todos los pagos en la tabla.
-            actualizarTabla();
+            // Convertirlos en una lista observable de JavaFX.
+            ObservableList<Pago> datos =
+                    FXCollections.observableArrayList(pagos);
 
-            // Finaliza el método porque no hay ningún criterio de búsqueda.
-            return;
-        }
+            // Colocar los pagos en la tabla.
+            tablaPagos.setItems(datos);
 
-        // Crea una lista observable donde se almacenarán los pagos encontrados.
-        ObservableList<Pago> encontrados =
-                FXCollections.observableArrayList();
+            // Refrescar visualmente la tabla.
+            tablaPagos.refresh();
 
-        // Recorre todos los pagos registrados en el servicio.
-        for (Pago pago :
-                pagoService.getPagos()) {
+        } catch (IllegalStateException e) {
 
-            // Obtiene la cédula del socio asociado al pago.
-            String cedula =
-                    pago.getMembresia()
-                            .getSocio()
-                            .getCedula()
-                            .toLowerCase();
+            // Evitar mostrar información desactualizada.
+            tablaPagos.setItems(
+                    FXCollections.observableArrayList()
+            );
 
-            // Obtiene el nombre del socio asociado al pago.
-            String nombre =
-                    pago.getMembresia()
-                            .getSocio()
-                            .getNombre()
-                            .toLowerCase();
-
-            // Comprueba si la búsqueda coincide con la cédula o el nombre.
-            if (cedula.contains(busqueda)
-                    || nombre.contains(busqueda)) {
-
-                // Agrega el pago encontrado a la lista de resultados.
-                encontrados.add(
-                        pago
-                );
-            }
-        }
-
-        // Muestra en la tabla únicamente los pagos encontrados.
-        tablaPagos.setItems(
-                encontrados
-        );
-
-        // Comprueba si no se encontró ningún pago.
-        if (encontrados.isEmpty()) {
-
-            // Muestra un mensaje indicando que no hubo coincidencias.
+            // Informar que falló la consulta.
             mostrarMensaje(
-                    Alert.AlertType.INFORMATION,
-                    "Búsqueda",
-                    "No se encontraron pagos con esos datos."
+                    Alert.AlertType.ERROR,
+                    "Error al consultar pagos",
+                    "No fue posible cargar los pagos desde MySQL.\n"
+                            + e.getMessage()
             );
         }
     }
 
     /**
-     * Muestra nuevamente todos los pagos.
+     * Busca pagos por cédula o nombre del socio.
+     */
+    @FXML
+    private void buscarPago() {
+
+        // Recuperar el texto ingresado.
+        String busqueda = txtBuscar.getText();
+
+        // Proteger el método si el campo está vacío.
+        if (busqueda == null || busqueda.isBlank()) {
+
+            // Sin criterio, mostrar todos los pagos.
+            actualizarTabla();
+            return;
+        }
+
+        // Eliminar espacios y normalizar a minúsculas.
+        busqueda = busqueda.trim().toLowerCase();
+
+        // Lista para almacenar las coincidencias.
+        ObservableList<Pago> encontrados =
+                FXCollections.observableArrayList();
+
+        try {
+
+            // Consultar los pagos actuales desde MySQL.
+            List<Pago> pagos = pagoService.getPagos();
+
+            // Revisar cada pago.
+            for (Pago pago : pagos) {
+
+                // Recuperar la cédula del socio.
+                String cedula = pago.getMembresia()
+                        .getSocio()
+                        .getCedula()
+                        .toLowerCase();
+
+                // Recuperar el nombre del socio.
+                String nombre = pago.getMembresia()
+                        .getSocio()
+                        .getNombre()
+                        .toLowerCase();
+
+                // Verificar coincidencia parcial.
+                if (cedula.contains(busqueda)
+                        || nombre.contains(busqueda)) {
+
+                    // Agregar el pago encontrado.
+                    encontrados.add(pago);
+                }
+            }
+
+            // Mostrar solamente las coincidencias.
+            tablaPagos.setItems(encontrados);
+
+            // Refrescar la tabla.
+            tablaPagos.refresh();
+
+            // Informar si no hubo resultados.
+            if (encontrados.isEmpty()) {
+
+                mostrarMensaje(
+                        Alert.AlertType.INFORMATION,
+                        "Búsqueda",
+                        "No se encontraron pagos con esos datos."
+                );
+            }
+
+        } catch (IllegalStateException e) {
+
+            // Informar de un fallo en la consulta JDBC.
+            mostrarMensaje(
+                    Alert.AlertType.ERROR,
+                    "Error de búsqueda",
+                    "No fue posible consultar los pagos.\n"
+                            + e.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Limpia la búsqueda y vuelve a consultar todos los pagos.
      */
     @FXML
     private void mostrarTodos() {
 
-        // Limpia el contenido del campo de búsqueda.
+        // Vaciar el campo de búsqueda.
         txtBuscar.clear();
 
-        // Vuelve a cargar todos los pagos en la tabla.
+        // Volver a consultar los pagos desde MySQL.
         actualizarTabla();
     }
 
     /**
-     * Abre la pantalla para registrar
-     * un nuevo pago.
+     * Abre el formulario para registrar un pago.
+     *
+     * Conserva la navegación del proyecto original.
      */
     @FXML
     private void registrarPago() {
 
         try {
 
-            // Crea el cargador encargado de abrir la vista de registro de pagos.
-            FXMLLoader loader =
-                    new FXMLLoader(
-                            HelloApplication.class
-                                    .getResource(
-                                            "RegistrarPagoView.fxml"
-                                    )
-                    );
-
-            // Carga la estructura visual de la pantalla de registro.
-            Parent root =
-                    loader.load();
-
-            // Obtiene la ventana actual desde la tabla de pagos.
-            Stage stage =
-                    (Stage)
-                            tablaPagos
-                                    .getScene()
-                                    .getWindow();
-
-            // Cambia la escena actual por la pantalla de registro de pagos.
-            stage.setScene(
-                    new Scene(
-                            root,
-                            600,
-                            400
+            // Localizar el FXML del formulario.
+            FXMLLoader loader = new FXMLLoader(
+                    HelloApplication.class.getResource(
+                            "RegistrarPagoView.fxml"
                     )
             );
 
-            // Centra nuevamente la ventana en la pantalla.
+            // Cargar la interfaz.
+            Parent root = loader.load();
+
+            // Recuperar la ventana actual.
+            Stage stage = (Stage) tablaPagos
+                    .getScene()
+                    .getWindow();
+
+            // Mostrar la pantalla de registro.
+            stage.setScene(
+                    new Scene(root, 600, 400)
+            );
+
+            // Centrar la ventana.
             stage.centerOnScreen();
 
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
 
-            // Muestra una alerta si no se pudo cargar la pantalla.
+            // Informar si no se pudo abrir la pantalla.
             mostrarMensaje(
                     Alert.AlertType.ERROR,
                     "Error",
-                    "No se pudo abrir la pantalla para registrar el pago."
+                    "No se pudo abrir la pantalla de registro.\n"
+                            + e.getMessage()
             );
         }
     }
@@ -328,81 +346,57 @@ public class PagosController {
 
         try {
 
-            // Crea el cargador para abrir la vista del menú principal.
-            FXMLLoader loader =
-                    new FXMLLoader(
-                            HelloApplication.class
-                                    .getResource(
-                                            "MenuPrincipalView.fxml"
-                                    )
-                    );
-
-            // Carga la estructura visual del menú principal.
-            Parent root =
-                    loader.load();
-
-            // Obtiene la ventana actual desde la tabla de pagos.
-            Stage stage =
-                    (Stage)
-                            tablaPagos
-                                    .getScene()
-                                    .getWindow();
-
-            // Reemplaza la escena actual por la del menú principal.
-            stage.setScene(
-                    new Scene(
-                            root,
-                            600,
-                            400
+            // Localizar el FXML del menú principal.
+            FXMLLoader loader = new FXMLLoader(
+                    HelloApplication.class.getResource(
+                            "MenuPrincipalView.fxml"
                     )
             );
 
-            // Centra nuevamente la ventana en la pantalla.
+            // Cargar la interfaz.
+            Parent root = loader.load();
+
+            // Recuperar la ventana actual.
+            Stage stage = (Stage) tablaPagos
+                    .getScene()
+                    .getWindow();
+
+            // Mostrar el menú principal.
+            stage.setScene(
+                    new Scene(root, 600, 400)
+            );
+
+            // Centrar la ventana.
             stage.centerOnScreen();
 
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
 
-            // Muestra una alerta si no se pudo regresar al menú.
             mostrarMensaje(
                     Alert.AlertType.ERROR,
                     "Error",
-                    "No se pudo regresar al menú principal."
+                    "No se pudo regresar al menú principal.\n"
+                            + e.getMessage()
             );
         }
     }
 
     /**
-     * Muestra una alerta al usuario.
-     *
-     * @param tipo tipo de alerta
-     * @param titulo título de la ventana
-     * @param mensaje mensaje que se mostrará
+     * Muestra mensajes informativos, advertencias o errores.
      */
     private void mostrarMensaje(
             Alert.AlertType tipo,
             String titulo,
             String mensaje) {
 
-        // Crea una nueva ventana de alerta con el tipo indicado.
-        Alert alerta =
-                new Alert(tipo);
+        // Crear una alerta del tipo solicitado.
+        Alert alerta = new Alert(tipo);
 
-        // Establece el título de la ventana de alerta.
-        alerta.setTitle(
-                titulo
-        );
+        // Configurar título y contenido.
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
 
-        // Elimina el encabezado de la alerta.
-        alerta.setHeaderText(
-                null
-        );
-
-        // Establece el mensaje que se mostrará al usuario.
-        alerta.setContentText(
-                mensaje
-        );
-
-        // Muestra la alerta y espera a que el usuario la cierre.
+        // Mostrar la alerta.
         alerta.showAndWait();
     }
 }

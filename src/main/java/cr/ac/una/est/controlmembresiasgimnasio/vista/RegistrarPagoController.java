@@ -25,107 +25,80 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 /**
- * Controlador encargado de registrar
- * los pagos de membresías de los socios.
+ * Controlador encargado de registrar pagos de membresías.
+ *
+ * Utiliza PagoService para guardar los datos en MySQL.
+ * Los identificadores son generados por la base de datos.
  */
 public class RegistrarPagoController {
 
-    // Campo donde se ingresa la cédula del socio.
+    // Campo para ingresar la cédula del socio.
     @FXML
     private TextField txtCedula;
 
-    // Lista desplegable donde se selecciona el plan.
+    // Lista de planes disponibles.
     @FXML
     private ComboBox<String> cmbPlan;
 
-    // Campo donde se muestra o ingresa el monto del pago.
+    // Campo para ingresar o mostrar el monto.
     @FXML
     private TextField txtMonto;
 
-    // Selector utilizado para elegir la fecha de inicio del pago.
+    // Selector de fecha del pago.
     @FXML
     private DatePicker dpFechaInicio;
 
-    // Lista desplegable donde se selecciona el método de pago.
+    // Lista de métodos de pago.
     @FXML
     private ComboBox<String> cmbMetodoPago;
 
-    // Etiqueta donde se muestra la fecha de vencimiento calculada.
+    // Etiqueta que muestra el vencimiento.
     @FXML
     private Label lblVencimiento;
 
-    // Servicio encargado de buscar y gestionar los socios.
+    // Servicios existentes del proyecto.
     private SocioService socioService;
-
-    // Servicio encargado de consultar los planes disponibles.
     private PlanService planService;
-
-    // Servicio encargado de registrar pagos y membresías.
     private PagoService pagoService;
 
     /**
-     * Inicializa el controlador y carga
-     * los planes y métodos de pago.
+     * Inicializa el formulario.
      */
     @FXML
     public void initialize() {
 
-        // Obtiene el servicio de socios de la aplicación.
-        socioService =
-                DatosAplicacion.getSocioService();
+        // Recuperar los servicios compartidos.
+        socioService = DatosAplicacion.getSocioService();
+        planService = DatosAplicacion.getPlanService();
+        pagoService = DatosAplicacion.getPagoService();
 
-        // Obtiene el servicio de planes de la aplicación.
-        planService =
-                DatosAplicacion.getPlanService();
-
-        // Obtiene el servicio de pagos de la aplicación.
-        pagoService =
-                DatosAplicacion.getPagoService();
-
-        // Carga los planes disponibles en el ComboBox.
+        // Cargar opciones del formulario.
         cargarPlanes();
-
-        // Carga los métodos de pago disponibles.
         cargarMetodosPago();
 
-        // Establece la fecha actual como fecha inicial.
-        dpFechaInicio.setValue(
-                LocalDate.now()
-        );
+        // Establecer la fecha actual.
+        dpFechaInicio.setValue(LocalDate.now());
 
-        /*
-         * Cuando el usuario selecciona un plan,
-         * mostramos automáticamente su precio.
-         */
-        // Ejecuta la actualización de datos cuando cambia el plan seleccionado.
+        // Actualizar el monto al seleccionar un plan.
         cmbPlan.setOnAction(
                 event -> actualizarDatosPlan()
         );
 
-        /*
-         * Si cambia la fecha también actualizamos
-         * la fecha estimada de vencimiento.
-         */
-        // Ejecuta la actualización cuando cambia la fecha seleccionada.
+        // Actualizar el vencimiento al cambiar la fecha.
         dpFechaInicio.setOnAction(
                 event -> actualizarDatosPlan()
         );
     }
 
     /**
-     * Carga los planes disponibles
-     * dentro del ComboBox.
+     * Carga los planes registrados.
      */
     private void cargarPlanes() {
 
-        // Elimina cualquier elemento que estuviera previamente cargado.
         cmbPlan.getItems().clear();
 
-        // Recorre todos los planes disponibles.
-        for (Plan plan :
-                planService.getPlanesDisponibles()) {
+        for (Plan plan : planService.getPlanesDisponibles()) {
 
-            // Agrega el nombre del plan al ComboBox.
             cmbPlan.getItems().add(
                     plan.getNombre()
             );
@@ -137,245 +110,242 @@ public class RegistrarPagoController {
      */
     private void cargarMetodosPago() {
 
-        // Agrega las opciones disponibles para realizar el pago.
-        cmbMetodoPago
-                .getItems()
-                .addAll(
-                        "Efectivo",
-                        "Tarjeta",
-                        "Transferencia"
-                );
+        cmbMetodoPago.getItems().clear();
+
+        cmbMetodoPago.getItems().addAll(
+                "Efectivo",
+                "Tarjeta",
+                "Transferencia"
+        );
     }
 
     /**
-     * Actualiza automáticamente el monto
-     * y el vencimiento estimado según
-     * el plan seleccionado.
+     * Actualiza el precio y el vencimiento estimado.
      */
     private void actualizarDatosPlan() {
 
-        // Obtiene el nombre del plan seleccionado.
-        String nombrePlan =
-                cmbPlan.getValue();
+        String nombrePlan = cmbPlan.getValue();
+        LocalDate fecha = dpFechaInicio.getValue();
 
-        // Obtiene la fecha seleccionada como inicio de la membresía.
-        LocalDate fecha =
-                dpFechaInicio.getValue();
-
-        // Comprueba si todavía no se ha seleccionado ningún plan.
-        if (nombrePlan == null) {
-
-            // Finaliza el método porque no hay un plan que consultar.
+        if (nombrePlan == null || fecha == null) {
             return;
         }
 
-        // Busca el plan seleccionado por su nombre.
-        Plan plan =
-                planService.buscarPorNombre(
-                        nombrePlan
-                );
+        Plan plan = planService.buscarPorNombre(nombrePlan);
 
-        // Comprueba si el plan no fue encontrado.
         if (plan == null) {
-
-            // Finaliza el método porque no existe un plan válido.
             return;
         }
 
-        // Muestra automáticamente el precio final del plan.
+        // Mostrar el precio calculado del plan.
         txtMonto.setText(
-                String.valueOf(
-                        plan.calcularPrecioFinal()
-                )
+                String.valueOf(plan.calcularPrecioFinal())
         );
 
-        // Comprueba que exista una fecha de inicio.
-        if (fecha != null) {
+        // Calcular el vencimiento estimado.
+        LocalDate vencimiento = fecha.plusMonths(
+                plan.getDuracionEnMeses()
+        );
 
-            // Calcula la fecha de vencimiento según la duración del plan.
-            LocalDate vencimiento =
-                    fecha.plusMonths(
-                            plan.getDuracionEnMeses()
-                    );
-
-            // Muestra la fecha de vencimiento calculada.
-            lblVencimiento.setText(
-                    vencimiento.toString()
-            );
-        }
+        lblVencimiento.setText(
+                vencimiento.toString()
+        );
     }
 
     /**
-     * Registra el pago de una membresía.
+     * Registra un pago nuevo o una renovación.
+     *
+     * Para un socio sin membresía utiliza registrarPrimerPago().
+     * Para una membresía existente utiliza registrarPago().
      */
     @FXML
     private void guardarPago() {
 
-        // Comprueba que todos los campos necesarios estén completos.
+        // 1. Verificar que los campos estén completos.
         if (!camposValidos()) {
 
-            // Muestra una advertencia si faltan datos.
             mostrarMensaje(
                     Alert.AlertType.WARNING,
                     "Datos incompletos",
                     "Debe completar todos los datos del pago."
             );
 
-            // Detiene el proceso de registro.
             return;
         }
-
-        /*
-         * Primero buscamos al socio utilizando
-         * la cédula escrita en el formulario.
-         */
-        // Busca al socio utilizando la cédula ingresada.
-        Socio socio =
-                socioService.buscarPorCedula(
-                        txtCedula
-                                .getText()
-                                .trim()
-                );
-
-        // Comprueba si el socio no existe.
-        if (socio == null) {
-
-            // Muestra una advertencia indicando que no se encontró el socio.
-            mostrarMensaje(
-                    Alert.AlertType.WARNING,
-                    "Socio no encontrado",
-                    "No existe un socio registrado con esa cédula."
-            );
-
-            // Detiene el proceso de registro.
-            return;
-        }
-
-        /*
-         * Obtenemos el plan seleccionado.
-         */
-        // Busca el plan seleccionado por su nombre.
-        Plan plan =
-                planService.buscarPorNombre(
-                        cmbPlan.getValue()
-                );
-
-        // Comprueba si el plan no es válido.
-        if (plan == null) {
-
-            // Informa al usuario que debe seleccionar un plan válido.
-            mostrarMensaje(
-                    Alert.AlertType.WARNING,
-                    "Plan inválido",
-                    "Debe seleccionar un plan válido."
-            );
-
-            // Detiene el proceso de registro.
-            return;
-        }
-
-        // Variable que almacenará el monto del pago.
-        double monto;
 
         try {
 
-            // Convierte el texto del monto a un número decimal.
-            monto =
-                    Double.parseDouble(
-                            txtMonto
-                                    .getText()
-                                    .trim()
-                    );
+            // 2. Obtener la cédula ingresada.
+            String cedula = txtCedula.getText().trim();
 
-        } catch (NumberFormatException e) {
+            // 3. Buscar al socio en el servicio existente.
+            Socio socio = socioService.buscarPorCedula(cedula);
 
-            // Muestra una advertencia si el monto no tiene un formato válido.
-            mostrarMensaje(
-                    Alert.AlertType.WARNING,
-                    "Monto inválido",
-                    "El monto debe ser un número válido."
+            if (socio == null) {
+
+                mostrarMensaje(
+                        Alert.AlertType.WARNING,
+                        "Socio no encontrado",
+                        "No existe un socio registrado con esa cédula."
+                );
+
+                return;
+            }
+
+            // 4. Buscar el plan seleccionado.
+            Plan plan = planService.buscarPorNombre(
+                    cmbPlan.getValue()
             );
 
-            // Detiene el proceso de registro.
-            return;
-        }
+            if (plan == null) {
 
-        // Obtiene la fecha seleccionada para realizar el pago.
-        LocalDate fechaPago =
-                dpFechaInicio.getValue();
+                mostrarMensaje(
+                        Alert.AlertType.WARNING,
+                        "Plan inválido",
+                        "Debe seleccionar un plan válido."
+                );
 
-        // Obtiene el metodo de pago seleccionado.
-        String metodoPago =
-                cmbMetodoPago.getValue();
+                return;
+            }
 
-        try {
+            // 5. Convertir el monto a un número.
+            double monto;
 
-            /*
-             * Buscamos si el socio ya posee
-             * una membresía.
-             */
-            // Busca una membresía asociada al socio.
+            try {
+
+                monto = Double.parseDouble(
+                        txtMonto.getText().trim()
+                );
+
+            } catch (NumberFormatException e) {
+
+                mostrarMensaje(
+                        Alert.AlertType.WARNING,
+                        "Monto inválido",
+                        "El monto debe ser un número válido."
+                );
+
+                return;
+            }
+
+            // 6. Validar que el monto sea positivo y finito.
+            if (!Double.isFinite(monto) || monto <= 0) {
+
+                mostrarMensaje(
+                        Alert.AlertType.WARNING,
+                        "Monto inválido",
+                        "El monto debe ser mayor que cero."
+                );
+
+                return;
+            }
+
+            // 7. Recuperar fecha y método de pago.
+            LocalDate fechaPago = dpFechaInicio.getValue();
+            String metodoPago = cmbMetodoPago.getValue();
+
+            // 8. Comprobar que el socio exista en MySQL.
+            if (socio.getIdSocio() <= 0) {
+
+                mostrarMensaje(
+                        Alert.AlertType.ERROR,
+                        "Socio sin identificador",
+                        "El socio debe estar registrado en MySQL."
+                );
+
+                return;
+            }
+
+            // 9. Comprobar que el plan tenga un ID de MySQL.
+            if (plan.getIdPlan() <= 0) {
+
+                mostrarMensaje(
+                        Alert.AlertType.ERROR,
+                        "Plan sin identificador",
+                        "El plan debe estar registrado en MySQL."
+                );
+
+                return;
+            }
+
+            // 10. Buscar si el socio ya tiene una membresía.
             Membresia membresia =
-                    pagoService
-                            .buscarMembresiaPorCedula(
-                                    txtCedula.getText().trim()
-                            );
+                    pagoService.buscarMembresiaPorCedula(cedula);
 
-            /*
-             * Si todavía no tiene membresía,
-             * se crea una nueva.
-             */
-            // Comprueba si el socio todavía no tiene una membresía.
+            Pago pago;
+
             if (membresia == null) {
 
-                // Obtiene un identificador disponible para la nueva membresía.
-                int idMembresia =
-                        obtenerSiguienteIdMembresia();
+                /*
+                 * PRIMER PAGO
+                 *
+                 * Crear la membresía y registrar el pago
+                 * dentro de una sola transacción.
+                 *
+                 * MySQL genera ambos identificadores.
+                 */
+                pago = pagoService.registrarPrimerPago(
+                        socio,
+                        plan,
+                        monto,
+                        fechaPago,
+                        metodoPago
+                );
 
-                // Registra una nueva membresía para el socio.
-                membresia =
-                        pagoService.registrarMembresia(
-                                idMembresia,
-                                socio,
-                                plan,
-                                fechaPago
-                        );
+                // Recuperar la membresía creada.
+                membresia = pago.getMembresia();
 
             } else {
 
                 /*
-                 * Si ya existe, permitimos actualizar
-                 * el plan antes de registrar
-                 * la nueva renovación.
+                 * RENOVACIÓN
+                 *
+                 * La membresía ya existe.
+                 * Se permite cambiar el plan antes de pagar.
                  */
-                // Actualiza el plan de la membresía existente.
-                membresia.setPlan(
-                        plan
-                );
-            }
 
-            // Obtiene un identificador disponible para el nuevo pago.
-            int idPago =
-                    obtenerSiguienteIdPago();
+                // Conservar el plan anterior por si falla el pago.
+                Plan planAnterior = membresia.getPlan();
 
-            // Registra el nuevo pago asociado a la membresía.
-            Pago pago =
-                    pagoService.registrarPago(
-                            idPago,
+                try {
+
+                    // Actualizar el plan seleccionado.
+                    membresia.setPlan(plan);
+
+                    /*
+                     * Registrar el pago y renovar
+                     * la membresía mediante PagoService.
+                     *
+                     * MySQL genera el ID del pago.
+                     */
+                    pago = pagoService.registrarPago(
+                            0,
                             membresia,
                             monto,
                             fechaPago,
                             metodoPago
                     );
 
-            // Muestra la fecha de vencimiento de la membresía actualizada.
-            lblVencimiento.setText(
-                    membresia
-                            .getFechaVencimiento()
-                            .toString()
-            );
+                } catch (RuntimeException e) {
 
-            // Muestra un mensaje confirmando que el pago fue registrado.
+                    // Restaurar el plan anterior si falla.
+                    membresia.setPlan(planAnterior);
+
+                    throw e;
+                }
+            }
+
+            // 11. Mostrar el vencimiento real guardado.
+            LocalDate vencimiento =
+                    membresia.getFechaVencimiento();
+
+            if (vencimiento != null) {
+                lblVencimiento.setText(
+                        vencimiento.toString()
+                );
+            }
+
+            // 12. Confirmar al usuario el registro.
             mostrarMensaje(
                     Alert.AlertType.INFORMATION,
                     "Pago registrado",
@@ -383,101 +353,44 @@ public class RegistrarPagoController {
                             + "Número de pago: "
                             + pago.getIdPago()
                             + "\nVencimiento: "
-                            + membresia.getFechaVencimiento()
+                            + vencimiento
             );
 
-            // Limpia los datos ingresados después de registrar el pago.
+            // 13. Limpiar el formulario.
             limpiarFormulario();
 
         } catch (IllegalArgumentException e) {
 
-            // Muestra el mensaje generado cuando ocurre un error de validación.
+            // Errores de validación.
             mostrarMensaje(
                     Alert.AlertType.ERROR,
-                    "No se pudo registrar",
+                    "Datos inválidos",
+                    e.getMessage()
+            );
+
+        } catch (IllegalStateException e) {
+
+            // Errores de conexión o persistencia JDBC.
+            mostrarMensaje(
+                    Alert.AlertType.ERROR,
+                    "Error al registrar el pago",
                     e.getMessage()
             );
         }
     }
 
     /**
-     * Obtiene el siguiente identificador
-     * disponible para una membresía.
-     *
-     * @return siguiente identificador
-     */
-    private int obtenerSiguienteIdMembresia() {
-
-        // Variable utilizada para almacenar el identificador más alto encontrado.
-        int mayorId = 0;
-
-        // Recorre todas las membresías registradas.
-        for (Membresia membresia :
-                pagoService.getMembresias()) {
-
-            // Comprueba si el identificador actual es mayor que el registrado.
-            if (membresia.getIdMembresia()
-                    > mayorId) {
-
-                // Actualiza el mayor identificador encontrado.
-                mayorId =
-                        membresia.getIdMembresia();
-            }
-        }
-
-        // Devuelve el siguiente identificador disponible.
-        return mayorId + 1;
-    }
-
-    /**
-     * Obtiene el siguiente identificador
-     * disponible para un pago.
-     *
-     * @return siguiente identificador
-     */
-    private int obtenerSiguienteIdPago() {
-
-        // Variable utilizada para almacenar el identificador más alto encontrado.
-        int mayorId = 0;
-
-        // Recorre todos los pagos registrados.
-        for (Pago pago :
-                pagoService.getPagos()) {
-
-            // Comprueba si el identificador actual es mayor que el registrado.
-            if (pago.getIdPago()
-                    > mayorId) {
-
-                // Actualiza el mayor identificador encontrado.
-                mayorId =
-                        pago.getIdPago();
-            }
-        }
-
-        // Devuelve el siguiente identificador disponible.
-        return mayorId + 1;
-    }
-
-    /**
-     * Verifica que los campos necesarios
-     * estén completos.
-     *
-     * @return true si los datos son válidos
+     * Comprueba que los campos obligatorios estén completos.
      */
     private boolean camposValidos() {
 
-        // Comprueba que la cédula no esté vacía,
-        // que exista un plan, que haya un monto,
-        // que exista una fecha y que se haya seleccionado un método de pago.
-        return !txtCedula
-                .getText()
-                .isBlank()
+        return txtCedula.getText() != null
+                && !txtCedula.getText().isBlank()
 
                 && cmbPlan.getValue() != null
 
-                && !txtMonto
-                .getText()
-                .isBlank()
+                && txtMonto.getText() != null
+                && !txtMonto.getText().isBlank()
 
                 && dpFechaInicio.getValue() != null
 
@@ -485,41 +398,31 @@ public class RegistrarPagoController {
     }
 
     /**
-     * Limpia el formulario.
+     * Cancela la entrada de datos del formulario.
      */
     @FXML
     private void cancelar() {
 
-        // Limpia todos los datos ingresados en el formulario.
         limpiarFormulario();
     }
 
     /**
-     * Limpia los campos del formulario.
+     * Restablece todos los campos del formulario.
      */
     private void limpiarFormulario() {
 
-        // Limpia el campo de cédula.
         txtCedula.clear();
 
-        // Quita la selección actual del plan.
         cmbPlan.getSelectionModel()
                 .clearSelection();
 
-        // Limpia el campo del monto.
         txtMonto.clear();
 
-        // Restablece la fecha de inicio a la fecha actual.
-        dpFechaInicio.setValue(
-                LocalDate.now()
-        );
+        dpFechaInicio.setValue(LocalDate.now());
 
-        // Quita la selección actual del método de pago.
-        cmbMetodoPago
-                .getSelectionModel()
+        cmbMetodoPago.getSelectionModel()
                 .clearSelection();
 
-        // Restablece el mensaje de vencimiento.
         lblVencimiento.setText(
                 "Se calculará automáticamente"
         );
@@ -527,47 +430,34 @@ public class RegistrarPagoController {
 
     /**
      * Regresa a la pantalla de pagos.
+     *
+     * Conserva la navegación original del proyecto.
      */
     @FXML
     private void volverPagos() {
 
         try {
 
-            // Crea el cargador para abrir la vista de pagos.
-            FXMLLoader loader =
-                    new FXMLLoader(
-                            HelloApplication.class
-                                    .getResource(
-                                            "PagosView.fxml"
-                                    )
-                    );
-
-            // Carga la estructura visual de la pantalla de pagos.
-            Parent root =
-                    loader.load();
-
-            // Obtiene la ventana actual desde el campo de cédula.
-            Stage stage =
-                    (Stage)
-                            txtCedula
-                                    .getScene()
-                                    .getWindow();
-
-            // Cambia la escena actual por la pantalla de pagos.
-            stage.setScene(
-                    new Scene(
-                            root,
-                            690,
-                            420
+            FXMLLoader loader = new FXMLLoader(
+                    HelloApplication.class.getResource(
+                            "PagosView.fxml"
                     )
             );
 
-            // Centra nuevamente la ventana en la pantalla.
+            Parent root = loader.load();
+
+            Stage stage = (Stage) txtCedula
+                    .getScene()
+                    .getWindow();
+
+            stage.setScene(
+                    new Scene(root, 690, 420)
+            );
+
             stage.centerOnScreen();
 
         } catch (IOException e) {
 
-            // Muestra una alerta si no se pudo cargar la pantalla de pagos.
             mostrarMensaje(
                     Alert.AlertType.ERROR,
                     "Error",
@@ -577,37 +467,20 @@ public class RegistrarPagoController {
     }
 
     /**
-     * Muestra un mensaje al usuario.
-     *
-     * @param tipo tipo de alerta
-     * @param titulo título de la alerta
-     * @param mensaje mensaje que se mostrará
+     * Muestra una alerta informativa, de advertencia
+     * o de error al usuario.
      */
     private void mostrarMensaje(
             Alert.AlertType tipo,
             String titulo,
             String mensaje) {
 
-        // Crea una alerta utilizando el tipo indicado.
-        Alert alerta =
-                new Alert(tipo);
+        Alert alerta = new Alert(tipo);
 
-        // Establece el título de la ventana de alerta.
-        alerta.setTitle(
-                titulo
-        );
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
 
-        // Elimina el encabezado de la alerta.
-        alerta.setHeaderText(
-                null
-        );
-
-        // Establece el mensaje que se mostrará al usuario.
-        alerta.setContentText(
-                mensaje
-        );
-
-        // Muestra la alerta y espera a que el usuario la cierre.
         alerta.showAndWait();
     }
 }
