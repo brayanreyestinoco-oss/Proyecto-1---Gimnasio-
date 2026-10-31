@@ -4,13 +4,19 @@ module cr.ac.una.est.controlmembresiasgimnasio {
     requires javafx.fxml;
     requires com.dlsc.fxmlkit;
 
-
     /*
      * Permite que JavaFX cargue los controladores
      * y archivos FXML.
      */
     requires java.sql;
     // Permite utilizar JDBC y las clases de java.sql.
+
+    /*
+     * El driver de MySQL (mysql-connector-j) no se declara con requires:
+     * java.sql lo descubre solo mediante ServiceLoader al estar en el
+     * module path. Si al ejecutar aparece "No suitable driver found",
+     * agregar: requires mysql.connector.j;
+     */
 
     opens cr.ac.una.est.controlmembresiasgimnasio
             to javafx.fxml;

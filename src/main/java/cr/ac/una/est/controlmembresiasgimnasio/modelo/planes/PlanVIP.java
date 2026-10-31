@@ -7,55 +7,69 @@ import cr.ac.una.est.controlmembresiasgimnasio.interfaces.IRenovable;
  */
 public class PlanVIP extends Plan implements IRenovable {
 
-    private static final double RECARGO_VIP = 10000;
+    /** Código con el que se guarda este tipo en MySQL. */
+    public static final String TIPO = "VIP";
+
+    // Recargo en colones por los beneficios VIP.
+    private final double recargo;
 
     /**
-     * Crea un plan VIP con precio base mensual más el recargo VIP.
+     * Crea un plan VIP con los valores originales del sistema:
+     * precio mensual de 15000 más 10000 de recargo.
      */
     public PlanVIP() {
-        super("VIP Mensual", 15000);
+        this("VIP Mensual", 15000, 10000,
+                "Acceso al gimnasio + clases especiales + casillero personal");
     }
 
-    /**
-     * Calcula el precio final sumando el recargo por beneficios VIP.
-     * @return precio final en colones
-     */
+    /** Crea un plan VIP nuevo (sin guardar). */
+    public PlanVIP(String nombre, double precioBase,
+                   double recargo, String beneficios) {
+        super(nombre, precioBase, beneficios);
+        this.recargo = recargo;
+    }
+
+    /** Reconstruye un plan VIP desde los datos almacenados. */
+    public PlanVIP(int idPlan, String nombre, double precioBase,
+                   double recargo, String beneficios) {
+        super(idPlan, nombre, precioBase, beneficios);
+        this.recargo = recargo;
+    }
+
+    /** Obtiene el recargo VIP en colones. */
+    public double getRecargo() {
+        return recargo;
+    }
+
+    @Override
+    public String getTipo() {
+        return TIPO;
+    }
+
+    /** El ajuste del plan VIP es su recargo en colones. */
+    @Override
+    public double getAjuste() {
+        return recargo;
+    }
+
+    /** Calcula el precio final sumando el recargo VIP. */
     @Override
     public double calcularPrecioFinal() {
-        return getPrecioBase() + RECARGO_VIP;
+        return getPrecioBase() + recargo;
     }
 
-    /**
-     * El plan VIP dura 1 mes, igual que el mensual, pero con más beneficios.
-     * @return 1
-     */
+    /** El plan VIP dura 1 mes. */
     @Override
     public int getDuracionEnMeses() {
         return 1;
     }
 
-    /**
-     * Describe los beneficios del plan VIP.
-     * @return texto de beneficios
-     */
-    @Override
-    public String getBeneficios() {
-        return "Acceso al gimnasio + clases especiales + casillero personal";
-    }
-
-    /**
-     * El plan VIP no se renueva automáticamente (requiere confirmación).
-     * @return false
-     */
+    /** El plan VIP no se renueva automáticamente. */
     @Override
     public boolean esRenovableAutomaticamente() {
         return false;
     }
 
-    /**
-     * El costo de renovar es igual al precio final.
-     * @return costo de renovación
-     */
     @Override
     public double costoRenovacion() {
         return calcularPrecioFinal();
