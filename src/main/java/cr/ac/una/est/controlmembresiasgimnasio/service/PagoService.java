@@ -140,6 +140,9 @@ public class PagoService {
 
             conexion.setAutoCommit(false);
 
+            // Variable para controlar si se intentó confirmar la transacción.
+            boolean commitIntentado = false;
+
             try {
                 // Verificar que el socio y el plan de la membresía
                 // coincidan con registros existentes en MySQL.
@@ -148,7 +151,15 @@ public class PagoService {
                         membresia.getSocio(),
                         membresia.getPlan()
                 );
-                // Actualizar las fechas en el objeto Java.
+
+// Comprobar que la membresía pertenece al socio correcto.
+// FOR UPDATE bloquea la fila durante la transacción.
+                validarMembresiaParaRenovacion(
+                        conexion,
+                        membresia
+                );
+
+// Actualizar las fechas en el objeto Java.
                 actualizarVencimiento(membresia, fechaPago);
 
                 // Actualizar la membresía en MySQL.
@@ -173,32 +184,49 @@ public class PagoService {
                 // Guardar el pago utilizando la misma conexión.
                 pagoRepository.guardar(pago, conexion);
 
-                // Confirmar las dos operaciones.
+                // Indicamos que vamos a confirmar la transacción.
+                commitIntentado = true;
+
+// Confirmar la actualización de membresía y el pago.
                 conexion.commit();
 
+// Si commit termina correctamente,
+// devolvemos el pago registrado.
                 return pago;
 
             } catch (SQLException | RuntimeException e) {
 
-                // Indica si MySQL pudo revertir la transacción.
+                // Si ya intentamos confirmar la transacción,
+                // no podemos asegurar que MySQL la haya cancelado.
+                if (commitIntentado) {
+
+                    throw new IllegalStateException(
+                            "Ocurrió un error durante la confirmación "
+                                    + "del pago. No se puede determinar con "
+                                    + "certeza si MySQL guardó los cambios. "
+                                    + "Consulte los pagos registrados antes "
+                                    + "de intentar nuevamente.",
+                            e
+                    );
+                }
+
+                // Si todavía no intentamos commit(),
+                // podemos solicitar la reversión.
                 boolean rollbackExitoso = false;
 
                 try {
 
-                    // Intentar deshacer los cambios realizados.
                     conexion.rollback();
-
-                    // La operación rollback terminó sin errores.
                     rollbackExitoso = true;
 
                 } catch (SQLException errorRollback) {
 
-                    // Guardar también el error ocurrido al revertir.
+                    // Conservamos el error original y el de rollback.
                     e.addSuppressed(errorRollback);
                 }
 
-                // Restaurar el objeto Java si la reversión
-                // se completó correctamente.
+                // Restauramos el objeto Java únicamente cuando
+                // la reversión terminó correctamente.
                 if (rollbackExitoso) {
 
                     membresia.setFechaInicio(inicioAnterior);
@@ -210,26 +238,33 @@ public class PagoService {
                     membresia.setActiva(activaAnterior);
                 }
 
-                // Informar del fallo sin asegurar una reversión
-                // cuando no fue posible comprobarla.
                 throw new IllegalStateException(
                         rollbackExitoso
                                 ? "No se pudo registrar el pago. "
-                                + "Se ejecutó la reversión de la transacción."
+                                + "La transacción fue revertida."
                                 : "No se pudo registrar el pago "
-                                + "y no fue posible confirmar la reversión.",
+                                + "y no fue posible confirmar "
+                                + "la reversión de la transacción.",
                         e
                 );
             }
 
         } catch (SQLException e) {
 
-            membresia.setFechaInicio(inicioAnterior);
-            membresia.setFechaVencimiento(vencimientoAnterior);
-            membresia.setActiva(activaAnterior);
+            // Este bloque maneja los errores de conexión
+            // o los errores al cerrar los recursos JDBC.
+            //
+            // No restauramos automáticamente el objeto Java
+            // porque, si ocurrió un problema durante commit(),
+            // el resultado de la transacción podría ser incierto.
 
             throw new IllegalStateException(
-                    "Error de conexión al registrar el pago.", e);
+                    "Ocurrió un error de conexión durante "
+                            + "el registro del pago. "
+                            + "Antes de intentar registrar el pago nuevamente, "
+                            + "verifique en MySQL si quedó guardado.",
+                    e
+            );
         }
     }
 
@@ -290,6 +325,9 @@ public class PagoService {
             // Desactivamos la confirmación automática.
             conexion.setAutoCommit(false);
 
+            // Indica si ya se intentó confirmar el primer pago.
+            boolean commitIntentado = false;
+
             try {
 
                 // Comprobar que el socio y el plan existen
@@ -338,37 +376,59 @@ public class PagoService {
                         conexion
                 );
 
-                // 6. Confirmar todas las operaciones juntas.
+                // Indicamos que comienza la confirmación.
+                commitIntentado = true;
+
+// Confirmar la membresía y su primer pago.
                 conexion.commit();
 
-                // Devolver el pago ya registrado.
+// Devolver el pago solamente si commit terminó.
                 return pago;
 
             } catch (SQLException | RuntimeException e) {
 
-                // Intentamos deshacer las operaciones realizadas en MySQL.
+                // Si ya se intentó confirmar la transacción,
+                // no podemos asegurar si MySQL guardó el pago.
+                if (commitIntentado) {
+
+                    throw new IllegalStateException(
+                            "Ocurrió un error durante la confirmación "
+                                    + "del primer pago. No se puede determinar "
+                                    + "con certeza si la membresía y el pago "
+                                    + "quedaron registrados en MySQL. "
+                                    + "Verifique los datos antes de intentar "
+                                    + "registrar el pago nuevamente.",
+                            e
+                    );
+                }
+
+                // Si todavía no se intentó commit(),
+                // solicitamos revertir la transacción.
                 boolean rollbackExitoso = false;
 
                 try {
+
                     conexion.rollback();
                     rollbackExitoso = true;
 
                 } catch (SQLException errorRollback) {
 
-                    // Conservamos información de ambos errores.
+                    // Conservamos ambos errores para diagnóstico.
                     e.addSuppressed(errorRollback);
                 }
 
-                // Restauramos los datos del objeto Java únicamente
-                // cuando MySQL confirmó que la reversión fue exitosa.
+                // Restauramos el objeto Java solamente cuando
+                // rollback terminó correctamente.
                 if (rollbackExitoso) {
 
-                    // La membresía no quedó registrada.
+                    // Restaurar el identificador inicial.
                     membresia.setIdMembresia(0);
 
-                    // Restauramos su estado inicial.
+                    // Restaurar las fechas iniciales.
                     membresia.setFechaInicio(fechaPago);
                     membresia.setFechaVencimiento(null);
+
+                    // La membresía vuelve a su estado inicial.
                     membresia.setActiva(false);
                 }
 
@@ -377,7 +437,8 @@ public class PagoService {
                                 ? "No se pudo registrar el primer pago. "
                                 + "La transacción fue revertida."
                                 : "No se pudo registrar el primer pago "
-                                + "y no fue posible confirmar la reversión.",
+                                + "y no fue posible confirmar "
+                                + "la reversión de la transacción.",
                         e
                 );
             }
@@ -602,4 +663,91 @@ public class PagoService {
             }
         }
     }
+    /**
+     * Verifica que la membresía que se desea renovar
+     * exista y pertenezca al socio correcto.
+     *
+     * También comprueba que las fechas y el estado
+     * no hayan cambiado en MySQL desde la consulta.
+     */
+    private void validarMembresiaParaRenovacion(
+            Connection conexion,
+            Membresia membresia) throws SQLException {
+
+        if (membresia.getSocio() == null
+                || membresia.getSocio().getIdSocio() <= 0) {
+
+            throw new SQLException(
+                    "La membresía no tiene un socio válido."
+            );
+        }
+
+        // FOR UPDATE bloquea la fila hasta que termine
+        // la transacción con commit o rollback.
+        String sql =
+                "SELECT id_socio, fecha_inicio, "
+                        + "fecha_vencimiento, activa "
+                        + "FROM membresia "
+                        + "WHERE id_membresia = ? FOR UPDATE";
+
+        try (PreparedStatement ps =
+                     conexion.prepareStatement(sql)) {
+
+            ps.setInt(1, membresia.getIdMembresia());
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                // Verificar que la membresía exista.
+                if (!rs.next()) {
+                    throw new SQLException(
+                            "La membresía no existe en MySQL."
+                    );
+                }
+
+                // Comprobar que pertenece al socio correcto.
+                if (rs.getInt("id_socio")
+                        != membresia.getSocio().getIdSocio()) {
+
+                    throw new SQLException(
+                            "La membresía no pertenece "
+                                    + "al socio seleccionado."
+                    );
+                }
+
+                // Recuperar las fechas guardadas en MySQL.
+                java.sql.Date inicio =
+                        rs.getDate("fecha_inicio");
+
+                java.sql.Date vencimiento =
+                        rs.getDate("fecha_vencimiento");
+
+                LocalDate inicioBD =
+                        inicio == null
+                                ? null
+                                : inicio.toLocalDate();
+
+                LocalDate vencimientoBD =
+                        vencimiento == null
+                                ? null
+                                : vencimiento.toLocalDate();
+
+                // Detectar si la información cambió.
+                if (!java.util.Objects.equals(
+                        inicioBD, membresia.getFechaInicio())
+                        || !java.util.Objects.equals(
+                        vencimientoBD,
+                        membresia.getFechaVencimiento())
+                        || rs.getBoolean("activa")
+                        != membresia.isActiva()) {
+
+                    throw new SQLException(
+                            "La membresía cambió en MySQL. "
+                                    + "Consulte nuevamente sus datos "
+                                    + "antes de registrar el pago."
+                    );
+                }
+            }
+        }
+    }
+
 }

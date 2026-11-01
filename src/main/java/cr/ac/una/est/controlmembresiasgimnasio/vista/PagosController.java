@@ -271,7 +271,13 @@ public class PagosController {
 
         } catch (IllegalStateException e) {
 
-            // Informar de un fallo en la consulta JDBC.
+            // Limpiar la tabla para evitar que permanezcan
+            // resultados de una consulta anterior.
+            tablaPagos.setItems(
+                    FXCollections.observableArrayList()
+            );
+
+            // Mostrar el error ocurrido al consultar MySQL.
             mostrarMensaje(
                     Alert.AlertType.ERROR,
                     "Error de búsqueda",

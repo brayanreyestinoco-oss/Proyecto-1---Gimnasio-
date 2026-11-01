@@ -89,6 +89,16 @@ public class RegistrarPagoController {
         dpFechaInicio.setOnAction(
                 event -> actualizarDatosPlan()
         );
+
+        // Actualizar el vencimiento al salir del campo de cédula.
+        txtCedula.focusedProperty().addListener(
+                (observable, estabaEnfocado, estaEnfocado) -> {
+
+                    if (!estaEnfocado) {
+                        actualizarDatosPlan();
+                    }
+                }
+        );
     }
 
     /**
@@ -121,14 +131,18 @@ public class RegistrarPagoController {
     }
 
     /**
-     * Actualiza el precio y el vencimiento estimado.
+     * Actualiza el precio del plan y muestra
+     * el vencimiento estimado del pago.
+     *
+     * Si existe una membresía vigente, calcula
+     * la renovación desde su vencimiento actual.
      */
     private void actualizarDatosPlan() {
 
         String nombrePlan = cmbPlan.getValue();
-        LocalDate fecha = dpFechaInicio.getValue();
+        LocalDate fechaPago = dpFechaInicio.getValue();
 
-        if (nombrePlan == null || fecha == null) {
+        if (nombrePlan == null || fechaPago == null) {
             return;
         }
 
@@ -138,13 +152,51 @@ public class RegistrarPagoController {
             return;
         }
 
-        // Mostrar el precio calculado del plan.
+        // Mostrar el precio del plan seleccionado.
         txtMonto.setText(
                 String.valueOf(plan.calcularPrecioFinal())
         );
 
-        // Calcular el vencimiento estimado.
-        LocalDate vencimiento = fecha.plusMonths(
+        // Inicialmente, el pago comienza en la fecha elegida.
+        LocalDate fechaBase = fechaPago;
+
+        // Buscar la membresía del socio si se ingresó cédula.
+        String cedula = txtCedula.getText();
+
+        if (cedula != null && !cedula.isBlank()) {
+
+            try {
+
+                Membresia membresia =
+                        pagoService.buscarMembresiaPorCedula(
+                                cedula.trim()
+                        );
+
+                // Una membresía vigente se extiende desde
+                // su fecha de vencimiento actual.
+                if (membresia != null
+                        && membresia.isActiva()
+                        && membresia.getFechaVencimiento() != null
+                        && !membresia.getFechaVencimiento()
+                        .isBefore(fechaPago)) {
+
+                    fechaBase = membresia.getFechaVencimiento();
+                }
+
+            } catch (IllegalStateException e) {
+
+                // Si no se puede consultar MySQL, no mostramos
+                // una fecha que podría resultar incorrecta.
+                lblVencimiento.setText(
+                        "No se pudo calcular el vencimiento"
+                );
+
+                return;
+            }
+        }
+
+        // Aplicar la duración del plan seleccionado.
+        LocalDate vencimiento = fechaBase.plusMonths(
                 plan.getDuracionEnMeses()
         );
 
@@ -329,9 +381,30 @@ public class RegistrarPagoController {
 
                 } catch (RuntimeException e) {
 
-                    // Restaurar el plan anterior si falla.
-                    membresia.setPlan(planAnterior);
+                    // Comprobar si el servicio informó que no puede
+                    // confirmar el resultado de la transacción.
+                    String mensajeError = e.getMessage();
 
+                    boolean resultadoIncierto =
+                            e instanceof IllegalStateException
+                                    && mensajeError != null
+                                    && (
+                                    mensajeError.contains(
+                                            "No se puede determinar"
+                                    )
+                                            || mensajeError.contains(
+                                            "no fue posible confirmar"
+                                    )
+                            );
+
+                    // Restaurar el plan anterior solo cuando
+                    // no exista incertidumbre sobre la transacción.
+                    if (!resultadoIncierto) {
+
+                        membresia.setPlan(planAnterior);
+                    }
+
+                    // Propagar el error al manejo general del formulario.
                     throw e;
                 }
             }
