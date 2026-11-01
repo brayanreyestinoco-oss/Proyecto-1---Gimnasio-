@@ -53,7 +53,7 @@ public class HistorialAccesosController {
     private static final String RES_PERMITIDOS = "Permitidos / Vigentes";
     private static final String RES_DENEGADOS = "Denegados / No vigentes";
 
-    private static final String VER_ENTRADAS = "Entradas al gimnasio";
+    private static final String VER_ENTRADAS = "Intentos de acceso";
     private static final String VER_CONSULTAS = "Consultas de membresía";
 
     @FXML
@@ -86,6 +86,10 @@ public class HistorialAccesosController {
     @FXML
     private TableColumn<RegistroAcceso, String> colMotivo;
 
+    @FXML private javafx.scene.control.ProgressIndicator indicadorCarga;
+    @FXML private javafx.scene.control.DatePicker fechaDesde;
+    @FXML private javafx.scene.control.DatePicker fechaHasta;
+    private Task<List<RegistroAcceso>> tareaActual;
     @FXML
     private Label lblResumen;
 
@@ -103,7 +107,7 @@ public class HistorialAccesosController {
 
         cmbTipo.getItems().setAll(VER_ENTRADAS, VER_CONSULTAS);
         cmbTipo.setValue(VER_ENTRADAS);
-        colMotivo.setText("Plan");
+        colMotivo.setText("Motivo");
 
         cmbPeriodo.getItems().setAll(HOY, SIETE_DIAS, TODOS);
         cmbPeriodo.setValue(HOY);
@@ -144,8 +148,7 @@ public class HistorialAccesosController {
 
         tablaAccesos.setItems(filtrados);
 
-        txtBuscar.textProperty().addListener(
-                (obs, anterior, actual) -> aplicarFiltros());
+        txtBuscar.setOnAction(e -> cargarHistorial());
         cmbResultado.valueProperty().addListener(
                 (obs, anterior, actual) -> aplicarFiltros());
         cmbPeriodo.valueProperty().addListener(
@@ -153,7 +156,7 @@ public class HistorialAccesosController {
         cmbTipo.valueProperty().addListener(
                 (obs, anterior, actual) -> {
                     colMotivo.setText(VER_CONSULTAS.equals(actual)
-                            ? "Estado" : "Plan");
+                            ? "Estado" : "Motivo");
                     tablaAccesos.refresh();
                     cargarHistorial();
                 });
@@ -169,27 +172,44 @@ public class HistorialAccesosController {
     @FXML
     private void cargarHistorial() {
 
-        LocalDateTime desde = calcularDesde();
+        if (fechaDesde.getValue() != null && fechaHasta.getValue() != null
+                && fechaDesde.getValue().isAfter(fechaHasta.getValue())) {
+            mostrarAlerta(Alert.AlertType.WARNING, "La fecha inicial no puede superar la final.");
+            return;
+        }
+        if (tareaActual != null) tareaActual.cancel();
+        LocalDateTime desde = fechaDesde.getValue() == null ? calcularDesde()
+                : fechaDesde.getValue().atStartOfDay();
+        LocalDateTime hasta = fechaHasta.getValue() == null ? null
+                : fechaHasta.getValue().plusDays(1).atStartOfDay();
+        String socio = txtBuscar.getText() == null ? "" : txtBuscar.getText().trim();
         boolean consultas = VER_CONSULTAS.equals(cmbTipo.getValue());
 
+        registros.clear();
+        indicadorCarga.setVisible(true);
         lblResumen.setText("Cargando historial...");
 
         Task<List<RegistroAcceso>> tarea = new Task<>() {
             @Override
             protected List<RegistroAcceso> call() {
                 return consultas
-                        ? servicio.listarConsultas(desde, LIMITE_FILAS)
-                        : servicio.listar(desde, LIMITE_FILAS);
+                        ? servicio.buscarConsultas(desde, hasta, socio, LIMITE_FILAS)
+                        : servicio.buscar(desde, hasta, socio, LIMITE_FILAS);
             }
         };
 
+        tareaActual = tarea;
         tarea.setOnSucceeded(e -> {
+            if (tareaActual != tarea) return;
+            indicadorCarga.setVisible(false);
             registros.setAll(tarea.getValue());
             aplicarFiltros();
             actualizarResumen();
         });
 
         tarea.setOnFailed(e -> {
+            if (tareaActual != tarea) return;
+            indicadorCarga.setVisible(false);
             lblResumen.setText("No se pudo cargar el historial.");
             mostrarAlerta(Alert.AlertType.ERROR,
                     "No se pudo cargar el historial:\n"
@@ -236,8 +256,13 @@ public class HistorialAccesosController {
                 ? "" : txtBuscar.getText().trim().toLowerCase();
 
         String resultado = cmbResultado.getValue();
+        LocalDate inicio = fechaDesde.getValue();
+        LocalDate fin = fechaHasta.getValue();
 
         filtrados.setPredicate(r -> {
+            LocalDate fecha = r.fechaHora().toLocalDate();
+            if (inicio != null && fecha.isBefore(inicio)) return false;
+            if (fin != null && fecha.isAfter(fin)) return false;
 
             if (RES_PERMITIDOS.equals(resultado) && !r.permitido()) {
                 return false;
@@ -248,7 +273,7 @@ public class HistorialAccesosController {
             }
 
             return texto.isEmpty()
-                    || r.cedula().toLowerCase().contains(texto)
+                    || r.cedula().equalsIgnoreCase(texto)
                     || (r.nombre() != null
                     && r.nombre().toLowerCase().contains(texto));
         });
@@ -261,7 +286,7 @@ public class HistorialAccesosController {
 
         long total = filtrados.size();
 
-        lblResumen.setText(total + " registro(s): "
+        lblResumen.setText((registros.size() == LIMITE_FILAS ? "Límite de 5000: acorte el período. " : "") + total + " registro(s): "
                 + permitidas + " permitido(s)/vigente(s), "
                 + (total - permitidas) + " denegado(s)/no vigente(s)");
     }
@@ -269,6 +294,10 @@ public class HistorialAccesosController {
     @FXML
     private void exportarCsv() {
 
+        if (tareaActual != null && tareaActual.isRunning()) {
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Espere a que termine la consulta.");
+            return;
+        }
         if (filtrados.isEmpty()) {
             mostrarAlerta(Alert.AlertType.INFORMATION,
                     "No hay datos para exportar.");
@@ -297,7 +326,7 @@ public class HistorialAccesosController {
                     "Fecha y hora", "Socio", "Cedula",
                     "Resultado",
                     VER_CONSULTAS.equals(cmbTipo.getValue())
-                            ? "Estado" : "Plan"));
+                            ? "Estado" : "Motivo"));
 
             for (RegistroAcceso r : filtrados) {
                 escribirFila(escritor, List.of(
@@ -334,6 +363,7 @@ public class HistorialAccesosController {
 
     @FXML
     private void volverMenu() {
+        if (tareaActual != null) tareaActual.cancel();
 
         try {
             FXMLLoader loader = new FXMLLoader(

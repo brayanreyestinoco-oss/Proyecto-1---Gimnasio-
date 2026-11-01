@@ -64,6 +64,7 @@ public class ControladorAcceso {
             new HistorialAccesoService();
 
     private ControlAcceso controlAcceso;
+    private boolean procesando;
 
     @FXML
     public void initialize() {
@@ -112,6 +113,8 @@ public class ControladorAcceso {
 
         tarea.setOnSucceeded(e ->
                 tablaRecientes.getItems().setAll(tarea.getValue()));
+        tarea.setOnFailed(e -> tablaRecientes.setPlaceholder(
+                new Label("No se pudieron cargar los accesos recientes. Revise MySQL.")));
 
         Thread hilo = new Thread(tarea, "cargar-accesos-recientes");
         hilo.setDaemon(true);
@@ -158,23 +161,39 @@ public class ControladorAcceso {
             return;
         }
 
-        ResultadoAcceso resultado;
-
-        try {
-            resultado = esEntrada
-                    ? controlAcceso.registrarEntrada(cedula)
-                    : controlAcceso.consultarMembresia(cedula);
-
-        } catch (IllegalStateException e) {
-            limpiarInformacion();
-
-            lblResultado.setText(
-                    "Error al consultar la base de datos."
-            );
-
+        if (procesando) return;
+        if (cedula.length() > 20) {
+            lblResultado.setText("La cédula no puede superar los 20 caracteres.");
             return;
         }
+        procesando = true;
+        txtCedula.setDisable(true);
+        lblResultado.setText("Consultando y guardando en MySQL...");
+        Task<ResultadoAcceso> tarea = new Task<>() {
+            @Override protected ResultadoAcceso call() {
+                return esEntrada ? controlAcceso.registrarEntrada(cedula)
+                        : controlAcceso.consultarMembresia(cedula);
+            }
+        };
+        tarea.setOnSucceeded(e -> {
+            procesando = false;
+            txtCedula.setDisable(false);
+            mostrarResultado(tarea.getValue(), esEntrada);
+        });
+        tarea.setOnFailed(e -> {
+            procesando = false;
+            txtCedula.setDisable(false);
+            limpiarInformacion();
+            lblResultado.setText("No se pudo verificar el acceso. Revise la conexión a MySQL e intente de nuevo.");
+        });
+        Thread hilo = new Thread(tarea, "verificar-acceso");
+        hilo.setDaemon(true);
+        hilo.start();
+    }
 
+    /** Presenta la verificación desde el hilo de JavaFX.
+     * @param resultado verificación @param esEntrada indica intento o consulta */
+    private void mostrarResultado(ResultadoAcceso resultado, boolean esEntrada) {
         if (resultado.membresia() == null) {
             limpiarInformacion();
         } else {
