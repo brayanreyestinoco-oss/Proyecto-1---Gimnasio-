@@ -1,5 +1,6 @@
 package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
+import cr.ac.una.est.controlmembresiasgimnasio.Pantalla;
 import cr.ac.una.est.controlmembresiasgimnasio.DatosAplicacion;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.planes.Plan;
@@ -390,14 +391,7 @@ public class PlanesController {
 
             Stage stage = (Stage) tablaPlanes.getScene().getWindow();
 
-            stage.setMaximized(false);
-
-            Scene scene = new Scene(root, 600, 400);
-
-            stage.setScene(scene);
-            stage.sizeToScene();
-            stage.centerOnScreen();
-
+            Pantalla.cambiar(stage, root);
         } catch (IOException e) {
 
             mostrarAlerta(

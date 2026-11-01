@@ -1,5 +1,6 @@
 package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
+import cr.ac.una.est.controlmembresiasgimnasio.Pantalla;
 import cr.ac.una.est.controlmembresiasgimnasio.DatosAplicacion;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
@@ -364,13 +365,7 @@ public class SociosController {
                                     .getWindow();
 
             // Cambia la escena actual por el formulario de modificación.
-            stage.setScene(
-                    new Scene(
-                            root,
-                            850,
-                            500
-                    )
-            );
+            Pantalla.cambiar(stage, root);
 
         } catch (IOException e) {
 
@@ -412,13 +407,7 @@ public class SociosController {
                                     .getWindow();
 
             // Cambia la escena actual por el formulario de registro.
-            stage.setScene(
-                    new Scene(
-                            root,
-                            850,
-                            500
-                    )
-            );
+            Pantalla.cambiar(stage, root);
 
         } catch (IOException e) {
 
@@ -461,16 +450,7 @@ public class SociosController {
                                 .getWindow();
 
         // Cambia la escena actual por la del menú principal.
-        stage.setScene(
-                new Scene(
-                        root,
-                        600,
-                        400
-                )
-        );
-
-        // Centra nuevamente la ventana en la pantalla.
-        stage.centerOnScreen();
+        Pantalla.cambiar(stage, root);
     }
 
     /**

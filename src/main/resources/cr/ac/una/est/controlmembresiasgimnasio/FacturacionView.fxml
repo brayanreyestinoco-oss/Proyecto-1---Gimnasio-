@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.VBox?>
+
+<!-- Pantalla de facturación: lista de facturas, vista previa y exportación a Word. -->
+<BorderPane prefHeight="650.0" prefWidth="1100.0"
+            style="-fx-background-color: #F4F6F8; -fx-font-size: 15px;"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.FacturacionController">
+
+    <!-- ENCABEZADO -->
+    <top>
+        <VBox spacing="10" style="-fx-background-color: #1F2937;">
+            <padding>
+                <Insets bottom="15" left="20" right="20" top="15"/>
+            </padding>
+
+            <Label style="-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;"
+                   text="🧾 FACTURACIÓN"/>
+
+            <Label style="-fx-text-fill: #D1D5DB; -fx-font-size: 12px;"
+                   text="Facturas de los clientes generadas a partir de sus pagos"/>
+
+            <HBox spacing="10">
+                <TextField fx:id="txtBuscar"
+                           prefHeight="42" prefWidth="420"
+                           promptText="Buscar por número, cédula o nombre"
+                           style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 7px;"/>
+
+                <Button onAction="#mostrarTodas" prefHeight="42"
+                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;"
+                        text="Mostrar todas"/>
+
+                <Button onAction="#cargarFacturas" prefHeight="42"
+                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;"
+                        text="🔄 Actualizar"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- LISTA DE FACTURAS -->
+    <center>
+        <VBox spacing="8">
+            <padding>
+                <Insets bottom="10" left="15" right="8" top="15"/>
+            </padding>
+
+            <TableView fx:id="tablaFacturas"
+                       style="-fx-font-size: 14px; -fx-fixed-cell-size: 38px; -fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6;"
+                       VBox.vgrow="ALWAYS">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+                <columns>
+                    <TableColumn fx:id="colNumero" text="N° Factura"/>
+                    <TableColumn fx:id="colFecha" text="Fecha"/>
+                    <TableColumn fx:id="colCliente" text="Cliente"/>
+                    <TableColumn fx:id="colCedula" text="Cédula"/>
+                    <TableColumn fx:id="colPlan" text="Plan"/>
+                    <TableColumn fx:id="colMetodo" text="Método"/>
+                    <TableColumn fx:id="colTotal" text="Total"/>
+                </columns>
+            </TableView>
+
+            <Label fx:id="lblEstado" style="-fx-text-fill: #6B7280;"/>
+        </VBox>
+    </center>
+
+    <!-- VISTA PREVIA -->
+    <right>
+        <VBox prefWidth="520" minWidth="440" spacing="8">
+            <padding>
+                <Insets bottom="10" left="8" right="15" top="15"/>
+            </padding>
+
+            <Label style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1F2937;"
+                   text="Vista previa"/>
+
+            <TextArea fx:id="txtVistaPrevia"
+                      editable="false"
+                      style="-fx-font-family: 'Consolas', 'Courier New', monospace; -fx-font-size: 13px;"
+                      text="Seleccione una factura para ver su vista previa."
+                      VBox.vgrow="ALWAYS"/>
+
+            <Button fx:id="btnExportar"
+                    maxWidth="Infinity"
+                    onAction="#exportarDocx"
+                    prefHeight="46"
+                    style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6;"
+                    text="📄 Exportar a Word (.docx)"/>
+        </VBox>
+    </right>
+
+    <bottom>
+        <HBox alignment="BOTTOM_RIGHT">
+            <padding>
+                <Insets bottom="15" right="25"/>
+            </padding>
+
+            <Button onAction="#volverMenu"
+                    prefHeight="40"
+                    prefWidth="120"
+                    style="-fx-background-color: #6B7280; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6;"
+                    text="← Volver"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

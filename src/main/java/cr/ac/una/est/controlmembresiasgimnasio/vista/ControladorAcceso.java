@@ -1,5 +1,6 @@
 package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
+import cr.ac.una.est.controlmembresiasgimnasio.Pantalla;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
 import cr.ac.una.est.controlmembresiasgimnasio.service.ControlAcceso;
@@ -165,12 +166,7 @@ public class ControladorAcceso {
             Stage stage =
                     (Stage) txtCedula.getScene().getWindow();
 
-            stage.setScene(
-                    new Scene(root, 600, 400)
-            );
-
-            stage.centerOnScreen();
-
+            Pantalla.cambiar(stage, root);
         } catch (IOException e) {
 
             lblResultado.setText(

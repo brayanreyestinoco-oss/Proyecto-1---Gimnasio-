@@ -1,5 +1,6 @@
 package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
+import cr.ac.una.est.controlmembresiasgimnasio.Pantalla;
 import cr.ac.una.est.controlmembresiasgimnasio.DatosAplicacion;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Pago;
@@ -319,13 +320,7 @@ public class PagosController {
                     .getWindow();
 
             // Mostrar la pantalla de registro.
-            stage.setScene(
-                    new Scene(root, 600, 400)
-            );
-
-            // Centrar la ventana.
-            stage.centerOnScreen();
-
+            Pantalla.cambiar(stage, root);
         } catch (IOException | RuntimeException e) {
 
             // Informar si no se pudo abrir la pantalla.
@@ -362,13 +357,7 @@ public class PagosController {
                     .getWindow();
 
             // Mostrar el menú principal.
-            stage.setScene(
-                    new Scene(root, 600, 400)
-            );
-
-            // Centrar la ventana.
-            stage.centerOnScreen();
-
+            Pantalla.cambiar(stage, root);
         } catch (IOException | RuntimeException e) {
 
             mostrarMensaje(

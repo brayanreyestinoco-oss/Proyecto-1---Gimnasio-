@@ -1,5 +1,6 @@
 package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
+import cr.ac.una.est.controlmembresiasgimnasio.Pantalla;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.reportes.ReporteFila;
 import cr.ac.una.est.controlmembresiasgimnasio.repository.ReporteRepositoryJdbc;
@@ -214,8 +215,7 @@ public class ReportesController {
                     HelloApplication.class.getResource("MenuPrincipalView.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) tablaReporte.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 400));
-            stage.centerOnScreen();
+            Pantalla.cambiar(stage, root);
         } catch (IOException e) {
             mostrarAlerta(Alert.AlertType.ERROR,
                     "No se pudo regresar al menú principal:\n" + e.getMessage());

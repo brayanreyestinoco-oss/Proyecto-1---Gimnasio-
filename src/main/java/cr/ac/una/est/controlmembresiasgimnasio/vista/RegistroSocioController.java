@@ -1,5 +1,6 @@
 package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
+import cr.ac.una.est.controlmembresiasgimnasio.Pantalla;
 import cr.ac.una.est.controlmembresiasgimnasio.DatosAplicacion;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.socios.Socio;
@@ -434,13 +435,7 @@ public class RegistroSocioController {
                                     .getWindow();
 
             // Cambia la escena actual por la pantalla de socios.
-            stage.setScene(
-                    new Scene(
-                            root,
-                            600,
-                            400
-                    )
-            );
+            Pantalla.cambiar(stage, root);
 
         } catch (IOException e) {
 

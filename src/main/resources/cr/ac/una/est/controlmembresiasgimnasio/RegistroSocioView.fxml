@@ -1,303 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Importa la clase Insets para configurar los espacios internos de los contenedores. -->
-
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<!-- Importa el control Button para crear botones. -->
-<!-- Importa el control Label para mostrar textos. -->
-<!-- Importa el control TextArea para ingresar textos de varias líneas. -->
-<!-- Importa el control TextField para ingresar textos de una sola línea. -->
-<!-- Importa el contenedor BorderPane para organizar la interfaz por regiones. -->
-<!-- Importa GridPane para organizar los campos del formulario en filas y columnas. -->
-<!-- Importa HBox para colocar los botones horizontalmente. -->
-<!-- Importa VBox para organizar elementos verticalmente. -->
+<!-- Registro/modificación de socio: formulario en dos columnas centrado en la pantalla. -->
+<BorderPane prefHeight="700.0"
+            prefWidth="1100.0"
+            style="-fx-background-color: #F4F6F8; -fx-font-size: 15px;"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.RegistroSocioController">
 
-<!-- Contenedor principal de la pantalla de registro de socios. -->
-<!-- Se mantiene con un tamaño fijo de 850x500 píxeles. -->
+    <top>
+        <VBox alignment="CENTER" spacing="4.0" style="-fx-background-color: #1F2937;">
+            <padding>
+                <Insets bottom="18.0" left="20.0" right="20.0" top="18.0" />
+            </padding>
 
-<VBox maxHeight="500.0"
-      maxWidth="850.0"
-      minHeight="500.0"
-      minWidth="850.0"
-      prefHeight="500.0"
-      prefWidth="850.0"
-      xmlns="http://javafx.com/javafx/17.0.12"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.RegistroSocioController">
+            <Label style="-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;"
+                   text="➕ REGISTRAR SOCIO" />
+            <Label style="-fx-text-fill: #D1D5DB; -fx-font-size: 14px;"
+                   text="Registro de un nuevo socio" />
+        </VBox>
+    </top>
 
-    <!-- Contenedor que organiza la pantalla en encabezado, formulario y botones. -->
-    <BorderPane maxHeight="500.0"
-                maxWidth="850.0"
-                minHeight="500.0"
-                minWidth="850.0"
-                prefHeight="500.0"
-                prefWidth="850.0">
+    <center>
+        <VBox alignment="CENTER" spacing="30.0">
+            <padding>
+                <Insets bottom="20.0" left="40.0" right="40.0" top="20.0" />
+            </padding>
 
-        <!-- ENCABEZADO -->
-        <!-- Parte superior de la pantalla donde se muestra el título y subtítulo. -->
-        <top>
-
-            <!-- Contenedor vertical utilizado para colocar los textos del encabezado. -->
-            <VBox alignment="CENTER"
-                  prefHeight="80.0"
-                  prefWidth="850.0"
-                  style="-fx-background-color: #1F2937;">
-
-                <!-- Espaciado interno del encabezado. -->
-                <padding>
-                    <Insets bottom="12.0"
-                            left="15.0"
-                            right="15.0"
-                            top="12.0" />
-                </padding>
-
-                <!-- Título principal de la pantalla de registro. -->
-                <Label style="-fx-text-fill: white;
-                             -fx-font-size: 22px;
-                             -fx-font-weight: bold;"
-                       text="➕ REGISTRAR SOCIO" />
-
-                <!-- Texto secundario que describe la función de la pantalla. -->
-                <Label style="-fx-text-fill: #D1D5DB;
-                             -fx-font-size: 12px;"
-                       text="Registro de un nuevo socio" />
-
-            </VBox>
-
-        </top>
-
-
-        <!-- FORMULARIO -->
-        <!-- Parte central donde se encuentran los datos que debe ingresar el usuario. -->
-        <center>
-
-            <!-- GridPane organiza los campos del formulario mediante filas y columnas. -->
-            <GridPane hgap="12.0"
-                      vgap="10.0">
-
-                <!-- Espaciado interno del formulario. -->
-                <padding>
-                    <Insets bottom="10.0"
-                            left="25.0"
-                            right="25.0"
-                            top="18.0" />
-                </padding>
-
-
-                <!-- DATOS PERSONALES -->
-
-                <!-- Etiqueta que identifica el campo de cédula. -->
-                <Label style="-fx-font-weight: bold;"
-                       text="Cédula:"
-                       GridPane.columnIndex="0"
-                       GridPane.rowIndex="0" />
-
-                <!-- Campo donde se ingresa la cédula del socio. -->
-                <TextField fx:id="txtCedula"
-                           prefHeight="30.0"
-                           prefWidth="200.0"
-                           promptText="Ej. 1-2345-6789"
-                           GridPane.columnIndex="1"
-                           GridPane.rowIndex="0" />
-
-
-                <!-- Etiqueta que identifica el campo del nombre completo. -->
-                <Label prefHeight="17.0"
-                       prefWidth="90.0"
-                       style="-fx-font-weight: bold;"
-                       text="Nombre:"
-                       GridPane.columnIndex="0"
-                       GridPane.rowIndex="1" />
-
-                <!-- Campo donde se ingresa el nombre completo del socio. -->
-                <TextField fx:id="txtNombre"
-                           prefHeight="30.0"
-                           prefWidth="200.0"
-                           promptText="Nombre completo del socio"
-                           GridPane.columnIndex="1"
-                           GridPane.rowIndex="1" />
-
-
-                <!-- Etiqueta que identifica el campo del teléfono. -->
-                <Label style="-fx-font-weight: bold;"
-                       text="Teléfono:"
-                       GridPane.columnIndex="0"
-                       GridPane.rowIndex="2" />
-
-                <!-- Campo donde se ingresa el número de teléfono del socio. -->
-                <TextField fx:id="txtTelefono"
-                           prefHeight="30.0"
-                           prefWidth="200.0"
-                           promptText="Ej. 8888-8888"
-                           GridPane.columnIndex="1"
-                           GridPane.rowIndex="2" />
-
-
-                <!-- Etiqueta que identifica el campo del correo electrónico. -->
-                <Label style="-fx-font-weight: bold;"
-                       text="Correo:"
-                       GridPane.columnIndex="0"
-                       GridPane.rowIndex="3" />
-
-                <!-- Campo donde se ingresa el correo electrónico del socio. -->
-                <TextField fx:id="txtCorreo"
-                           prefHeight="30.0"
-                           prefWidth="200.0"
-                           promptText="correo@ejemplo.com"
-                           GridPane.columnIndex="1"
-                           GridPane.rowIndex="3" />
-
-
-                <!-- CONTACTO DE EMERGENCIA -->
-
-                <!-- Etiqueta que identifica el nombre del contacto de emergencia. -->
-                <Label style="-fx-font-weight: bold;"
-                       text="Contacto emergencia:"
-                       GridPane.columnIndex="2"
-                       GridPane.rowIndex="0" />
-
-                <!-- Campo donde se ingresa el nombre del contacto de emergencia. -->
-                <TextField fx:id="txtContactoEmergencia"
-                           prefHeight="30.0"
-                           prefWidth="200.0"
-                           promptText="Nombre"
-                           GridPane.columnIndex="3"
-                           GridPane.rowIndex="0" />
-
-
-                <!-- Etiqueta que identifica el teléfono del contacto de emergencia. -->
-                <Label style="-fx-font-weight: bold;"
-                       text="Teléfono emergencia:"
-                       GridPane.columnIndex="2"
-                       GridPane.rowIndex="1" />
-
-                <!-- Campo donde se ingresa el teléfono del contacto de emergencia. -->
-                <TextField fx:id="txtTelefonoEmergencia"
-                           prefHeight="30.0"
-                           prefWidth="200.0"
-                           promptText="Ej. 8888-8888"
-                           GridPane.columnIndex="3"
-                           GridPane.rowIndex="1" />
-
-
-                <!-- CONDICIONES MÉDICAS -->
-
-                <!-- Etiqueta que identifica el campo de condiciones médicas. -->
-                <Label style="-fx-font-weight: bold;"
-                       text="Condiciones médicas:"
-                       GridPane.columnIndex="2"
-                       GridPane.rowIndex="2" />
-
-                <!-- Área donde se pueden ingresar condiciones médicas en varias líneas. -->
-                <TextArea fx:id="txtCondicionesMedicas"
-                          prefHeight="70.0"
-                          prefWidth="200.0"
-                          promptText="Indique condiciones médicas..."
-                          wrapText="true"
-                          GridPane.columnIndex="3"
-                          GridPane.rowIndex="2"
-                          GridPane.rowSpan="2" />
-
-
-                <!-- Define el ancho de las columnas del formulario. -->
+            <GridPane alignment="CENTER" hgap="20.0" vgap="18.0">
                 <columnConstraints>
-
-                    <ColumnConstraints minWidth="105.0"
-                                       prefWidth="105.0" />
-
-                    <ColumnConstraints minWidth="200.0"
-                                       prefWidth="200.0" />
-
-                    <ColumnConstraints minWidth="145.0"
-                                       prefWidth="145.0" />
-
-                    <ColumnConstraints minWidth="200.0"
-                                       prefWidth="200.0" />
-
+                    <ColumnConstraints minWidth="190.0" prefWidth="190.0" />
+                    <ColumnConstraints minWidth="300.0" prefWidth="320.0" />
+                    <ColumnConstraints minWidth="40.0" prefWidth="40.0" />
+                    <ColumnConstraints minWidth="190.0" prefWidth="190.0" />
+                    <ColumnConstraints minWidth="300.0" prefWidth="320.0" />
                 </columnConstraints>
 
+                <Label style="-fx-font-weight: bold;" text="Cédula:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <TextField fx:id="txtCedula" prefHeight="42.0" maxWidth="Infinity" promptText="Ej. 1-2345-6789"
+                           GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                <!-- Define las filas del formulario. -->
-                <rowConstraints>
+                <Label style="-fx-font-weight: bold;" text="Nombre:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <TextField fx:id="txtNombre" prefHeight="42.0" maxWidth="Infinity" promptText="Nombre completo del socio"
+                           GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                    <RowConstraints minHeight="35.0"
-                                    prefHeight="35.0" />
+                <Label style="-fx-font-weight: bold;" text="Teléfono:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <TextField fx:id="txtTelefono" prefHeight="42.0" maxWidth="Infinity" promptText="Ej. 8888-8888"
+                           GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                    <RowConstraints minHeight="35.0"
-                                    prefHeight="35.0" />
+                <Label style="-fx-font-weight: bold;" text="Correo:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                <TextField fx:id="txtCorreo" prefHeight="42.0" maxWidth="Infinity" promptText="correo@ejemplo.com"
+                           GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-                    <RowConstraints minHeight="35.0"
-                                    prefHeight="35.0" />
+                <Label style="-fx-font-weight: bold;" text="Contacto emergencia:" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                <TextField fx:id="txtContactoEmergencia" prefHeight="42.0" maxWidth="Infinity" promptText="Nombre"
+                           GridPane.columnIndex="4" GridPane.rowIndex="0" />
 
-                    <RowConstraints minHeight="35.0"
-                                    prefHeight="35.0" />
+                <Label style="-fx-font-weight: bold;" text="Teléfono emergencia:" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                <TextField fx:id="txtTelefonoEmergencia" prefHeight="42.0" maxWidth="Infinity" promptText="Ej. 8888-8888"
+                           GridPane.columnIndex="4" GridPane.rowIndex="1" />
 
-                </rowConstraints>
-
+                <Label style="-fx-font-weight: bold;" text="Condiciones médicas:" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                <TextArea fx:id="txtCondicionesMedicas" prefHeight="110.0" maxWidth="Infinity"
+                          promptText="Indique condiciones médicas..." wrapText="true"
+                          GridPane.columnIndex="4" GridPane.rowIndex="2" GridPane.rowSpan="2" />
             </GridPane>
 
-        </center>
-
-
-        <!-- BOTONES -->
-        <!-- Parte inferior de la pantalla donde se encuentran las acciones disponibles. -->
-        <bottom>
-
-            <!-- Contenedor horizontal que organiza los botones en una fila. -->
-            <HBox alignment="CENTER"
-                  spacing="15.0">
-
-                <!-- Espaciado interno alrededor de los botones. -->
-                <padding>
-                    <Insets bottom="15.0"
-                            left="15.0"
-                            right="15.0"
-                            top="5.0" />
-                </padding>
-
-                <!-- Botón utilizado para guardar los datos del socio. -->
-                <!-- Ejecuta el método guardarSocio del controlador. -->
-                <Button fx:id="btnGuardar"
-                        onAction="#guardarSocio"
-                        prefHeight="35.0"
-                        prefWidth="130.0"
-                        style="-fx-background-color: #1F2937;
-                              -fx-text-fill: white;
-                              -fx-font-weight: bold;
-                              -fx-background-radius: 6;"
+            <HBox alignment="CENTER" spacing="15.0">
+                <Button fx:id="btnGuardar" onAction="#guardarSocio" prefHeight="46.0" prefWidth="170.0"
+                        style="-fx-background-color: #1F2937; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
                         text="💾 Guardar" />
-
-                <!-- Botón utilizado para cancelar el registro actual. -->
-                <!-- Ejecuta el método cancelar del controlador. -->
-                <Button fx:id="btnCancelar"
-                        onAction="#cancelar"
-                        prefHeight="35.0"
-                        prefWidth="130.0"
-                        style="-fx-background-color: #DC2626;
-                              -fx-text-fill: white;
-                              -fx-font-weight: bold;
-                              -fx-background-radius: 6;"
+                <Button fx:id="btnCancelar" onAction="#cancelar" prefHeight="46.0" prefWidth="170.0"
+                        style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
                         text="Cancelar" />
-
-                <!-- Botón utilizado para regresar a la pantalla de socios. -->
-                <!-- Ejecuta el método volverSocios del controlador. -->
-                <Button fx:id="btnVolver"
-                        onAction="#volverSocios"
-                        prefHeight="35.0"
-                        prefWidth="100.0"
-                        style="-fx-background-color: #6B7280;
-                              -fx-text-fill: white;
-                              -fx-font-weight: bold;
-                              -fx-background-radius: 6;"
+                <Button fx:id="btnVolver" onAction="#volverSocios" prefHeight="46.0" prefWidth="140.0"
+                        style="-fx-background-color: #6B7280; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
                         text="← Volver" />
-
             </HBox>
+        </VBox>
+    </center>
 
-        </bottom>
-
-    </BorderPane>
-
-</VBox>
+</BorderPane>

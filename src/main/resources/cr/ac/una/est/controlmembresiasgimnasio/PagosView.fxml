@@ -1,132 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Importa Insets para configurar los espacios internos de los contenedores. -->
-
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<!-- Importa Button para crear los botones de la interfaz. -->
-<!-- Importa Label para mostrar títulos y textos informativos. -->
-<!-- Importa TableColumn para definir las columnas de la tabla. -->
-<!-- Importa TableView para mostrar la información de los pagos. -->
-<!-- Importa TextField para permitir al usuario ingresar texto de búsqueda. -->
-<!-- Importa BorderPane para dividir la pantalla en diferentes regiones. -->
-<!-- Importa HBox para organizar elementos horizontalmente. -->
-<!-- Importa VBox para organizar elementos verticalmente. -->
-<!-- Contenedor principal de la pantalla de gestión de pagos. -->
-<!-- El controlador asociado se encarga de manejar las acciones de esta vista. -->
+<!-- Gestión de pagos: encabezado con búsqueda y tabla que ocupa el resto de la pantalla. -->
+<BorderPane prefHeight="700" prefWidth="1100.0"
+            style="-fx-background-color: #F4F6F8; -fx-font-size: 15px;"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PagosController">
 
-<BorderPane prefHeight="400" prefWidth="694.0" style="-fx-background-color: #F4F6F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PagosController">
-
-    <!-- ENCABEZADO -->
-    <!-- Parte superior de la pantalla que contiene el título, descripción y buscador. -->
     <top>
-
-        <!-- Contenedor vertical para organizar los elementos del encabezado. -->
         <VBox spacing="10" style="-fx-background-color: #1F2937;">
-
-            <!-- Espaciado interno del encabezado. -->
             <padding>
-                <Insets bottom="10" left="15" right="15" top="15" />
+                <Insets bottom="18" left="25" right="25" top="18" />
             </padding>
 
-            <!-- Título principal de la pantalla de gestión de pagos. -->
-            <Label style="-fx-font-size: 20px;                           -fx-font-weight: bold;                           -fx-text-fill: white;" text="💳 GESTIÓN DE PAGOS" />
+            <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white;" text="💳 GESTIÓN DE PAGOS" />
 
-            <!-- Descripción de las funciones disponibles en esta pantalla. -->
-            <Label style="-fx-font-size: 12px;                           -fx-text-fill: #D1D5DB;" text="Administración de pagos y membresías" />
+            <Label style="-fx-font-size: 14px; -fx-text-fill: #D1D5DB;" text="Administración de pagos y membresías" />
 
-            <!-- BUSCADOR -->
-            <!-- Contenedor horizontal para los controles de búsqueda. -->
             <HBox spacing="10">
+                <TextField fx:id="txtBuscar" prefHeight="42" prefWidth="420" promptText="Buscar por cédula o nombre"
+                           style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8px; -fx-font-size: 15px;" />
 
-                <!-- Campo de texto utilizado para buscar pagos por cédula o nombre. -->
-                <TextField fx:id="txtBuscar" prefWidth="300" promptText="Buscar por cédula o nombre" style="-fx-background-color: white;                                   -fx-border-color: #D1D5DB;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-padding: 7px;" />
+                <Button fx:id="btnBuscar" onAction="#buscarPago" prefHeight="42" prefWidth="130"
+                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;"
+                        text="🔎 Buscar" />
 
-                <!-- Botón que ejecuta la búsqueda de pagos. -->
-                <!-- Llama al método buscarPago del controlador. -->
-                <Button fx:id="btnBuscar" onAction="#buscarPago" style="-fx-background-color: white;                                -fx-text-fill: #1F2937;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-color: #D1D5DB;                                -fx-border-radius: 6;" text="🔎 Buscar" />
-
-                <!-- Botón que permite mostrar nuevamente todos los pagos registrados. -->
-                <!-- Llama al método mostrarTodos del controlador. -->
-                <Button fx:id="btnMostrarTodos" onAction="#mostrarTodos" style="-fx-background-color: white;                                -fx-text-fill: #1F2937;                                -fx-font-weight: bold;                                -fx-background-radius: 6;                                -fx-border-color: #D1D5DB;                                -fx-border-radius: 6;" text="Mostrar todos" />
-
+                <Button fx:id="btnMostrarTodos" onAction="#mostrarTodos" prefHeight="42" prefWidth="160"
+                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;"
+                        text="Mostrar todos" />
             </HBox>
-
         </VBox>
-
     </top>
 
-
-    <!-- CONTENIDO -->
-    <!-- Parte central de la pantalla donde se muestran los pagos registrados. -->
     <center>
-
-        <!-- Contenedor vertical que agrupa la tabla y el botón para registrar pagos. -->
-        <VBox prefHeight="235.0" prefWidth="657.0" spacing="10">
-
-            <!-- Espaciado interno alrededor del contenido. -->
+        <VBox spacing="12">
             <padding>
-                <Insets bottom="10" left="10" right="10" top="10" />
+                <Insets bottom="10" left="25" right="25" top="20" />
             </padding>
 
-            <!-- Tabla donde se muestran los pagos y la información de las membresías. -->
-            <TableView fx:id="tablaPagos" style="-fx-background-color: white;                               -fx-border-color: #D1D5DB;                               -fx-border-radius: 6;                               -fx-background-radius: 6;" VBox.vgrow="ALWAYS">
-
-                <!-- Columnas que forman parte de la tabla de pagos. -->
+            <TableView fx:id="tablaPagos"
+                       style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-size: 14px; -fx-fixed-cell-size: 38px;"
+                       VBox.vgrow="ALWAYS">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                </columnResizePolicy>
                 <columns>
-
-                    <!-- Columna que muestra la cédula del socio. -->
-                    <TableColumn fx:id="colCedula" prefWidth="85" text="Cédula" />
-
-                    <!-- Columna que muestra el nombre del socio. -->
-                    <TableColumn fx:id="colSocio" prefWidth="120" text="Socio" />
-
-                    <!-- Columna que muestra el plan asociado al pago. -->
-                    <TableColumn fx:id="colPlan" prefWidth="80" text="Plan" />
-
-                    <!-- Columna que muestra la fecha en que se realizó el pago. -->
-                    <TableColumn fx:id="colFechaPago" prefWidth="100" text="Fecha pago" />
-
-                    <!-- Columna que muestra el monto pagado. -->
-                    <TableColumn fx:id="colMonto" prefWidth="85" text="Monto" />
-
-                    <!-- Columna que muestra la fecha de vencimiento de la membresía. -->
-                    <TableColumn fx:id="colVencimiento" prefWidth="105" text="Vencimiento" />
-                    <!-- Columna que muestra el método utilizado para el pago. -->
-                    <TableColumn fx:id="colMetodoPago" prefWidth="95" text="Método" />
+                    <TableColumn fx:id="colCedula" prefWidth="130" text="Cédula" />
+                    <TableColumn fx:id="colSocio" prefWidth="220" text="Socio" />
+                    <TableColumn fx:id="colPlan" prefWidth="120" text="Plan" />
+                    <TableColumn fx:id="colFechaPago" prefWidth="130" text="Fecha pago" />
+                    <TableColumn fx:id="colMonto" prefWidth="120" text="Monto" />
+                    <TableColumn fx:id="colVencimiento" prefWidth="130" text="Vencimiento" />
+                    <TableColumn fx:id="colMetodoPago" prefWidth="130" text="Método" />
                 </columns>
-
             </TableView>
 
-            <!-- Botón utilizado para abrir el formulario de registro de un nuevo pago. -->
-            <!-- Llama al método registrarPago del controlador. -->
-            <Button fx:id="btnRegistrar" onAction="#registrarPago" prefHeight="25.0" prefWidth="676.0" style="-fx-background-color: #1F2937;                            -fx-text-fill: white;                            -fx-font-weight: bold;                            -fx-background-radius: 6;" text="➕ Registrar pago" />
-
+            <Button fx:id="btnRegistrar" onAction="#registrarPago" maxWidth="Infinity" prefHeight="46.0"
+                    style="-fx-background-color: #1F2937; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 6;"
+                    text="➕ Registrar pago" />
         </VBox>
-
     </center>
 
-
-    <!-- BOTÓN VOLVER -->
-    <!-- Parte inferior de la pantalla donde se encuentra el botón para regresar. -->
     <bottom>
-
-        <!-- Contenedor horizontal que coloca el botón en la esquina inferior derecha. -->
         <HBox alignment="BOTTOM_RIGHT">
-
-            <!-- Espaciado interno alrededor del botón. -->
             <padding>
-                <Insets bottom="10" right="10" />
+                <Insets bottom="15" right="25" />
             </padding>
 
-            <!-- Botón utilizado para regresar al menú principal. -->
-            <!-- Llama al método volverMenu del controlador. -->
-            <Button fx:id="btnVolver" onAction="#volverMenu" prefHeight="30" prefWidth="80" style="-fx-background-color: #6B7280;                            -fx-text-fill: white;                            -fx-font-weight: bold;                            -fx-background-radius: 6;" text="← Volver" />
-
+            <Button fx:id="btnVolver" onAction="#volverMenu" prefHeight="40" prefWidth="120"
+                    style="-fx-background-color: #6B7280; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
+                    text="← Volver" />
         </HBox>
-
     </bottom>
 
 </BorderPane>

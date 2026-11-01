@@ -6,193 +6,97 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<!-- Control de acceso: búsqueda en el encabezado y resultado centrado en la pantalla. -->
 <BorderPane xmlns="http://javafx.com/javafx/17.0.12"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.ControladorAcceso"
-            prefWidth="600"
-            prefHeight="520"
-            style="-fx-background-color: #F4F6F8;">
-
-
-    <!-- ENCABEZADO -->
+            prefWidth="1100"
+            prefHeight="700"
+            style="-fx-background-color: #F4F6F8; -fx-font-size: 15px;">
 
     <top>
-
-        <VBox spacing="10"
-              style="-fx-background-color: #1F2937;">
-
+        <VBox spacing="10" style="-fx-background-color: #1F2937;">
             <padding>
-
-                <Insets top="15"
-                        right="15"
-                        bottom="15"
-                        left="15"/>
-
+                <Insets top="18" right="25" bottom="18" left="25" />
             </padding>
 
             <Label text="🚪 CONTROL DE ACCESO"
-                   style="-fx-font-size: 20px;
-                          -fx-font-weight: bold;
-                          -fx-text-fill: white;"/>
+                   style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white;" />
 
             <Label text="Verificación de membresías del gimnasio"
-                   style="-fx-font-size: 12px;
-                          -fx-text-fill: #D1D5DB;"/>
+                   style="-fx-font-size: 14px; -fx-text-fill: #D1D5DB;" />
 
             <HBox spacing="10">
+                <TextField fx:id="txtCedula" promptText="Número de cédula del socio" prefHeight="42" prefWidth="420"
+                           style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8px; -fx-font-size: 15px;" />
 
-                <TextField fx:id="txtCedula"
-                           promptText="Número del cedula socio"
-                           prefWidth="300"
-                           style="-fx-background-color: white;
-                                  -fx-border-color: #D1D5DB;
-                                  -fx-border-radius: 6;
-                                  -fx-background-radius: 6;
-                                  -fx-padding: 7px;"/>
-
-                <Button fx:id="btnVerificar"
-                        text="🔎 Verificar acceso"
-                        onAction="#verificarAcceso"
-                        prefWidth="160"
-                        style="-fx-background-color: white;
-                               -fx-text-fill: #1F2937;
-                               -fx-font-weight: bold;
-                               -fx-background-radius: 6;
-                               -fx-border-color: #D1D5DB;
-                               -fx-border-radius: 6;"/>
-
+                <Button fx:id="btnVerificar" text="🔎 Verificar acceso" onAction="#verificarAcceso"
+                        prefHeight="42" prefWidth="210"
+                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;" />
             </HBox>
-
         </VBox>
-
     </top>
 
-
-    <!-- INFORMACIÓN DEL SOCIO -->
-
     <center>
-
-        <VBox spacing="12"
-              alignment="TOP_CENTER">
-
+        <VBox spacing="20" alignment="CENTER">
             <padding>
-
-                <Insets top="20"
-                        right="40"
-                        bottom="10"
-                        left="40"/>
-
+                <Insets top="20" right="40" bottom="20" left="40" />
             </padding>
 
             <Label text="Información de la membresía"
-                   style="-fx-font-size: 17px;
-                          -fx-font-weight: bold;
-                          -fx-text-fill: #1F2937;"/>
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1F2937;" />
 
-            <GridPane hgap="20"
-                      vgap="12">
+            <GridPane hgap="25" vgap="16" alignment="CENTER">
+                <columnConstraints>
+                    <ColumnConstraints prefWidth="160" minWidth="160" halignment="RIGHT" />
+                    <ColumnConstraints prefWidth="340" minWidth="260" />
+                </columnConstraints>
 
-                <!-- NOMBRE -->
+                <Label text="Socio:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                       style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #4B5563;" />
+                <Label fx:id="lblNombre" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                       style="-fx-font-size: 17px; -fx-text-fill: #1F2937;" />
 
-                <Label text="Socio:"
-                       GridPane.columnIndex="0"
-                       GridPane.rowIndex="0"
-                       style="-fx-font-weight: bold;
-                              -fx-text-fill: #4B5563;"/>
+                <Label text="Plan:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                       style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #4B5563;" />
+                <Label fx:id="lblPlan" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                       style="-fx-font-size: 17px; -fx-text-fill: #1F2937;" />
 
-                <Label fx:id="lblNombre"
-                       text="-"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="0"
-                       style="-fx-text-fill: #1F2937;"/>
-
-
-                <!-- PLAN -->
-
-                <Label text="Plan:"
-                       GridPane.columnIndex="0"
-                       GridPane.rowIndex="1"
-                       style="-fx-font-weight: bold;
-                              -fx-text-fill: #4B5563;"/>
-
-                <Label fx:id="lblPlan"
-                       text="-"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="1"
-                       style="-fx-text-fill: #1F2937;"/>
-
-
-                <!-- VENCIMIENTO -->
-
-                <Label text="Vencimiento:"
-                       GridPane.columnIndex="0"
-                       GridPane.rowIndex="2"
-                       style="-fx-font-weight: bold;
-                              -fx-text-fill: #4B5563;"/>
-
-                <Label fx:id="lblVencimiento"
-                       text="-"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="2"
-                       style="-fx-text-fill: #1F2937;"/>
-
+                <Label text="Vencimiento:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                       style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #4B5563;" />
+                <Label fx:id="lblVencimiento" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                       style="-fx-font-size: 17px; -fx-text-fill: #1F2937;" />
             </GridPane>
 
-            <Separator prefWidth="450"/>
+            <Separator maxWidth="700" />
 
             <Label text="Estado del acceso:"
-                   style="-fx-font-size: 13px;
-                          -fx-font-weight: bold;
-                          -fx-text-fill: #4B5563;"/>
+                   style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4B5563;" />
 
             <Label fx:id="lblResultado"
-                   text="Ingrese el número de cedula del socio"
+                   text="Ingrese el número de cédula del socio"
                    wrapText="true"
                    alignment="CENTER"
-                   prefWidth="450"
-                   style="-fx-font-size: 18px;
-                          -fx-font-weight: bold;
-                          -fx-text-fill: #1F2937;
-                          -fx-background-color: white;
-                          -fx-border-color: #D1D5DB;
-                          -fx-border-radius: 7;
-                          -fx-background-radius: 7;
-                          -fx-padding: 12px;"/>
-
+                   maxWidth="700"
+                   prefWidth="700"
+                   style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1F2937; -fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 7; -fx-background-radius: 7; -fx-padding: 22px;" />
         </VBox>
-
     </center>
 
-
-    <!-- VOLVER -->
-
     <bottom>
-
         <HBox alignment="BOTTOM_RIGHT">
-
             <padding>
-
-                <Insets bottom="10"
-                        right="10"/>
-
+                <Insets bottom="15" right="25" />
             </padding>
 
-            <Button fx:id="btnVolver"
-                    text="← Volver"
-                    onAction="#volverMenu"
-                    prefHeight="30"
-                    prefWidth="90"
-                    style="-fx-background-color: #6B7280;
-                           -fx-text-fill: white;
-                           -fx-font-weight: bold;
-                           -fx-background-radius: 6;"/>
-
+            <Button fx:id="btnVolver" text="← Volver" onAction="#volverMenu" prefHeight="40" prefWidth="120"
+                    style="-fx-background-color: #6B7280; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;" />
         </HBox>
-
     </bottom>
 
 </BorderPane>

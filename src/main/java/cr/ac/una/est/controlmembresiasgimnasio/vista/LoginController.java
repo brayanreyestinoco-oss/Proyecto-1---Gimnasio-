@@ -1,5 +1,6 @@
 package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
+import cr.ac.una.est.controlmembresiasgimnasio.Pantalla;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 
 import javafx.application.Platform;
@@ -118,17 +119,7 @@ public class LoginController {
                                     .getWindow();
 
             // Reemplaza la escena actual por la escena del menú principal.
-            stage.setScene(
-                    new Scene(
-                            root,
-                            600,
-                            400
-                    )
-            );
-
-            // Centra nuevamente la ventana en la pantalla.
-            stage.centerOnScreen();
-
+            Pantalla.cambiar(stage, root);
         } catch (IOException e) {
 
             // Muestra un mensaje si ocurre un error al cargar el menú principal.
