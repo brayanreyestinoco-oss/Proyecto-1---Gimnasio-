@@ -2,6 +2,7 @@ package cr.ac.una.est.controlmembresiasgimnasio.service;
 
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
 import cr.ac.una.est.controlmembresiasgimnasio.repository.AccesoRepository;
+import cr.ac.una.est.controlmembresiasgimnasio.repository.AccesoRepositoryJdbc;
 
 import java.sql.SQLException;
 
@@ -10,7 +11,7 @@ public class ControlAcceso {
     private PagoService pagoService;
 
     private final AccesoRepository accesoRepository =
-            new AccesoRepository();
+            new AccesoRepositoryJdbc();
 
     public ControlAcceso(PagoService pagoService) {
 
@@ -64,9 +65,8 @@ public class ControlAcceso {
 
     /**
      * Registra una ENTRADA al gimnasio: verifica la membresía.
-     * Si está vigente, la entrada se guarda en acceso_historial (solo
-     * quedan quienes entraron). Si se deniega, el intento se guarda en
-     * consulta_membresia para no perderlo.
+     * Todos los intentos se guardan en intento_acceso con su resultado
+     * y motivo, incluso si la cédula no está registrada.
      *
      * @param cedula cédula digitada
      * @return resultado de la verificación
@@ -78,13 +78,8 @@ public class ControlAcceso {
         boolean registrado = true;
 
         try {
-            if (r.permitido()) {
-                accesoRepository.registrarEntrada(r.idSocio());
-            } else {
-                accesoRepository.registrarConsulta(
-                        r.idSocio(), limpiar(cedula), false,
-                        "Entrada denegada: " + r.motivo());
-            }
+            accesoRepository.registrarIntento(
+                    r.idSocio(), limpiar(cedula), r.permitido(), r.motivo());
         } catch (SQLException e) {
             registrado = false;
         }
@@ -119,6 +114,9 @@ public class ControlAcceso {
     private ResultadoAcceso evaluar(String cedula) {
 
         String cedulaLimpia = limpiar(cedula);
+        if (cedulaLimpia.isEmpty() || cedulaLimpia.length() > 20) {
+            throw new IllegalArgumentException("La cédula debe tener entre 1 y 20 caracteres.");
+        }
 
         Membresia membresia =
                 pagoService.buscarMembresiaPorCedula(cedulaLimpia);
@@ -131,6 +129,11 @@ public class ControlAcceso {
 
             if (!membresia.isActiva()) {
                 motivo = "Membresía inactiva";
+            } else if (membresia.getFechaInicio() != null
+                    && membresia.getFechaInicio().isAfter(java.time.LocalDate.now())) {
+                motivo = "Membresía aún no inicia";
+            } else if (membresia.getFechaVencimiento() == null) {
+                motivo = "Sin vencimiento registrado";
             } else if (pagoService.membresiaEstaVigente(membresia)) {
                 vigente = true;
                 motivo = "Membresía vigente";

@@ -2,6 +2,7 @@ package cr.ac.una.est.controlmembresiasgimnasio.service;
 
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.accesos.RegistroAcceso;
 import cr.ac.una.est.controlmembresiasgimnasio.repository.AccesoRepository;
+import cr.ac.una.est.controlmembresiasgimnasio.repository.AccesoRepositoryJdbc;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -13,7 +14,29 @@ import java.util.List;
 public class HistorialAccesoService {
 
     private final AccesoRepository accesoRepository =
-            new AccesoRepository();
+            new AccesoRepositoryJdbc();
+
+    /** @param desde inicio inclusivo o null @param hasta fin exclusivo o null
+     * @param socio filtro por socio @param limite máximo de filas @return intentos filtrados */
+    public List<RegistroAcceso> buscar(LocalDateTime desde, LocalDateTime hasta,
+                                      String socio, int limite) {
+        try {
+            return accesoRepository.buscar(desde, hasta, socio, limite);
+        } catch (SQLException e) {
+            throw new IllegalStateException("No se pudo consultar MySQL. Revise la conexión y el script de historial.", e);
+        }
+    }
+
+    /** @param desde inicio inclusivo @param hasta fin exclusivo @param socio filtro
+     * @param limite máximo @return consultas filtradas */
+    public List<RegistroAcceso> buscarConsultas(LocalDateTime desde, LocalDateTime hasta,
+                                               String socio, int limite) {
+        try {
+            return accesoRepository.buscarConsultas(desde, hasta, socio, limite);
+        } catch (SQLException e) {
+            throw new IllegalStateException("No se pudo consultar el historial de membresías.", e);
+        }
+    }
 
     /** Consultas de membresía (tabla consulta_membresia). */
     public List<RegistroAcceso> listarConsultas(
