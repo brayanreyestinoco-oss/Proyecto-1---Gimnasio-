@@ -3,6 +3,8 @@ module cr.ac.una.est.controlmembresiasgimnasio {
     requires javafx.controls;
     requires javafx.fxml;
     requires com.dlsc.fxmlkit;
+    requires java.sql;
+    requires com.mysql.cj;
 
     /*
      * Permite que JavaFX cargue los controladores
