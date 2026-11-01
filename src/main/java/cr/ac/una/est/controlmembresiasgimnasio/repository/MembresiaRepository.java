@@ -46,6 +46,8 @@ public interface MembresiaRepository {
      */
     Membresia buscarPorSocio(int idSocio)
             throws SQLException;
+    Membresia buscarPorCedula(String cedula)
+            throws SQLException;
 
     /**
      * Obtiene las membresías registradas.

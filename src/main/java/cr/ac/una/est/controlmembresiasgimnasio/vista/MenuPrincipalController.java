@@ -62,6 +62,11 @@ public class MenuPrincipalController {
     }
 
     @FXML
+    private void abrirHistorialAccesos() throws IOException {
+        abrir("HistorialAccesosView.fxml");
+    }
+
+    @FXML
     private void abrirReportes() throws IOException {
         abrir("ReportesView.fxml");
     }

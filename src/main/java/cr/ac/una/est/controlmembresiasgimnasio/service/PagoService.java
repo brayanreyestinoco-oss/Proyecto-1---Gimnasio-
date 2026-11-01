@@ -519,16 +519,12 @@ public class PagoService {
             return null;
         }
 
-        for (Membresia membresia : getMembresias()) {
-
-            if (membresia.getSocio().getCedula()
-                    .equalsIgnoreCase(cedula.trim())) {
-
-                return membresia;
-            }
+        try {
+            return membresiaRepository.buscarPorCedula(cedula.trim());
+        } catch (SQLException e) {
+            throw new IllegalStateException(
+                    "Error al buscar la membresía por cédula.", e);
         }
-
-        return null;
     }
 
     /**

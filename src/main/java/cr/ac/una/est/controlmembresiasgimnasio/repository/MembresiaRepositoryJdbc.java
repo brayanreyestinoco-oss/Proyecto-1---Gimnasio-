@@ -151,6 +151,28 @@ public class MembresiaRepositoryJdbc
         }
     }
 
+    @Override
+    public Membresia buscarPorCedula(String cedula)
+            throws SQLException {
+
+        String sql = CONSULTA_BASE
+                + "WHERE s.cedula = ?";
+
+        try (Connection conexion =
+                     ConexionBD.obtenerConexion();
+             PreparedStatement ps =
+                     conexion.prepareStatement(sql)) {
+
+            ps.setString(1, cedula);
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                return rs.next()
+                        ? reconstruirMembresia(rs)
+                        : null;
+            }
+        }
+    }
     /**
      * Recupera todas las membresías.
      */
