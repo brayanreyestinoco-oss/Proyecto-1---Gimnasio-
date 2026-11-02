@@ -4,6 +4,7 @@ import cr.ac.una.est.controlmembresiasgimnasio.Pantalla;
 import cr.ac.una.est.controlmembresiasgimnasio.DatosAplicacion;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Pago;
+import cr.ac.una.est.controlmembresiasgimnasio.service.FormatoFactura;
 import cr.ac.una.est.controlmembresiasgimnasio.service.PagoService;
 
 import javafx.beans.property.SimpleDoubleProperty;
@@ -16,12 +17,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -158,6 +162,42 @@ public class PagosController {
                         dato.getValue().getMetodoPago()
                 )
         );
+        // Mostrar las fechas como dd/MM/yyyy y el monto como ₡15,000.00.
+        colFechaPago.setCellFactory(columna -> celdaFecha());
+        colVencimiento.setCellFactory(columna -> celdaFecha());
+
+        colMonto.setCellFactory(columna -> new TableCell<>() {
+            @Override
+            protected void updateItem(Number valor, boolean vacio) {
+                super.updateItem(valor, vacio);
+
+                if (vacio || valor == null) {
+                    setText(null);
+                    return;
+                }
+
+                setText(FormatoFactura.dinero(
+                        BigDecimal.valueOf(valor.doubleValue())
+                                .setScale(2, RoundingMode.HALF_UP)));
+                setStyle("-fx-alignment: CENTER-RIGHT;");
+            }
+        });
+    }
+
+    /** Celda que muestra una fecha como dd/MM/yyyy (o "-" si no hay). */
+    private TableCell<Pago, LocalDate> celdaFecha() {
+        return new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDate fecha, boolean vacio) {
+                super.updateItem(fecha, vacio);
+
+                if (vacio) {
+                    setText(null);
+                } else {
+                    setText(fecha == null ? "-" : FormatoFactura.fecha(fecha));
+                }
+            }
+        };
     }
 
     /**

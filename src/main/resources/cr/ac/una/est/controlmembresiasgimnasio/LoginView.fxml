@@ -4,59 +4,149 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<!-- Inicio de sesión. Ocupa toda la ventana; el formulario queda centrado. -->
-<BorderPane prefHeight="700" prefWidth="1100"
-            style="-fx-background-color: #F4F6F8; -fx-font-size: 15px;"
-            xmlns="http://javafx.com/javafx/17.0.12"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.LoginController">
+<!--
+  LOGIN — línea "gimnasio premium": carbón + dorado.
 
-    <center>
-        <VBox alignment="CENTER" spacing="18">
+  Sistema de diseño
+  - Paleta (5 colores): carbón #0B0F14 / #0E1116, superficie #161B22, línea #2A313C,
+    dorado #D4AF37 (único acento y único botón de acción), texto #FFFFFF / #9CA3AF.
+  - Tipografía (escala): 64 titular · 34 título · 16 cuerpo/botón · 14 etiqueta · 12 sobretítulo.
+    Titulares en negrita cursiva (dinamismo deportivo); sobretítulos en mayúsculas doradas.
+  - Espaciado: múltiplos de 8 (8 · 16 · 24 · 32 · 48 · 56 · 64). Radio de controles: 8.
+  - Contraste: texto blanco/gris claro sobre carbón (> 7:1); texto oscuro sobre dorado (> 9:1).
+  - Jerarquía: un solo punto focal por zona (titular en el hero, botón dorado en el formulario).
 
+  El aspecto base está en línea (style="...") para verse igual aunque estilos.css no cargue;
+  el CSS solo añade el brillo dorado al enfocar un campo y al pasar el mouse.
+-->
+<GridPane prefHeight="700" prefWidth="1100"
+          style="-fx-background-color: #0E1116; -fx-font-size: 15px;"
+          stylesheets="@estilos.css"
+          xmlns="http://javafx.com/javafx/17.0.12"
+          xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.LoginController">
+
+    <columnConstraints>
+        <ColumnConstraints percentWidth="56" />
+        <ColumnConstraints minWidth="420" percentWidth="44" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints percentHeight="100" vgrow="ALWAYS" />
+    </rowConstraints>
+
+    <!-- ============ HERO (izquierda) ============ -->
+    <StackPane GridPane.columnIndex="0" GridPane.rowIndex="0"
+               style="-fx-background-color: linear-gradient(to bottom right, #0B0F14, #151B23);">
+
+        <!-- Diagonales: losa gris, franja dorada ancha y franja dorada fina -->
+        <Region maxHeight="Infinity" maxWidth="560" StackPane.alignment="CENTER_RIGHT"
+                style="-fx-background-color: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); -fx-shape: 'M30 0 L100 0 L70 100 L0 100 Z'; -fx-scale-shape: true; -fx-position-shape: true;" />
+        <Region maxHeight="Infinity" maxWidth="150" StackPane.alignment="CENTER_RIGHT"
+                style="-fx-background-color: linear-gradient(to bottom, #D4AF37, rgba(212,175,55,0.15)); -fx-shape: 'M30 0 L100 0 L70 100 L0 100 Z'; -fx-scale-shape: true; -fx-position-shape: true;">
+            <StackPane.margin>
+                <Insets right="120" />
+            </StackPane.margin>
+        </Region>
+        <Region maxHeight="Infinity" maxWidth="64" StackPane.alignment="CENTER_RIGHT"
+                style="-fx-background-color: linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.05)); -fx-shape: 'M30 0 L100 0 L70 100 L0 100 Z'; -fx-scale-shape: true; -fx-position-shape: true;">
+            <StackPane.margin>
+                <Insets right="24" />
+            </StackPane.margin>
+        </Region>
+
+        <!-- Contenido del hero -->
+        <BorderPane>
             <padding>
-                <Insets bottom="30" left="80" right="80" top="30" />
+                <Insets bottom="64" left="64" right="64" top="48" />
             </padding>
 
-            <Label style="-fx-font-size: 42px; -fx-font-weight: bold; -fx-text-fill: #1F2937;"
-                   text="🏋 GIMNASIO" />
+            <!-- Marca (arriba izquierda) -->
+            <top>
+                <HBox alignment="CENTER_LEFT" spacing="16" BorderPane.alignment="TOP_LEFT">
+                    <!-- Logo: pesa dibujada con vectores (sin archivo de imagen), en círculo dorado -->
+                    <StackPane minHeight="72" minWidth="72" prefHeight="72" prefWidth="72"
+                               style="-fx-background-color: #D4AF37; -fx-background-radius: 36;">
+                        <Region maxHeight="16" maxWidth="50" minHeight="16" minWidth="50" prefHeight="16" prefWidth="50"
+                                rotate="-35"
+                                style="-fx-background-color: #0B0F14; -fx-shape: 'M10 13 H16 V27 H10 Z M18 8 H25 V32 H18 Z M25 17 H75 V23 H25 Z M75 8 H82 V32 H75 Z M84 13 H90 V27 H84 Z'; -fx-scale-shape: true; -fx-position-shape: true;" />
+                    </StackPane>
+                    <VBox spacing="0">
+                        <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-font-style: italic; -fx-text-fill: white;"
+                               text="GIMNASIO" />
+                        <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #D4AF37;"
+                               text="CONTROL DE MEMBRESÍAS" />
+                    </VBox>
+                </HBox>
+            </top>
 
-            <Label style="-fx-font-size: 16px; -fx-text-fill: #6B7280;"
-                   text="Sistema de Gestión de Membresías" />
+            <!-- Titular (abajo izquierda) -->
+            <bottom>
+                <VBox alignment="BOTTOM_LEFT" spacing="8" BorderPane.alignment="BOTTOM_LEFT">
+                    <Region maxHeight="3" maxWidth="72" minHeight="3" minWidth="72" prefHeight="3" prefWidth="72"
+                            style="-fx-background-color: #D4AF37;" />
 
-            <Region prefHeight="10" />
+                    <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #D4AF37;"
+                           text="MEMBRESÍAS  ·  ACCESOS  ·  FACTURACIÓN" />
 
-            <VBox maxWidth="460" prefWidth="460" spacing="6">
-                <Label style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1F2937;" text="Usuario" />
-                <TextField fx:id="txtUsuario" prefHeight="46" promptText="Ingrese su usuario"
-                           style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8px; -fx-font-size: 16px;" />
-            </VBox>
+                    <Label maxWidth="420" prefWidth="420" wrapText="true"
+                           style="-fx-font-size: 16px; -fx-text-fill: #9CA3AF;"
+                           text="Gestión de socios, planes, pagos y control de acceso en un solo lugar." />
+                </VBox>
+            </bottom>
+        </BorderPane>
+    </StackPane>
 
-            <VBox maxWidth="460" prefWidth="460" spacing="6">
-                <Label style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1F2937;" text="Contraseña" />
-                <PasswordField fx:id="txtContrasena" prefHeight="46" promptText="Ingrese su contraseña"
-                               style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8px; -fx-font-size: 16px;" />
-            </VBox>
+    <!-- ============ FORMULARIO (derecha) ============ -->
+    <StackPane GridPane.columnIndex="1" GridPane.rowIndex="0"
+               style="-fx-background-color: #0E1116; -fx-border-color: #232A33; -fx-border-width: 0 0 0 1;">
 
-            <Label fx:id="lblMensaje" style="-fx-text-fill: #DC2626; -fx-font-size: 14px;" text="" />
+        <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="400" spacing="8">
+            <padding>
+                <Insets bottom="48" left="48" right="48" top="48" />
+            </padding>
 
-            <Button fx:id="btnIngresar" onAction="#ingresar" prefHeight="50" prefWidth="460"
-                    style="-fx-background-color: #1F2937; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 6;"
-                    text="🔐 Ingresar" />
+            <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #D4AF37;"
+                   text="ACCESO AL SISTEMA" />
+            <Label style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-font-style: italic; -fx-text-fill: white;"
+                   text="Inicia sesión" />
+            <Label style="-fx-font-size: 14px; -fx-text-fill: #9CA3AF;"
+                   text="Ingresa tus credenciales para continuar." />
 
+            <Region prefHeight="24" />
+
+            <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #9CA3AF;" text="USUARIO" />
+            <TextField fx:id="txtUsuario" onAction="#ingresar" prefHeight="48" promptText="Ingrese su usuario"
+                       style="-fx-background-color: #161B22; -fx-background-radius: 8; -fx-border-color: #2A313C; -fx-border-radius: 8; -fx-text-fill: white; -fx-prompt-text-fill: #8B93A1; -fx-highlight-fill: #D4AF37; -fx-highlight-text-fill: #0B0F14; -fx-padding: 8 16 8 16; -fx-font-size: 15px;"
+                       styleClass="campo" />
+
+            <Region prefHeight="8" />
+
+            <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #9CA3AF;" text="CONTRASEÑA" />
+            <PasswordField fx:id="txtContrasena" onAction="#ingresar" prefHeight="48" promptText="Ingrese su contraseña"
+                           style="-fx-background-color: #161B22; -fx-background-radius: 8; -fx-border-color: #2A313C; -fx-border-radius: 8; -fx-text-fill: white; -fx-prompt-text-fill: #8B93A1; -fx-highlight-fill: #D4AF37; -fx-highlight-text-fill: #0B0F14; -fx-padding: 8 16 8 16; -fx-font-size: 15px;"
+                           styleClass="campo" />
+
+            <Label fx:id="lblMensaje" minHeight="32" prefHeight="32" wrapText="true"
+                   style="-fx-text-fill: #F87171; -fx-font-size: 13px;" text="" />
+
+            <Button fx:id="btnIngresar" maxWidth="Infinity" onAction="#ingresar" prefHeight="52"
+                    style="-fx-background-color: #D4AF37; -fx-background-radius: 8; -fx-text-fill: #0B0F14; -fx-font-size: 16px; -fx-font-weight: bold; -fx-cursor: hand;"
+                    styleClass="boton-principal" text="INGRESAR  →" />
+
+            <Region prefHeight="16" />
+
+            <Label style="-fx-font-size: 12px; -fx-text-fill: #6B7280;"
+                   text="Acceso exclusivo para personal autorizado." />
         </VBox>
-    </center>
 
-    <bottom>
-        <HBox alignment="BOTTOM_RIGHT">
-            <padding>
-                <Insets bottom="20" right="25" />
-            </padding>
+        <!-- Salir: acción secundaria, discreta -->
+        <Button fx:id="btnSalir" onAction="#salir" prefHeight="40" prefWidth="112"
+                style="-fx-background-color: transparent; -fx-background-radius: 8; -fx-border-color: #2A313C; -fx-border-radius: 8; -fx-text-fill: #9CA3AF; -fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand;"
+                styleClass="boton-salir" text="🚪  Salir" StackPane.alignment="TOP_RIGHT">
+            <StackPane.margin>
+                <Insets right="32" top="32" />
+            </StackPane.margin>
+        </Button>
+    </StackPane>
 
-            <Button fx:id="btnSalir" onAction="#salir" prefHeight="40" prefWidth="120"
-                    style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
-                    text="🚪 Salir" />
-        </HBox>
-    </bottom>
-
-</BorderPane>
+</GridPane>

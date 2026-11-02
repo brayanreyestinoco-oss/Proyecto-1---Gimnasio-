@@ -5,22 +5,22 @@
 <?import javafx.scene.layout.*?>
 
 <!-- Registro/modificación de socio: formulario en dos columnas centrado en la pantalla. -->
-<BorderPane prefHeight="700.0"
+<BorderPane styleClass="pagina-oscura" stylesheets="@estilos.css" prefHeight="700.0"
             prefWidth="1100.0"
-            style="-fx-background-color: #F4F6F8; -fx-font-size: 15px;"
+            style="-fx-background-color: #0E1116; -fx-font-size: 15px;"
             xmlns="http://javafx.com/javafx/17.0.12"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.RegistroSocioController">
 
     <top>
-        <VBox alignment="CENTER" spacing="4.0" style="-fx-background-color: #1F2937;">
+        <VBox alignment="CENTER" spacing="4.0" style="-fx-background-color: #0B0F14; -fx-border-color: transparent transparent rgba(212,175,55,0.45) transparent; -fx-border-width: 0 0 1 0;">
             <padding>
                 <Insets bottom="18.0" left="20.0" right="20.0" top="18.0" />
             </padding>
 
             <Label style="-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;"
                    text="➕ REGISTRAR SOCIO" />
-            <Label style="-fx-text-fill: #D1D5DB; -fx-font-size: 14px;"
+            <Label style="-fx-text-fill: #9CA3AF; -fx-font-size: 14px;"
                    text="Registro de un nuevo socio" />
         </VBox>
     </top>
@@ -41,44 +41,44 @@
                 </columnConstraints>
 
                 <Label style="-fx-font-weight: bold;" text="Cédula:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                <TextField fx:id="txtCedula" prefHeight="42.0" maxWidth="Infinity" promptText="Ej. 1-2345-6789"
+                <TextField styleClass="campo" fx:id="txtCedula" prefHeight="42.0" maxWidth="Infinity" promptText="Ej. 1-2345-6789"
                            GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                 <Label style="-fx-font-weight: bold;" text="Nombre:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                <TextField fx:id="txtNombre" prefHeight="42.0" maxWidth="Infinity" promptText="Nombre completo del socio"
+                <TextField styleClass="campo" fx:id="txtNombre" prefHeight="42.0" maxWidth="Infinity" promptText="Nombre completo del socio"
                            GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                 <Label style="-fx-font-weight: bold;" text="Teléfono:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                <TextField fx:id="txtTelefono" prefHeight="42.0" maxWidth="Infinity" promptText="Ej. 8888-8888"
+                <TextField styleClass="campo" fx:id="txtTelefono" prefHeight="42.0" maxWidth="Infinity" promptText="Ej. 8888-8888"
                            GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                 <Label style="-fx-font-weight: bold;" text="Correo:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                <TextField fx:id="txtCorreo" prefHeight="42.0" maxWidth="Infinity" promptText="correo@ejemplo.com"
+                <TextField styleClass="campo" fx:id="txtCorreo" prefHeight="42.0" maxWidth="Infinity" promptText="correo@ejemplo.com"
                            GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
                 <Label style="-fx-font-weight: bold;" text="Contacto emergencia:" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-                <TextField fx:id="txtContactoEmergencia" prefHeight="42.0" maxWidth="Infinity" promptText="Nombre"
+                <TextField styleClass="campo" fx:id="txtContactoEmergencia" prefHeight="42.0" maxWidth="Infinity" promptText="Nombre"
                            GridPane.columnIndex="4" GridPane.rowIndex="0" />
 
                 <Label style="-fx-font-weight: bold;" text="Teléfono emergencia:" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                <TextField fx:id="txtTelefonoEmergencia" prefHeight="42.0" maxWidth="Infinity" promptText="Ej. 8888-8888"
+                <TextField styleClass="campo" fx:id="txtTelefonoEmergencia" prefHeight="42.0" maxWidth="Infinity" promptText="Ej. 8888-8888"
                            GridPane.columnIndex="4" GridPane.rowIndex="1" />
 
                 <Label style="-fx-font-weight: bold;" text="Condiciones médicas:" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                <TextArea fx:id="txtCondicionesMedicas" prefHeight="110.0" maxWidth="Infinity"
+                <TextArea styleClass="area" fx:id="txtCondicionesMedicas" prefHeight="110.0" maxWidth="Infinity"
                           promptText="Indique condiciones médicas..." wrapText="true"
                           GridPane.columnIndex="4" GridPane.rowIndex="2" GridPane.rowSpan="2" />
             </GridPane>
 
             <HBox alignment="CENTER" spacing="15.0">
                 <Button fx:id="btnGuardar" onAction="#guardarSocio" prefHeight="46.0" prefWidth="170.0"
-                        style="-fx-background-color: #1F2937; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
+                        style="-fx-background-color: #D4AF37; -fx-text-fill: #0B0F14; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
                         text="💾 Guardar" />
                 <Button fx:id="btnCancelar" onAction="#cancelar" prefHeight="46.0" prefWidth="170.0"
                         style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
                         text="Cancelar" />
                 <Button fx:id="btnVolver" onAction="#volverSocios" prefHeight="46.0" prefWidth="140.0"
-                        style="-fx-background-color: #6B7280; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
+                        style="-fx-background-color: #161B22; -fx-text-fill: #E5E7EB; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #2A313C; -fx-border-radius: 6;"
                         text="← Volver" />
             </HBox>
         </VBox>

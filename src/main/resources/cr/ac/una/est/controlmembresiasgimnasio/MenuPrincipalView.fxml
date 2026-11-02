@@ -4,153 +4,153 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<!-- Pantalla del menú principal. Ocupa toda la ventana (que se abre maximizada). -->
-<BorderPane fx:id="raiz"
-            prefHeight="650.0" prefWidth="1000.0"
-            style="-fx-background-color: #F4F6F8;"
+<!-- Menú principal: encabezado y módulos organizados en tarjetas por sección.
+     El aspecto base está en línea; estilos.css solo añade el efecto al pasar el mouse. -->
+<BorderPane styleClass="pagina-oscura" fx:id="raiz"
+            prefHeight="700.0" prefWidth="1100.0"
+            style="-fx-background-color: #0E1116; -fx-font-size: 15px;"
+            stylesheets="@estilos.css"
             xmlns="http://javafx.com/javafx/17.0.12"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.MenuPrincipalController">
 
     <!-- ENCABEZADO -->
     <top>
-        <VBox alignment="CENTER"
-              spacing="5.0"
-              style="-fx-background-color: #1F2937;">
-
+        <HBox alignment="CENTER_LEFT" spacing="16" style="-fx-background-color: linear-gradient(to right, #0B0F14, #151B23); -fx-border-color: transparent transparent rgba(212,175,55,0.45) transparent; -fx-border-width: 0 0 1 0;">
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                <Insets bottom="22" left="40" right="40" top="22" />
             </padding>
 
-            <Label style="-fx-text-fill: white;
-                           -fx-font-size: 26px;
-                           -fx-font-weight: bold;"
-                   text="MENU PRINCIPAL 📚"/>
+            <Label style="-fx-font-size: 40px; -fx-text-fill: white;" text="🏋" />
 
-            <Label style="-fx-text-fill: #D1D5DB;
-                           -fx-font-size: 13px;"
-                   text="Sistema de Gestión de Membresías"/>
-        </VBox>
+            <VBox spacing="2">
+                <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white;" text="Menú principal" />
+                <Label style="-fx-font-size: 14px; -fx-text-fill: #9CA3AF;" text="Sistema de Gestión de Membresías" />
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <VBox alignment="CENTER_RIGHT" spacing="8">
+                <Label fx:id="lblFecha" style="-fx-font-size: 14px; -fx-text-fill: #9CA3AF;" />
+
+                <Button onAction="#cerrarSesion" prefHeight="38" prefWidth="170"
+                        style="-fx-background-color: #DC2626; -fx-background-radius: 8; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand;" styleClass="boton-cerrar" text="🔒  Cerrar sesión" />
+            </VBox>
+        </HBox>
     </top>
 
-    <!-- MENÚ: botones centrados con un ancho fijo para que no se estiren demasiado. -->
+    <!-- MÓDULOS -->
     <center>
-        <ScrollPane fitToHeight="true"
-                    fitToWidth="true"
-                    hbarPolicy="NEVER"
-                    style="-fx-background-color: transparent;"
+        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER"
+                    style="-fx-background-color: transparent; -fx-background: #0E1116;"
                     vbarPolicy="AS_NEEDED">
             <content>
-                <VBox alignment="CENTER"
-                      spacing="12.0">
-
+                <VBox alignment="CENTER" spacing="14">
                     <padding>
-                        <Insets bottom="20.0" left="30.0" right="30.0" top="20.0"/>
+                        <Insets bottom="60" left="40" right="40" top="20" />
                     </padding>
 
-                    <Button maxWidth="480.0" prefWidth="480.0"
-                            mnemonicParsing="false"
-                            prefHeight="46.0"
-                            onAction="#abrirSocios"
-                            style="-fx-background-color: white;
-                                   -fx-text-fill: #1F2937;
-                                   -fx-font-size: 16px;
-                                   -fx-font-weight: bold;
-                                   -fx-background-radius: 8px;
-                                   -fx-border-radius: 8px;
-                                   -fx-border-color: #D1D5DB;"
-                            text="👥  Socios"/>
+                    <!-- Sección: gestión -->
+                    <Label maxWidth="1260" prefWidth="1260" style="-fx-text-fill: #9CA3AF; -fx-font-size: 13px; -fx-font-weight: bold;" text="GESTIÓN" />
 
-                    <Button maxWidth="480.0" prefWidth="480.0"
-                            mnemonicParsing="false"
-                            prefHeight="46.0"
-                            onAction="#abrirPlanes"
-                            style="-fx-background-color: white;
-                                   -fx-text-fill: #1F2937;
-                                   -fx-font-size: 16px;
-                                   -fx-font-weight: bold;
-                                   -fx-background-radius: 8px;
-                                   -fx-border-radius: 8px;
-                                   -fx-border-color: #D1D5DB;"
-                            text="📋  Planes"/>
+                    <TilePane alignment="TOP_LEFT" hgap="20" maxWidth="1260" prefColumns="4" prefTileHeight="112"
+                              prefTileWidth="300" vgap="20">
 
-                    <Button maxWidth="480.0" prefWidth="480.0"
-                            mnemonicParsing="false"
-                            prefHeight="46.0"
-                            onAction="#abrirPagos"
-                            style="-fx-background-color: white;
-                                   -fx-text-fill: #1F2937;
-                                   -fx-font-size: 16px;
-                                   -fx-font-weight: bold;
-                                   -fx-background-radius: 8px;
-                                   -fx-border-radius: 8px;
-                                   -fx-border-color: #D1D5DB;"
-                            text="💰  Pagos"/>
+                        <Button onAction="#abrirSocios" prefHeight="112" prefWidth="300" style="-fx-background-color: #161B22; -fx-background-radius: 14; -fx-border-color: #2A313C; -fx-border-radius: 14; -fx-cursor: hand;" styleClass="tarjeta">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="16">
+                                    <Label alignment="CENTER" minHeight="60" minWidth="60" prefHeight="60" prefWidth="60" style="-fx-background-color: #D4AF37; -fx-background-radius: 30; -fx-text-fill: #0B0F14; -fx-font-size: 26px;" text="👥" />
+                                    <VBox alignment="CENTER_LEFT" spacing="3">
+                                        <Label style="-fx-text-fill: white; -fx-font-size: 17px; -fx-font-weight: bold;" text="Socios" />
+                                        <Label maxWidth="190" prefWidth="190" style="-fx-text-fill: #9CA3AF; -fx-font-size: 12px;" wrapText="true"
+                                               text="Registrar, modificar y consultar" />
+                                    </VBox>
+                                </HBox>
+                            </graphic>
+                        </Button>
+                        <Button onAction="#abrirPlanes" prefHeight="112" prefWidth="300" style="-fx-background-color: #161B22; -fx-background-radius: 14; -fx-border-color: #2A313C; -fx-border-radius: 14; -fx-cursor: hand;" styleClass="tarjeta">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="16">
+                                    <Label alignment="CENTER" minHeight="60" minWidth="60" prefHeight="60" prefWidth="60" style="-fx-background-color: #D4AF37; -fx-background-radius: 30; -fx-text-fill: #0B0F14; -fx-font-size: 26px;" text="📋" />
+                                    <VBox alignment="CENTER_LEFT" spacing="3">
+                                        <Label style="-fx-text-fill: white; -fx-font-size: 17px; -fx-font-weight: bold;" text="Planes" />
+                                        <Label maxWidth="190" prefWidth="190" style="-fx-text-fill: #9CA3AF; -fx-font-size: 12px;" wrapText="true"
+                                               text="Mensual, anual y VIP" />
+                                    </VBox>
+                                </HBox>
+                            </graphic>
+                        </Button>
+                        <Button onAction="#abrirPagos" prefHeight="112" prefWidth="300" style="-fx-background-color: #161B22; -fx-background-radius: 14; -fx-border-color: #2A313C; -fx-border-radius: 14; -fx-cursor: hand;" styleClass="tarjeta">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="16">
+                                    <Label alignment="CENTER" minHeight="60" minWidth="60" prefHeight="60" prefWidth="60" style="-fx-background-color: #D4AF37; -fx-background-radius: 30; -fx-text-fill: #0B0F14; -fx-font-size: 26px;" text="💰" />
+                                    <VBox alignment="CENTER_LEFT" spacing="3">
+                                        <Label style="-fx-text-fill: white; -fx-font-size: 17px; -fx-font-weight: bold;" text="Pagos" />
+                                        <Label maxWidth="190" prefWidth="190" style="-fx-text-fill: #9CA3AF; -fx-font-size: 12px;" wrapText="true"
+                                               text="Registrar y revisar pagos" />
+                                    </VBox>
+                                </HBox>
+                            </graphic>
+                        </Button>
+                        <Button onAction="#abrirFacturacion" prefHeight="112" prefWidth="300" style="-fx-background-color: #161B22; -fx-background-radius: 14; -fx-border-color: #2A313C; -fx-border-radius: 14; -fx-cursor: hand;" styleClass="tarjeta">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="16">
+                                    <Label alignment="CENTER" minHeight="60" minWidth="60" prefHeight="60" prefWidth="60" style="-fx-background-color: #D4AF37; -fx-background-radius: 30; -fx-text-fill: #0B0F14; -fx-font-size: 26px;" text="📄" />
+                                    <VBox alignment="CENTER_LEFT" spacing="3">
+                                        <Label style="-fx-text-fill: white; -fx-font-size: 17px; -fx-font-weight: bold;" text="Facturación" />
+                                        <Label maxWidth="190" prefWidth="190" style="-fx-text-fill: #9CA3AF; -fx-font-size: 12px;" wrapText="true"
+                                               text="Facturas y exportación a Word" />
+                                    </VBox>
+                                </HBox>
+                            </graphic>
+                        </Button>
+                    </TilePane>
 
-                    <!-- FACTURACIÓN: facturas de los clientes y exportación a Word. -->
-                    <Button maxWidth="480.0" prefWidth="480.0"
-                            mnemonicParsing="false"
-                            prefHeight="46.0"
-                            onAction="#abrirFacturacion"
-                            style="-fx-background-color: white;
-                                   -fx-text-fill: #1F2937;
-                                   -fx-font-size: 16px;
-                                   -fx-font-weight: bold;
-                                   -fx-background-radius: 8px;
-                                   -fx-border-radius: 8px;
-                                   -fx-border-color: #D1D5DB;"
-                            text="🧾  Facturación"/>
+                    <Region prefHeight="10" />
 
-                    <Button maxWidth="480.0" prefWidth="480.0"
-                            mnemonicParsing="false"
-                            prefHeight="46.0"
-                            onAction="#abrirAcceso"
-                            style="-fx-background-color: white;
-                                   -fx-text-fill: #1F2937;
-                                   -fx-font-size: 16px;
-                                   -fx-font-weight: bold;
-                                   -fx-background-radius: 8px;
-                                   -fx-border-radius: 8px;
-                                   -fx-border-color: #D1D5DB;"
-                            text="🛡  Control de Accesos"/>
+                    <!-- Sección: acceso y reportes -->
+                    <Label maxWidth="1260" prefWidth="1260" style="-fx-text-fill: #9CA3AF; -fx-font-size: 13px; -fx-font-weight: bold;" text="ACCESO Y REPORTES" />
 
-                    <!-- HISTORIAL DE ACCESOS: quién entró y cuándo. -->
-                    <Button maxWidth="480.0" prefWidth="480.0"
-                            mnemonicParsing="false"
-                            prefHeight="46.0"
-                            onAction="#abrirHistorialAccesos"
-                            style="-fx-background-color: white;
-                                   -fx-text-fill: #1F2937;
-                                   -fx-font-size: 16px;
-                                   -fx-font-weight: bold;
-                                   -fx-background-radius: 8px;
-                                   -fx-border-radius: 8px;
-                                   -fx-border-color: #D1D5DB;"
-                            text="🕒  Historial de Accesos"/>
+                    <TilePane alignment="TOP_LEFT" hgap="20" maxWidth="1260" prefColumns="4" prefTileHeight="112"
+                              prefTileWidth="300" vgap="20">
 
-                    <Button maxWidth="480.0" prefWidth="480.0"
-                            mnemonicParsing="false"
-                            prefHeight="46.0"
-                            onAction="#abrirReportes"
-                            style="-fx-background-color: white;
-                                   -fx-text-fill: #1F2937;
-                                   -fx-font-size: 16px;
-                                   -fx-font-weight: bold;
-                                   -fx-background-radius: 8px;
-                                   -fx-border-radius: 8px;
-                                   -fx-border-color: #D1D5DB;"
-                            text="📖  Reportes"/>
-
-                    <Button maxWidth="480.0" prefWidth="480.0"
-                            mnemonicParsing="false"
-                            prefHeight="46.0"
-                            onAction="#cerrarSesion"
-                            style="-fx-background-color: #DC2626;
-                                   -fx-text-fill: white;
-                                   -fx-font-size: 16px;
-                                   -fx-font-weight: bold;
-                                   -fx-background-radius: 8px;"
-                            text="🔒  Cerrar Sesión"/>
+                        <Button onAction="#abrirAcceso" prefHeight="112" prefWidth="300" style="-fx-background-color: #161B22; -fx-background-radius: 14; -fx-border-color: #2A313C; -fx-border-radius: 14; -fx-cursor: hand;" styleClass="tarjeta">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="16">
+                                    <Label alignment="CENTER" minHeight="60" minWidth="60" prefHeight="60" prefWidth="60" style="-fx-background-color: #D4AF37; -fx-background-radius: 30; -fx-text-fill: #0B0F14; -fx-font-size: 26px;" text="🚪" />
+                                    <VBox alignment="CENTER_LEFT" spacing="3">
+                                        <Label style="-fx-text-fill: white; -fx-font-size: 17px; -fx-font-weight: bold;" text="Control de Accesos" />
+                                        <Label maxWidth="190" prefWidth="190" style="-fx-text-fill: #9CA3AF; -fx-font-size: 12px;" wrapText="true"
+                                               text="Registrar entradas y consultar membresías" />
+                                    </VBox>
+                                </HBox>
+                            </graphic>
+                        </Button>
+                        <Button onAction="#abrirHistorialAccesos" prefHeight="112" prefWidth="300" style="-fx-background-color: #161B22; -fx-background-radius: 14; -fx-border-color: #2A313C; -fx-border-radius: 14; -fx-cursor: hand;" styleClass="tarjeta">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="16">
+                                    <Label alignment="CENTER" minHeight="60" minWidth="60" prefHeight="60" prefWidth="60" style="-fx-background-color: #D4AF37; -fx-background-radius: 30; -fx-text-fill: #0B0F14; -fx-font-size: 26px;" text="🕒" />
+                                    <VBox alignment="CENTER_LEFT" spacing="3">
+                                        <Label style="-fx-text-fill: white; -fx-font-size: 17px; -fx-font-weight: bold;" text="Historial de Accesos" />
+                                        <Label maxWidth="190" prefWidth="190" style="-fx-text-fill: #9CA3AF; -fx-font-size: 12px;" wrapText="true"
+                                               text="Quién entró y cuándo" />
+                                    </VBox>
+                                </HBox>
+                            </graphic>
+                        </Button>
+                        <Button onAction="#abrirReportes" prefHeight="112" prefWidth="300" style="-fx-background-color: #161B22; -fx-background-radius: 14; -fx-border-color: #2A313C; -fx-border-radius: 14; -fx-cursor: hand;" styleClass="tarjeta">
+                            <graphic>
+                                <HBox alignment="CENTER_LEFT" spacing="16">
+                                    <Label alignment="CENTER" minHeight="60" minWidth="60" prefHeight="60" prefWidth="60" style="-fx-background-color: #D4AF37; -fx-background-radius: 30; -fx-text-fill: #0B0F14; -fx-font-size: 26px;" text="📊" />
+                                    <VBox alignment="CENTER_LEFT" spacing="3">
+                                        <Label style="-fx-text-fill: white; -fx-font-size: 17px; -fx-font-weight: bold;" text="Reportes" />
+                                        <Label maxWidth="190" prefWidth="190" style="-fx-text-fill: #9CA3AF; -fx-font-size: 12px;" wrapText="true"
+                                               text="Vencimientos y exportación a CSV" />
+                                    </VBox>
+                                </HBox>
+                            </graphic>
+                        </Button>
+                    </TilePane>
 
                 </VBox>
             </content>

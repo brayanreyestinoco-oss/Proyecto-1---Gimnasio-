@@ -2,7 +2,7 @@
 package cr.ac.una.est.controlmembresiasgimnasio.repository;
 
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.socios.Socio;
-import cr.ac.una.est.controlmembresiasgimnasio.util.ConexionBD;
+import cr.ac.una.est.controlmembresiasgimnasio.bd.ConexionBD;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

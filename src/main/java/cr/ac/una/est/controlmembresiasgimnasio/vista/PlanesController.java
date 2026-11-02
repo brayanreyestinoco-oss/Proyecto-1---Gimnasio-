@@ -342,11 +342,38 @@ public class PlanesController {
     }
 
     // Lee un número del formulario; acepta coma o punto decimal.
+    // Lee un número del formulario. Acepta 15000, 15,000, 15.000, 15 000
+    // y decimales como 12.5 o 12,5.
     private double leerNumero(String texto, String nombreCampo) {
-        String limpio = texto == null ? "" : texto.trim().replace(",", ".");
+        String limpio = texto == null ? "" : texto.trim()
+                .replace("₡", "").replace(" ", "").replace("\u00A0", "");
+
         if (limpio.isEmpty()) {
             throw new IllegalArgumentException(nombreCampo + " es obligatorio.");
         }
+
+        int coma = limpio.lastIndexOf(',');
+        int punto = limpio.lastIndexOf('.');
+
+        if (coma >= 0 && punto >= 0) {
+            // Con los dos símbolos, el que aparece último es el decimal.
+            limpio = coma > punto
+                    ? limpio.replace(".", "").replace(',', '.')
+                    : limpio.replace(",", "");
+        } else if (coma >= 0 || punto >= 0) {
+            char sep = coma >= 0 ? ',' : '.';
+            int primero = limpio.indexOf(sep);
+            int ultimo = limpio.lastIndexOf(sep);
+
+            // Varios separadores o 3 dígitos después: son miles.
+            boolean esMiles = primero != ultimo
+                    || limpio.length() - ultimo - 1 == 3;
+
+            limpio = esMiles
+                    ? limpio.replace(String.valueOf(sep), "")
+                    : limpio.replace(sep, '.');
+        }
+
         try {
             return Double.parseDouble(limpio);
         } catch (NumberFormatException e) {

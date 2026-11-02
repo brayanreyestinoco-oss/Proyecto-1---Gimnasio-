@@ -8,14 +8,34 @@ import cr.ac.una.est.controlmembresiasgimnasio.service.ControlAcceso;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class MenuPrincipalController {
 
     @FXML
     private Parent raiz;
+
+    @FXML
+    private Label lblFecha;
+
+    /** Muestra la fecha de hoy en el encabezado, ej. "Lunes 2 de noviembre de 2026". */
+    @FXML
+    public void initialize() {
+
+        String fecha = LocalDate.now().format(
+                DateTimeFormatter.ofPattern(
+                        "EEEE d 'de' MMMM 'de' yyyy",
+                        Locale.forLanguageTag("es-CR")));
+
+        lblFecha.setText(
+                Character.toUpperCase(fecha.charAt(0)) + fecha.substring(1));
+    }
 
     @FXML
     private void abrirSocios() throws IOException {

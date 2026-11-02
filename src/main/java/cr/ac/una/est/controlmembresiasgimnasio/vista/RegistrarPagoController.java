@@ -7,6 +7,7 @@ import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Pago;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.planes.Plan;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.socios.Socio;
+import cr.ac.una.est.controlmembresiasgimnasio.service.FormatoFactura;
 import cr.ac.una.est.controlmembresiasgimnasio.service.PagoService;
 import cr.ac.una.est.controlmembresiasgimnasio.service.PlanService;
 import cr.ac.una.est.controlmembresiasgimnasio.service.SocioService;
@@ -154,7 +155,9 @@ public class RegistrarPagoController {
 
         // Mostrar el precio del plan seleccionado.
         txtMonto.setText(
-                String.valueOf(plan.calcularPrecioFinal())
+                java.math.BigDecimal.valueOf(plan.calcularPrecioFinal())
+                        .setScale(2, java.math.RoundingMode.HALF_UP)
+                        .toPlainString()
         );
 
         // Inicialmente, el pago comienza en la fecha elegida.
@@ -201,7 +204,7 @@ public class RegistrarPagoController {
         );
 
         lblVencimiento.setText(
-                vencimiento.toString()
+                FormatoFactura.fecha(vencimiento)
         );
     }
 
@@ -415,7 +418,7 @@ public class RegistrarPagoController {
 
             if (vencimiento != null) {
                 lblVencimiento.setText(
-                        vencimiento.toString()
+                        FormatoFactura.fecha(vencimiento)
                 );
             }
 

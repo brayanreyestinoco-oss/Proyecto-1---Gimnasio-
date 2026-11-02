@@ -110,7 +110,7 @@ public class HistorialAccesosController {
         colMotivo.setText("Motivo");
 
         cmbPeriodo.getItems().setAll(HOY, SIETE_DIAS, TODOS);
-        cmbPeriodo.setValue(HOY);
+        cmbPeriodo.setValue(SIETE_DIAS);
 
         cmbResultado.getItems().setAll(
                 RES_TODOS, RES_PERMITIDOS, RES_DENEGADOS);
@@ -142,7 +142,7 @@ public class HistorialAccesosController {
                 setText(texto);
                 setStyle("-fx-font-weight: bold; -fx-text-fill: "
                         + (esPositivo(texto)
-                        ? "#15803D" : "#DC2626") + ";");
+                        ? "#4ADE80" : "#F87171") + ";");
             }
         });
 
@@ -285,6 +285,13 @@ public class HistorialAccesosController {
                 .filter(RegistroAcceso::permitido).count();
 
         long total = filtrados.size();
+
+        if (total == 0) {
+            lblResumen.setText(registros.isEmpty()
+                    ? "Sin registros en el período seleccionado. Pruebe con \"Últimos 7 días\" o \"Todos\"."
+                    : "Ningún registro coincide con los filtros.");
+            return;
+        }
 
         lblResumen.setText((registros.size() == LIMITE_FILAS ? "Límite de 5000: acorte el período. " : "") + total + " registro(s): "
                 + permitidas + " permitido(s)/vigente(s), "

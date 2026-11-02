@@ -5,32 +5,32 @@
 <?import javafx.scene.layout.*?>
 
 <!-- Gestión de pagos: encabezado con búsqueda y tabla que ocupa el resto de la pantalla. -->
-<BorderPane prefHeight="700" prefWidth="1100.0"
-            style="-fx-background-color: #F4F6F8; -fx-font-size: 15px;"
+<BorderPane styleClass="pagina-oscura" stylesheets="@estilos.css" prefHeight="700" prefWidth="1100.0"
+            style="-fx-background-color: #0E1116; -fx-font-size: 15px;"
             xmlns="http://javafx.com/javafx/17.0.12"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PagosController">
 
     <top>
-        <VBox spacing="10" style="-fx-background-color: #1F2937;">
+        <VBox spacing="10" style="-fx-background-color: #0B0F14; -fx-border-color: transparent transparent rgba(212,175,55,0.45) transparent; -fx-border-width: 0 0 1 0;">
             <padding>
                 <Insets bottom="18" left="25" right="25" top="18" />
             </padding>
 
             <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white;" text="💳 GESTIÓN DE PAGOS" />
 
-            <Label style="-fx-font-size: 14px; -fx-text-fill: #D1D5DB;" text="Administración de pagos y membresías" />
+            <Label style="-fx-font-size: 14px; -fx-text-fill: #9CA3AF;" text="Administración de pagos y membresías" />
 
             <HBox spacing="10">
-                <TextField fx:id="txtBuscar" prefHeight="42" prefWidth="420" promptText="Buscar por cédula o nombre"
-                           style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8px; -fx-font-size: 15px;" />
+                <TextField styleClass="campo" fx:id="txtBuscar" prefHeight="42" prefWidth="420" promptText="Buscar por cédula o nombre"
+                           style="-fx-background-color: #161B22; -fx-border-color: #2A313C; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8px; -fx-font-size: 15px; -fx-text-fill: white; -fx-prompt-text-fill: #8B93A1; -fx-highlight-fill: #D4AF37; -fx-highlight-text-fill: #0B0F14;" />
 
                 <Button fx:id="btnBuscar" onAction="#buscarPago" prefHeight="42" prefWidth="130"
-                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;"
+                        style="-fx-background-color: #161B22; -fx-text-fill: #E5E7EB; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #2A313C; -fx-border-radius: 6;"
                         text="🔎 Buscar" />
 
                 <Button fx:id="btnMostrarTodos" onAction="#mostrarTodos" prefHeight="42" prefWidth="160"
-                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;"
+                        style="-fx-background-color: #161B22; -fx-text-fill: #E5E7EB; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #2A313C; -fx-border-radius: 6;"
                         text="Mostrar todos" />
             </HBox>
         </VBox>
@@ -42,8 +42,8 @@
                 <Insets bottom="10" left="25" right="25" top="20" />
             </padding>
 
-            <TableView fx:id="tablaPagos"
-                       style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-size: 14px; -fx-fixed-cell-size: 38px;"
+            <TableView styleClass="tabla" fx:id="tablaPagos"
+                       style="-fx-background-color: #161B22; -fx-border-color: #2A313C; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-size: 14px; -fx-fixed-cell-size: 38px;"
                        VBox.vgrow="ALWAYS">
                 <columnResizePolicy>
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -60,7 +60,7 @@
             </TableView>
 
             <Button fx:id="btnRegistrar" onAction="#registrarPago" maxWidth="Infinity" prefHeight="46.0"
-                    style="-fx-background-color: #1F2937; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 6;"
+                    style="-fx-background-color: #D4AF37; -fx-text-fill: #0B0F14; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 6;"
                     text="➕ Registrar pago" />
         </VBox>
     </center>
@@ -72,7 +72,7 @@
             </padding>
 
             <Button fx:id="btnVolver" onAction="#volverMenu" prefHeight="40" prefWidth="120"
-                    style="-fx-background-color: #6B7280; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
+                    style="-fx-background-color: #161B22; -fx-text-fill: #E5E7EB; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #2A313C; -fx-border-radius: 6;"
                     text="← Volver" />
         </HBox>
     </bottom>

@@ -1,0 +1,348 @@
+/* =====================================================================
+   TEMA COMPARTIDO — carbón + dorado (el mismo del Login).
+
+   Paleta
+   - Fondo de página   #0E1116      - Barras / cabeceras   #0B0F14
+   - Superficie        #161B22      - Línea                #2A313C
+   - Dorado (acento)   #D4AF37      - Texto                #FFFFFF / #E5E7EB
+   - Texto de apoyo    #9CA3AF      - Peligro              #DC2626 (solo destructivo)
+
+   El aspecto de botones, barras y campos con estilo propio está en línea en
+   cada FXML; aquí van los controles que no se pueden colorear en línea
+   (tablas, listas desplegables, fechas, áreas de texto) y los efectos de
+   hover y foco. Los estilos en línea ganan sobre este archivo.
+   ===================================================================== */
+
+/* ---------- Efecto general al pasar el mouse por un botón ---------- */
+
+.button:hover {
+    -fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.45), 12, 0, 0, 0);
+}
+
+/* ---------- Login ---------- */
+
+.campo:focused {
+    -fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.55), 12, 0, 0, 0);
+}
+
+.boton-principal:hover {
+    -fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.70), 22, 0, 0, 0);
+}
+
+.boton-principal:pressed {
+    -fx-translate-y: 1;
+}
+
+.boton-salir:hover,
+.boton-cerrar:hover {
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.60), 14, 0, 0, 0);
+}
+
+/* ---------- Menú principal ---------- */
+
+.tarjeta {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.30), 12, 0, 0, 3);
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.tarjeta:hover {
+    -fx-border-color: #D4AF37;
+    -fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.35), 20, 0, 0, 6);
+    -fx-translate-y: -3;
+}
+
+.tarjeta:pressed {
+    -fx-translate-y: 0;
+}
+
+/* =====================================================================
+   PANTALLAS INTERNAS (clase pagina-oscura en la raíz de cada FXML)
+   ===================================================================== */
+
+.pagina-oscura {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Etiquetas sin color propio: texto claro sobre fondo oscuro */
+.pagina-oscura .label {
+    -fx-text-fill: #E5E7EB;
+}
+
+/* ---------- Campos de texto ---------- */
+
+.campo {
+    -fx-background-color: #161B22;
+    -fx-background-radius: 8;
+    -fx-border-color: #2A313C;
+    -fx-border-radius: 8;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #8B93A1;
+    -fx-highlight-fill: #D4AF37;
+    -fx-highlight-text-fill: #0B0F14;
+    -fx-padding: 8 12 8 12;
+}
+
+.pagina-oscura .campo:focused {
+    -fx-border-color: #D4AF37;
+}
+
+/* ---------- Listas desplegables ---------- */
+
+.combo {
+    -fx-background-color: #161B22;
+    -fx-background-radius: 8;
+    -fx-border-color: #2A313C;
+    -fx-border-radius: 8;
+    -fx-padding: 0;
+}
+
+.combo:focused {
+    -fx-border-color: #D4AF37;
+}
+
+.combo .list-cell {
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-padding: 8 12 8 12;
+}
+
+.combo .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo .arrow-button .arrow {
+    -fx-background-color: #9CA3AF;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #161B22;
+    -fx-border-color: #2A313C;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: #161B22;
+    -fx-text-fill: white;
+    -fx-padding: 8 12 8 12;
+}
+
+.combo-box-popup .list-view .list-cell:filled:hover,
+.combo-box-popup .list-view .list-cell:filled:selected {
+    -fx-background-color: #D4AF37;
+    -fx-text-fill: #0B0F14;
+}
+
+/* ---------- Selector de fecha ---------- */
+
+.fecha {
+    -fx-background-color: #161B22;
+    -fx-background-radius: 8;
+    -fx-border-color: #2A313C;
+    -fx-border-radius: 8;
+    -fx-padding: 0;
+}
+
+.fecha:focused {
+    -fx-border-color: #D4AF37;
+}
+
+.fecha .text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #8B93A1;
+    -fx-padding: 8 12 8 12;
+}
+
+.fecha .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.fecha .arrow-button .icon {
+    -fx-background-color: #9CA3AF;
+}
+
+.date-picker-popup {
+    -fx-background-color: #161B22;
+    -fx-border-color: #2A313C;
+}
+
+.date-picker-popup > .month-year-pane {
+    -fx-background-color: #0B0F14;
+    -fx-border-color: transparent transparent #D4AF37 transparent;
+}
+
+.date-picker-popup > .month-year-pane .spinner .button .arrow {
+    -fx-background-color: #D4AF37;
+}
+
+.date-picker-popup > .month-year-pane .spinner .label {
+    -fx-text-fill: white;
+}
+
+.date-picker-popup > .calendar-grid {
+    -fx-background-color: #161B22;
+}
+
+.date-picker-popup > .calendar-grid > .day-name-cell,
+.date-picker-popup > .calendar-grid > .week-number-cell {
+    -fx-background-color: #161B22;
+    -fx-text-fill: #9CA3AF;
+    -fx-border-color: transparent;
+}
+
+.date-picker-popup > .calendar-grid > .day-cell {
+    -fx-background-color: #161B22;
+    -fx-background-insets: 0;
+    -fx-border-color: #232A33;
+    -fx-border-width: 0.5;
+    -fx-text-fill: white;
+}
+
+.date-picker-popup > .calendar-grid > .day-cell:hover {
+    -fx-background-color: #2A313C;
+}
+
+.date-picker-popup > .calendar-grid > .day-cell:selected,
+.date-picker-popup > .calendar-grid > .day-cell:focused {
+    -fx-background-color: #D4AF37;
+    -fx-text-fill: #0B0F14;
+}
+
+.date-picker-popup > .calendar-grid > .day-cell:today {
+    -fx-border-color: #D4AF37;
+    -fx-border-width: 1;
+}
+
+.date-picker-popup > .calendar-grid > .day-cell.previous-month,
+.date-picker-popup > .calendar-grid > .day-cell.next-month {
+    -fx-text-fill: #6B7280;
+}
+/* ---------- Áreas de texto ---------- */
+
+.area {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-highlight-fill: #D4AF37;
+    -fx-highlight-text-fill: #0B0F14;
+    -fx-prompt-text-fill: #8B93A1;
+}
+
+.area .content {
+    -fx-background-color: #161B22;
+    -fx-background-radius: 8;
+    -fx-border-color: #2A313C;
+    -fx-border-radius: 8;
+}
+
+.area .scroll-pane,
+.area .viewport {
+    -fx-background-color: transparent;
+}
+
+.area:focused .content {
+    -fx-border-color: #D4AF37;
+}
+
+/* ---------- Tablas ---------- */
+
+.tabla {
+    -fx-background-color: #161B22;
+    -fx-background-radius: 8;
+    -fx-border-color: #2A313C;
+    -fx-border-radius: 8;
+    -fx-padding: 0;
+}
+
+.tabla .column-header-background {
+    -fx-background-color: #0B0F14;
+    -fx-background-radius: 8 8 0 0;
+}
+
+.tabla .column-header,
+.tabla .filler {
+    -fx-background-color: #0B0F14;
+    -fx-border-color: transparent transparent #D4AF37 transparent;
+    -fx-size: 40;
+}
+
+.tabla .column-header .label {
+    -fx-text-fill: #D4AF37;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER-LEFT;
+}
+
+.tabla .column-resize-line,
+.tabla .column-overlay {
+    -fx-background-color: transparent;
+}
+
+.tabla .table-row-cell {
+    -fx-background-color: #161B22;
+    -fx-border-color: transparent transparent #232A33 transparent;
+    -fx-table-cell-border-color: transparent;
+}
+
+.tabla .table-row-cell:filled:hover {
+    -fx-background-color: #1C232C;
+}
+
+.tabla .table-row-cell:filled:selected {
+    -fx-background-color: rgba(212, 175, 55, 0.20);
+}
+
+.tabla .table-cell {
+    -fx-text-fill: #E5E7EB;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 0 12 0 12;
+    -fx-border-color: transparent;
+}
+
+.tabla .table-row-cell:filled:selected .table-cell {
+    -fx-text-fill: white;
+}
+
+.tabla .placeholder .label {
+    -fx-text-fill: #6B7280;
+}
+
+.tabla .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.tabla .scroll-bar .thumb {
+    -fx-background-color: #2A313C;
+    -fx-background-radius: 4;
+    -fx-background-insets: 2;
+}
+
+.tabla .scroll-bar .track,
+.tabla .scroll-bar .increment-button,
+.tabla .scroll-bar .decrement-button,
+.tabla .corner {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.tabla .scroll-bar .increment-arrow,
+.tabla .scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+}
+
+/* Indicador de carga en dorado */
+.pagina-oscura .progress-indicator .percentage {
+    -fx-fill: #D4AF37;
+}
+
+.pagina-oscura .progress-indicator > .determinate-indicator > .indicator,
+.pagina-oscura .progress-indicator > .determinate-indicator > .progress {
+    -fx-background-color: #D4AF37;
+}
+
+/* Separadores discretos */
+.pagina-oscura .separator .line {
+    -fx-border-color: #2A313C transparent transparent transparent;
+    -fx-background-color: transparent;
+}

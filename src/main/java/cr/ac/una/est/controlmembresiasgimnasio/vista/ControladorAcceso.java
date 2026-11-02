@@ -5,6 +5,7 @@ import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.accesos.RegistroAcceso;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
 import cr.ac.una.est.controlmembresiasgimnasio.service.ControlAcceso;
+import cr.ac.una.est.controlmembresiasgimnasio.service.FormatoFactura;
 import cr.ac.una.est.controlmembresiasgimnasio.service.HistorialAccesoService;
 import cr.ac.una.est.controlmembresiasgimnasio.service.ResultadoAcceso;
 
@@ -93,7 +94,7 @@ public class ControladorAcceso {
                 setText(texto);
                 setStyle("-fx-font-weight: bold; -fx-text-fill: "
                         + ("PERMITIDO".equals(texto)
-                        ? "#15803D" : "#DC2626") + ";");
+                        ? "#4ADE80" : "#F87171") + ";");
             }
         });
 
@@ -256,7 +257,7 @@ public class ControladorAcceso {
         if (membresia.getFechaVencimiento() != null) {
 
             lblVencimiento.setText(
-                    membresia.getFechaVencimiento().toString()
+                    FormatoFactura.fecha(membresia.getFechaVencimiento())
             );
 
         } else {

@@ -52,12 +52,13 @@ public class AccesoRepositoryJdbc implements AccesoRepository {
      */
     public void registrarEntrada(int idSocio) throws SQLException {
 
-        String sql = "INSERT INTO acceso_historial (id_socio) VALUES (?)";
+        String sql = "INSERT INTO acceso_historial (id_socio, fecha_hora) VALUES (?, ?)";
 
         try (Connection conexion = ConexionBD.obtenerConexion();
              PreparedStatement ps = conexion.prepareStatement(sql)) {
 
             ps.setInt(1, idSocio);
+            ps.setTimestamp(2, ahora());
             ps.executeUpdate();
         }
     }
@@ -73,8 +74,8 @@ public class AccesoRepositoryJdbc implements AccesoRepository {
             throws SQLException {
 
         String sql = "INSERT INTO consulta_membresia "
-                + "(id_socio, cedula_consultada, vigente, estado) "
-                + "VALUES (?, ?, ?, ?)";
+                + "(id_socio, cedula_consultada, fecha_hora, vigente, estado) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conexion = ConexionBD.obtenerConexion();
              PreparedStatement ps = conexion.prepareStatement(sql)) {
@@ -86,8 +87,9 @@ public class AccesoRepositoryJdbc implements AccesoRepository {
             }
 
             ps.setString(2, recortar(cedula, 20));
-            ps.setBoolean(3, vigente);
-            ps.setString(4, recortar(estado, 100));
+            ps.setTimestamp(3, ahora());
+            ps.setBoolean(4, vigente);
+            ps.setString(5, recortar(estado, 100));
 
             ps.executeUpdate();
         }
@@ -174,16 +176,22 @@ public class AccesoRepositoryJdbc implements AccesoRepository {
     public void registrarIntento(Integer idSocio, String cedula,
                                   boolean permitido, String motivo) throws SQLException {
         String sql = "INSERT INTO intento_acceso "
-                + "(id_socio, cedula_consultada, permitido, motivo) VALUES (?, ?, ?, ?)";
+                + "(id_socio, cedula_consultada, fecha_hora, permitido, motivo) VALUES (?, ?, ?, ?, ?)";
         try (Connection conexion = ConexionBD.obtenerConexion();
              PreparedStatement ps = conexion.prepareStatement(sql)) {
             if (idSocio == null) ps.setNull(1, Types.INTEGER);
             else ps.setInt(1, idSocio);
             ps.setString(2, cedula);
-            ps.setBoolean(3, permitido);
-            ps.setString(4, motivo);
+            ps.setTimestamp(3, ahora());
+            ps.setBoolean(4, permitido);
+            ps.setString(5, motivo);
             ps.executeUpdate();
         }
+    }
+
+    /** Hora actual de la aplicación; se envía a MySQL para no depender de la hora del servidor. */
+    private static Timestamp ahora() {
+        return Timestamp.valueOf(LocalDateTime.now());
     }
 
     private static String recortar(String texto, int maximo) {

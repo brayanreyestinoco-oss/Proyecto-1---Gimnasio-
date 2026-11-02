@@ -5,15 +5,15 @@
 <?import javafx.scene.layout.*?>
 
 <!-- Gestión de planes: tabla a la izquierda y formulario de datos a la derecha. -->
-<BorderPane prefHeight="700.0"
+<BorderPane styleClass="pagina-oscura" stylesheets="@estilos.css" prefHeight="700.0"
             prefWidth="1100.0"
-            style="-fx-background-color: #F4F6F8; -fx-font-size: 15px;"
+            style="-fx-background-color: #0E1116; -fx-font-size: 15px;"
             xmlns="http://javafx.com/javafx/17.0.12"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.PlanesController">
 
     <top>
-        <VBox spacing="10" style="-fx-background-color: #1F2937;">
+        <VBox spacing="10" style="-fx-background-color: #0B0F14; -fx-border-color: transparent transparent rgba(212,175,55,0.45) transparent; -fx-border-width: 0 0 1 0;">
             <padding>
                 <Insets bottom="18" left="25" right="25" top="18" />
             </padding>
@@ -22,16 +22,16 @@
                    text="Gestión de Planes" />
 
             <HBox spacing="10">
-                <TextField fx:id="txtBuscar" prefHeight="42" prefWidth="380"
+                <TextField styleClass="campo" fx:id="txtBuscar" prefHeight="42" prefWidth="380"
                            promptText="Nombre del plan"
-                           style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8px; -fx-font-size: 15px;" />
+                           style="-fx-background-color: #161B22; -fx-border-color: #2A313C; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8px; -fx-font-size: 15px; -fx-text-fill: white; -fx-prompt-text-fill: #8B93A1; -fx-highlight-fill: #D4AF37; -fx-highlight-text-fill: #0B0F14;" />
 
                 <Button fx:id="btnBuscar" onAction="#buscarPlan" prefHeight="42" prefWidth="120"
-                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;"
+                        style="-fx-background-color: #161B22; -fx-text-fill: #E5E7EB; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #2A313C; -fx-border-radius: 6;"
                         text="Buscar" />
 
                 <Button fx:id="btnMostrarTodos" onAction="#mostrarTodos" prefHeight="42" prefWidth="160"
-                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;"
+                        style="-fx-background-color: #161B22; -fx-text-fill: #E5E7EB; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #2A313C; -fx-border-radius: 6;"
                         text="Mostrar todos" />
             </HBox>
         </VBox>
@@ -43,8 +43,8 @@
                 <Insets bottom="10" left="25" right="12" top="20" />
             </padding>
 
-            <TableView fx:id="tablaPlanes"
-                       style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-size: 14px; -fx-fixed-cell-size: 38px;"
+            <TableView styleClass="tabla" fx:id="tablaPlanes"
+                       style="-fx-background-color: #161B22; -fx-border-color: #2A313C; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-size: 14px; -fx-fixed-cell-size: 38px;"
                        VBox.vgrow="ALWAYS">
                 <columnResizePolicy>
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -59,37 +59,37 @@
     </center>
 
     <right>
-        <VBox spacing="8" prefWidth="400" minWidth="360" style="-fx-background-color: #F4F6F8;">
+        <VBox spacing="8" prefWidth="400" minWidth="360" style="-fx-background-color: #0E1116;">
             <padding>
                 <Insets bottom="12" left="12" right="25" top="20" />
             </padding>
 
-            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1F2937;" text="Datos del plan" />
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;" text="Datos del plan" />
 
             <Label style="-fx-font-weight: bold;" text="Tipo" />
-            <ComboBox fx:id="cmbTipo" maxWidth="Infinity" prefHeight="40" />
+            <ComboBox styleClass="combo" fx:id="cmbTipo" maxWidth="Infinity" prefHeight="40" />
 
             <Label style="-fx-font-weight: bold;" text="Nombre" />
-            <TextField fx:id="txtNombre" prefHeight="40" promptText="Ej. Mensual Plus" />
+            <TextField styleClass="campo" fx:id="txtNombre" prefHeight="40" promptText="Ej. Mensual Plus" />
 
             <Label style="-fx-font-weight: bold;" text="Precio base (₡)" />
-            <TextField fx:id="txtPrecioBase" prefHeight="40" promptText="Ej. 15000" />
+            <TextField styleClass="campo" fx:id="txtPrecioBase" prefHeight="40" promptText="Ej. 15000" />
 
             <Label fx:id="lblAjuste" style="-fx-font-weight: bold;" text="Ajuste" />
-            <TextField fx:id="txtAjuste" prefHeight="40" />
+            <TextField styleClass="campo" fx:id="txtAjuste" prefHeight="40" />
 
             <Label style="-fx-font-weight: bold;" text="Beneficios" />
-            <TextField fx:id="txtBeneficios" prefHeight="40" promptText="Qué incluye el plan" />
+            <TextField styleClass="campo" fx:id="txtBeneficios" prefHeight="40" promptText="Qué incluye el plan" />
 
             <Region prefHeight="6" />
 
             <HBox spacing="8">
                 <Button fx:id="btnGuardar" onAction="#guardarPlan" prefHeight="44" HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                        style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
+                        style="-fx-background-color: #D4AF37; -fx-text-fill: #0B0F14; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
                         text="Guardar" />
 
                 <Button fx:id="btnNuevo" onAction="#nuevoPlan" prefHeight="44" HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-size: 15px; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6;"
+                        style="-fx-background-color: #161B22; -fx-text-fill: white; -fx-font-size: 15px; -fx-border-color: #2A313C; -fx-border-radius: 6; -fx-background-radius: 6; -fx-prompt-text-fill: #8B93A1; -fx-highlight-fill: #D4AF37; -fx-highlight-text-fill: #0B0F14;"
                         text="Nuevo" />
 
                 <Button fx:id="btnEliminar" onAction="#eliminarPlan" prefHeight="44" HBox.hgrow="ALWAYS" maxWidth="Infinity"
@@ -106,7 +106,7 @@
             </padding>
 
             <Button fx:id="btnVolver" onAction="#volverMenu" prefHeight="40" prefWidth="120"
-                    style="-fx-background-color: #6B7280; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
+                    style="-fx-background-color: #161B22; -fx-text-fill: #E5E7EB; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #2A313C; -fx-border-radius: 6;"
                     text="← Volver" />
         </HBox>
     </bottom>

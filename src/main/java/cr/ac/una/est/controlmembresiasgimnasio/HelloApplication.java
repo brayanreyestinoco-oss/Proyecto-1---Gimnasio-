@@ -36,6 +36,13 @@ public class HelloApplication extends Application {
         // Crea la escena; su tamaño real lo define la ventana maximizada.
         Scene scene = new Scene(fxmlLoader.load());
 
+        // Tema compartido (carbón y dorado): a nivel de escena para que lo hereden
+        // también las listas desplegables y los calendarios emergentes.
+        var estilos = HelloApplication.class.getResource("estilos.css");
+        if (estilos != null) {
+            scene.getStylesheets().add(estilos.toExternalForm());
+        }
+
         // Establece el título que aparecerá en la ventana principal.
         stage.setTitle(
                 "Control de Membresías - Gimnasio"

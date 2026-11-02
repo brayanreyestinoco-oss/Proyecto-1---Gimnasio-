@@ -13,15 +13,15 @@
 <?import javafx.scene.layout.VBox?>
 
 <!-- Registro de pago: formulario centrado en la pantalla. -->
-<BorderPane xmlns="http://javafx.com/javafx/17.0.12"
+<BorderPane styleClass="pagina-oscura" stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/17.0.12"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.RegistrarPagoController"
             prefWidth="1100"
             prefHeight="700"
-            style="-fx-background-color: #F4F6F8; -fx-font-size: 15px;">
+            style="-fx-background-color: #0E1116; -fx-font-size: 15px;">
 
     <top>
-        <VBox spacing="5" style="-fx-background-color: #1F2937;">
+        <VBox spacing="5" style="-fx-background-color: #0B0F14; -fx-border-color: transparent transparent rgba(212,175,55,0.45) transparent; -fx-border-width: 0 0 1 0;">
             <padding>
                 <Insets top="18" right="25" bottom="18" left="25" />
             </padding>
@@ -30,7 +30,7 @@
                    style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white;" />
 
             <Label text="Registro de un nuevo pago de membresía"
-                   style="-fx-font-size: 14px; -fx-text-fill: #D1D5DB;" />
+                   style="-fx-font-size: 14px; -fx-text-fill: #9CA3AF;" />
         </VBox>
     </top>
 
@@ -47,47 +47,47 @@
                 </columnConstraints>
 
                 <Label text="Cédula del socio:" GridPane.columnIndex="0" GridPane.rowIndex="0"
-                       style="-fx-font-weight: bold; -fx-text-fill: #1F2937;" />
-                <TextField fx:id="txtCedula" promptText="Ingrese la cédula" prefHeight="42" maxWidth="Infinity"
+                       style="-fx-font-weight: bold; -fx-text-fill: white;" />
+                <TextField styleClass="campo" fx:id="txtCedula" promptText="Ingrese la cédula" prefHeight="42" maxWidth="Infinity"
                            GridPane.columnIndex="1" GridPane.rowIndex="0"
-                           style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8px; -fx-font-size: 15px;" />
+                           style="-fx-background-color: #161B22; -fx-border-color: #2A313C; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8px; -fx-font-size: 15px; -fx-text-fill: white; -fx-prompt-text-fill: #8B93A1; -fx-highlight-fill: #D4AF37; -fx-highlight-text-fill: #0B0F14;" />
 
                 <Label text="Plan:" GridPane.columnIndex="0" GridPane.rowIndex="1"
-                       style="-fx-font-weight: bold; -fx-text-fill: #1F2937;" />
-                <ComboBox fx:id="cmbPlan" promptText="Seleccione un plan" prefHeight="42" maxWidth="Infinity"
+                       style="-fx-font-weight: bold; -fx-text-fill: white;" />
+                <ComboBox styleClass="combo" fx:id="cmbPlan" promptText="Seleccione un plan" prefHeight="42" maxWidth="Infinity"
                           GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                 <Label text="Monto:" GridPane.columnIndex="0" GridPane.rowIndex="2"
-                       style="-fx-font-weight: bold; -fx-text-fill: #1F2937;" />
-                <TextField fx:id="txtMonto" promptText="Monto del plan" editable="false" prefHeight="42" maxWidth="Infinity"
+                       style="-fx-font-weight: bold; -fx-text-fill: white;" />
+                <TextField styleClass="campo" fx:id="txtMonto" promptText="Monto del plan" editable="false" prefHeight="42" maxWidth="Infinity"
                            GridPane.columnIndex="1" GridPane.rowIndex="2"
-                           style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8px; -fx-font-size: 15px;" />
+                           style="-fx-background-color: #161B22; -fx-border-color: #2A313C; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8px; -fx-font-size: 15px; -fx-text-fill: white; -fx-prompt-text-fill: #8B93A1; -fx-highlight-fill: #D4AF37; -fx-highlight-text-fill: #0B0F14;" />
 
                 <Label text="Fecha de pago:" GridPane.columnIndex="0" GridPane.rowIndex="3"
-                       style="-fx-font-weight: bold; -fx-text-fill: #1F2937;" />
-                <DatePicker fx:id="dpFechaInicio" prefHeight="42" maxWidth="Infinity"
+                       style="-fx-font-weight: bold; -fx-text-fill: white;" />
+                <DatePicker styleClass="fecha" fx:id="dpFechaInicio" prefHeight="42" maxWidth="Infinity"
                             GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
                 <Label text="Método de pago:" GridPane.columnIndex="0" GridPane.rowIndex="4"
-                       style="-fx-font-weight: bold; -fx-text-fill: #1F2937;" />
-                <ComboBox fx:id="cmbMetodoPago" promptText="Seleccione el método" prefHeight="42" maxWidth="Infinity"
+                       style="-fx-font-weight: bold; -fx-text-fill: white;" />
+                <ComboBox styleClass="combo" fx:id="cmbMetodoPago" promptText="Seleccione el método" prefHeight="42" maxWidth="Infinity"
                           GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
                 <Label text="Vencimiento:" GridPane.columnIndex="0" GridPane.rowIndex="5"
-                       style="-fx-font-weight: bold; -fx-text-fill: #1F2937;" />
+                       style="-fx-font-weight: bold; -fx-text-fill: white;" />
                 <Label fx:id="lblVencimiento" text="Se calculará automáticamente" maxWidth="Infinity"
                        GridPane.columnIndex="1" GridPane.rowIndex="5"
-                       style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 11px; -fx-text-fill: #4B5563;" />
+                       style="-fx-background-color: #161B22; -fx-border-color: #2A313C; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 11px; -fx-text-fill: #9CA3AF;" />
             </GridPane>
 
             <HBox spacing="15" alignment="CENTER">
                 <Button fx:id="btnCancelar" text="Cancelar" prefWidth="160" prefHeight="44"
                         onAction="#cancelar"
-                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;" />
+                        style="-fx-background-color: #161B22; -fx-text-fill: #E5E7EB; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #2A313C; -fx-border-radius: 6;" />
 
                 <Button fx:id="btnGuardar" text="💾 Guardar" prefWidth="160" prefHeight="44"
                         onAction="#guardarPago"
-                        style="-fx-background-color: #1F2937; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;" />
+                        style="-fx-background-color: #D4AF37; -fx-text-fill: #0B0F14; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;" />
             </HBox>
         </VBox>
     </center>
@@ -99,7 +99,7 @@
             </padding>
 
             <Button fx:id="btnVolver" prefHeight="40" prefWidth="120" text="← Volver" onAction="#volverPagos"
-                    style="-fx-background-color: #6B7280; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;" />
+                    style="-fx-background-color: #161B22; -fx-text-fill: #E5E7EB; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #2A313C; -fx-border-radius: 6;" />
         </HBox>
     </bottom>
 
