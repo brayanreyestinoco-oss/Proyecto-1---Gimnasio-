@@ -4,6 +4,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--
+  MenuPrincipalView.fxml
+  QUÉ HACE:    Menú principal con una tarjeta por módulo.
+  CONECTADO A: MenuPrincipalController. Cada tarjeta abre Socios, Planes, Pagos, Facturación,
+                Control de Acceso, Historial o Reportes.
+-->
+
 <!-- Menú principal: encabezado y módulos organizados en tarjetas por sección.
      El aspecto base está en línea; estilos.css solo añade el efecto al pasar el mouse. -->
 <BorderPane styleClass="pagina-oscura" fx:id="raiz"

@@ -4,6 +4,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--
+  PlanesView.fxml
+  QUÉ HACE:    Tabla de planes y formulario para crear, modificar o eliminar.
+  CONECTADO A: PlanesController. Volver regresa al menú.
+-->
+
 <!-- Gestión de planes: tabla a la izquierda y formulario de datos a la derecha. -->
 <BorderPane styleClass="pagina-oscura" stylesheets="@estilos.css" prefHeight="700.0"
             prefWidth="1100.0"

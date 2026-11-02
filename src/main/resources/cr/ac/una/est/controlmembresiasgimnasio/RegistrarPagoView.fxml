@@ -12,6 +12,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<!--
+  RegistrarPagoView.fxml
+  QUÉ HACE:    Formulario para cobrar una membresía (cédula, plan, monto, fecha, método,
+                vencimiento).
+  CONECTADO A: RegistrarPagoController. Al guardar o cancelar vuelve a PagosView.
+-->
+
 <!-- Registro de pago: formulario centrado en la pantalla. -->
 <BorderPane styleClass="pagina-oscura" stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/17.0.12"
             xmlns:fx="http://javafx.com/fxml/1"

@@ -5,6 +5,13 @@
 <?import javafx.scene.layout.*?>
 
 <!--
+  LoginView.fxml
+  QUÉ HACE:    Pantalla de inicio de sesión (usuario, contraseña y botón Ingresar).
+  CONECTADO A: LoginController. Es la primera pantalla que abre HelloApplication; al ingresar va a
+                MenuPrincipalView.
+-->
+
+<!--
   LOGIN — línea "gimnasio premium": carbón + dorado.
 
   Sistema de diseño

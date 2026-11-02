@@ -4,6 +4,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--
+  PagosView.fxml
+  QUÉ HACE:    Historial de pagos con buscador y botón Registrar pago.
+  CONECTADO A: PagosController. Registrar pago abre RegistrarPagoView; Volver regresa al menú.
+-->
+
 <!-- Gestión de pagos: encabezado con búsqueda y tabla que ocupa el resto de la pantalla. -->
 <BorderPane styleClass="pagina-oscura" stylesheets="@estilos.css" prefHeight="700" prefWidth="1100.0"
             style="-fx-background-color: #0E1116; -fx-font-size: 15px;"

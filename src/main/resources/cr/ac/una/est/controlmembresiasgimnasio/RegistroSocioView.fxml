@@ -4,6 +4,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--
+  RegistroSocioView.fxml
+  QUÉ HACE:    Formulario para registrar o modificar un socio.
+  CONECTADO A: RegistroSocioController. Al guardar o cancelar vuelve a SociosView.
+-->
+
 <!-- Registro/modificación de socio: formulario en dos columnas centrado en la pantalla. -->
 <BorderPane styleClass="pagina-oscura" stylesheets="@estilos.css" prefHeight="700.0"
             prefWidth="1100.0"

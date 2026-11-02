@@ -4,6 +4,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--
+  SociosView.fxml
+  QUÉ HACE:    Lista de socios con buscador y botones Registrar, Modificar y Eliminar.
+  CONECTADO A: SociosController. Registrar y Modificar abren RegistroSocioView; Volver regresa al
+                menú.
+-->
+
 <!-- Gestión de socios: tabla grande a la izquierda y panel de acciones/detalle a la derecha. -->
 <BorderPane styleClass="pagina-oscura" stylesheets="@estilos.css" prefHeight="700.0" prefWidth="1100.0"
             style="-fx-background-color: #0E1116; -fx-font-size: 15px;"

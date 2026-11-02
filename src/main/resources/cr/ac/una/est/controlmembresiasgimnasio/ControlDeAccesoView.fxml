@@ -12,6 +12,12 @@
 <?import javafx.scene.layout.VBox?>
 
 <!--
+  ControlDeAccesoView.fxml
+  QUÉ HACE:    Pantalla de recepción: se escribe la cédula y se ve si el socio puede entrar.
+  CONECTADO A: ControladorAcceso. Volver regresa al menú.
+-->
+
+<!--
   CONTROL DE ACCESO — pensado para la recepción:
   1) cédula y botones juntos arriba,
   2) el resultado (verde/rojo) es lo más grande de la pantalla,

@@ -4,6 +4,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--
+  HistorialAccesosView.fxml
+  QUÉ HACE:    Historial de quién entró o consultó, con filtros y exportación a CSV.
+  CONECTADO A: HistorialAccesosController. Volver regresa al menú.
+-->
+
 <!-- Historial: entradas al gimnasio y consultas de membresía. -->
 <BorderPane styleClass="pagina-oscura" stylesheets="@estilos.css" prefHeight="700.0" prefWidth="1200.0"
             style="-fx-background-color: #0E1116; -fx-font-size: 15px;"

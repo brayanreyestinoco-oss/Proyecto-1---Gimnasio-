@@ -4,6 +4,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--
+  ReportesView.fxml
+  QUÉ HACE:    Reporte de membresías (todas, por vencer o ya vencidas) con exportación a CSV.
+  CONECTADO A: ReportesController. Volver regresa al menú.
+-->
+
 <!-- Reporte de membresías: la tabla ocupa todo el ancho y alto disponibles. -->
 <BorderPane styleClass="pagina-oscura" stylesheets="@estilos.css" prefHeight="700.0" prefWidth="1200.0"
             style="-fx-background-color: #0E1116; -fx-font-size: 15px;"

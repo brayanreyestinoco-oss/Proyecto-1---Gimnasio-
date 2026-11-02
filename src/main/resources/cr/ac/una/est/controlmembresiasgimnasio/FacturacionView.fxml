@@ -12,6 +12,12 @@
 <?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.VBox?>
 
+<!--
+  FacturacionView.fxml
+  QUÉ HACE:    Lista de facturas, vista previa y botón Exportar a Word.
+  CONECTADO A: FacturacionController. Volver regresa al menú.
+-->
+
 <!-- Pantalla de facturación: lista de facturas, vista previa y exportación a Word. -->
 <BorderPane styleClass="pagina-oscura" stylesheets="@estilos.css" prefHeight="650.0" prefWidth="1100.0"
             style="-fx-background-color: #0E1116; -fx-font-size: 15px;"
