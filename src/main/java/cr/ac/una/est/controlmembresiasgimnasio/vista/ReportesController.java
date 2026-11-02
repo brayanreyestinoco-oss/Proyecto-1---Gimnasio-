@@ -26,6 +26,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ReportesController {
@@ -52,6 +54,12 @@ public class ReportesController {
     private TableColumn<ReporteFila, String> colMetodoPago;
     @FXML
     private ComboBox<String> selectorPlazo;
+
+    // Opciones del filtro: "por vencer" = membresías activas que vencen entre hoy y dentro de N días.
+    private static final String OPCION_TODAS = "Todas las membresías";
+    private static final String OPCION_7 = "Por vencer: próximos 7 días";
+    private static final String OPCION_15 = "Por vencer: próximos 15 días";
+    private static final String OPCION_30 = "Por vencer: próximos 30 días";
     @FXML
     private Label lblEstadoConsulta;
     @FXML
@@ -79,7 +87,7 @@ public class ReportesController {
         colMetodoPago.setCellValueFactory(new PropertyValueFactory<>("metodoPago"));
 
         selectorPlazo.setItems(FXCollections.observableArrayList(
-                "Todas", "7 días", "15 días", "30 días"));
+                OPCION_TODAS, OPCION_7, OPCION_15, OPCION_30));
         selectorPlazo.getSelectionModel().selectFirst();
         selectorPlazo.valueProperty().addListener(
                 (observable, anterior, seleccionado) -> cargarReporte());
@@ -107,7 +115,7 @@ public class ReportesController {
         tareaConsulta.setOnSucceeded(event -> {
             List<ReporteFila> filas = tareaConsulta.getValue();
             tablaReporte.setItems(FXCollections.observableArrayList(filas));
-            lblEstadoConsulta.setText(filas.size() + " membresías encontradas.");
+            lblEstadoConsulta.setText(describirResultado(filas.size(), dias));
             cambiarEstadoConsulta(false);
             btnExportarCsv.setDisable(filas.isEmpty());
         });
@@ -134,15 +142,35 @@ public class ReportesController {
 
     private Integer obtenerDiasSeleccionados() {
         String seleccionado = selectorPlazo.getValue();
-        if (seleccionado == null || "Todas".equals(seleccionado)) {
+        if (seleccionado == null || OPCION_TODAS.equals(seleccionado)) {
             return null;
         }
         return switch (seleccionado) {
-            case "7 días" -> 7;
-            case "15 días" -> 15;
-            case "30 días" -> 30;
+            case OPCION_7 -> 7;
+            case OPCION_15 -> 15;
+            case OPCION_30 -> 30;
             default -> throw new IllegalStateException("Plazo de reporte no reconocido.");
         };
+    }
+
+    /**
+     * Texto del estado de la consulta, específico para lo que se pidió.
+     * "Por vencer" = membresía activa cuya fecha de vencimiento cae entre
+     * hoy y dentro de N días (ver ReporteRepositoryJdbc.consultarProximasVencer).
+     */
+    private String describirResultado(int cantidad, Integer dias) {
+        String membresias = cantidad == 1 ? "1 membresía" : cantidad + " membresías";
+
+        if (dias == null) {
+            return membresias + " en total (activas, vencidas e inactivas).";
+        }
+
+        LocalDate limite = LocalDate.now().plusDays(dias);
+        String hasta = limite.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+        return cantidad == 0
+                ? "Ninguna membresía activa vence en los próximos " + dias + " días (hasta el " + hasta + ")."
+                : membresias + " activas vencen entre hoy y el " + hasta + ".";
     }
 
     private void cambiarEstadoConsulta(boolean consultando) {

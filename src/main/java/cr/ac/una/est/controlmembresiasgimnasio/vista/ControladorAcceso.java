@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class ControladorAcceso {
@@ -42,6 +43,13 @@ public class ControladorAcceso {
 
     @FXML
     private Label lblResultado;
+
+    @FXML
+    private Label lblDetalle;
+
+    private static final String AYUDA =
+            "Escriba la cédula y elija: Consultar membresía (solo ver el estado) "
+                    + "o Registrar entrada (marca el ingreso del socio).";
 
     @FXML
     private TableView<RegistroAcceso> tablaRecientes;
@@ -170,6 +178,8 @@ public class ControladorAcceso {
         procesando = true;
         txtCedula.setDisable(true);
         lblResultado.setText("Consultando y guardando en MySQL...");
+        lblDetalle.setText("");
+        pintarResultado(null);
         Task<ResultadoAcceso> tarea = new Task<>() {
             @Override protected ResultadoAcceso call() {
                 return esEntrada ? controlAcceso.registrarEntrada(cedula)
@@ -185,7 +195,9 @@ public class ControladorAcceso {
             procesando = false;
             txtCedula.setDisable(false);
             limpiarInformacion();
-            lblResultado.setText("No se pudo verificar el acceso. Revise la conexión a MySQL e intente de nuevo.");
+            lblResultado.setText("No se pudo verificar el acceso");
+            lblDetalle.setText("Revise la conexión a MySQL e intente de nuevo.");
+            pintarResultado(false);
         });
         Thread hilo = new Thread(tarea, "verificar-acceso");
         hilo.setDaemon(true);
@@ -201,26 +213,39 @@ public class ControladorAcceso {
             mostrarInformacionMembresia(resultado.membresia());
         }
 
-        String texto;
+        LocalDate vence = resultado.membresia() == null
+                ? null : resultado.membresia().getFechaVencimiento();
+        String plazo = describirPlazo(vence);
+        String motivo = resultado.motivo();
+        String titulo;
+        String detalle;
 
         if (esEntrada) {
 
             if (resultado.permitido()) {
-                texto = "ACCESO PERMITIDO";
+                titulo = "ACCESO PERMITIDO";
+                detalle = "Entrada registrada. " + detalleMotivo(motivo, plazo);
             } else {
-                texto = "ACCESO DENEGADO - "
-                        + resultado.motivo().toUpperCase();
+                titulo = "ACCESO DENEGADO";
+                detalle = detalleMotivo(motivo, plazo)
+                        + ("Membresía vencida".equals(motivo)
+                        ? " Renueve el pago para permitir el ingreso." : "");
             }
 
         } else {
-            texto = "CONSULTA: " + resultado.motivo().toUpperCase();
+            titulo = resultado.permitido()
+                    ? "MEMBRESÍA VIGENTE" : motivo.toUpperCase();
+            detalle = "Solo consulta: no se registró la entrada. "
+                    + detalleMotivo(motivo, plazo);
         }
 
         if (!resultado.registrado()) {
-            texto += "\n(No se pudo guardar en la base de datos)";
+            detalle += " (No se pudo guardar en la base de datos.)";
         }
 
-        lblResultado.setText(texto);
+        lblResultado.setText(titulo);
+        lblDetalle.setText(detalle);
+        pintarResultado(resultado.permitido());
 
         txtCedula.clear();
         txtCedula.requestFocus();
@@ -228,6 +253,64 @@ public class ControladorAcceso {
         if (esEntrada) {
             cargarRecientes();
         }
+    }
+
+    /**
+     * Colorea el panel de resultado: verde si el acceso está permitido (o la
+     * membresía vigente), rojo si no, y neutro cuando aún no hay resultado.
+     *
+     * @param permitido true = verde, false = rojo, null = neutro
+     */
+    private void pintarResultado(Boolean permitido) {
+
+        String fondo = "#161B22";
+        String borde = "#2A313C";
+        String texto = "#E5E7EB";
+
+        if (permitido != null && permitido) {
+            fondo = "rgba(74,222,128,0.12)";
+            borde = "#4ADE80";
+            texto = "#4ADE80";
+        } else if (permitido != null) {
+            fondo = "rgba(248,113,113,0.12)";
+            borde = "#F87171";
+            texto = "#F87171";
+        }
+
+        lblResultado.setStyle("-fx-background-color: " + fondo + ";"
+                + " -fx-background-radius: 12;"
+                + " -fx-border-color: " + borde + ";"
+                + " -fx-border-radius: 12; -fx-border-width: 1.5;"
+                + " -fx-text-fill: " + texto + ";"
+                + " -fx-font-size: 28px; -fx-font-weight: bold;"
+                + " -fx-padding: 16;");
+    }
+
+    /** Explica el motivo del resultado en una frase concreta. */
+    private static String detalleMotivo(String motivo, String plazo) {
+        return switch (motivo) {
+            case "Membresía vigente", "Membresía vencida" -> "La membresía " + plazo + ".";
+            case "Membresía inactiva" -> "La membresía del socio está inactiva.";
+            case "Sin membresía" -> "El socio está registrado, pero no tiene membresía.";
+            case "Cédula no registrada" -> "No existe ningún socio con esa cédula.";
+            default -> motivo + ".";
+        };
+    }
+
+    /** Describe el vencimiento respecto a hoy, ej. "vence el 30/11/2026 (quedan 12 días)". */
+    private static String describirPlazo(LocalDate vence) {
+        if (vence == null) {
+            return "no tiene fecha de vencimiento";
+        }
+
+        String fecha = FormatoFactura.fecha(vence);
+        long dias = ChronoUnit.DAYS.between(LocalDate.now(), vence);
+
+        if (dias > 1) return "vence el " + fecha + " (quedan " + dias + " días)";
+        if (dias == 1) return "vence mañana (" + fecha + ")";
+        if (dias == 0) return "vence hoy (" + fecha + ")";
+        if (dias == -1) return "venció ayer (" + fecha + ")";
+        return "venció el " + fecha + " (hace " + (-dias) + " días)";
     }
 
     private void mostrarInformacionMembresia(Membresia membresia) {
@@ -277,6 +360,8 @@ public class ControladorAcceso {
         lblResultado.setText(
                 "Ingrese el número de cédula del socio"
         );
+        lblDetalle.setText(AYUDA);
+        pintarResultado(null);
     }
 
     @FXML

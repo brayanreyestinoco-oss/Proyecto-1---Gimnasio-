@@ -21,9 +21,9 @@
                    text="Reporte de Membresías" />
 
             <HBox alignment="CENTER_LEFT" spacing="12">
-                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Vencimientos:" />
+                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Mostrar:" />
 
-                <ComboBox styleClass="combo" fx:id="selectorPlazo" prefHeight="40.0" prefWidth="170.0" promptText="Todas" />
+                <ComboBox styleClass="combo" fx:id="selectorPlazo" prefHeight="40.0" prefWidth="300.0" promptText="Todas las membresías" />
 
                 <Button fx:id="btnActualizar" onAction="#cargarReporte" prefHeight="40" prefWidth="130"
                         style="-fx-background-color: #161B22; -fx-text-fill: #E5E7EB; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #2A313C; -fx-border-radius: 6;"
@@ -35,7 +35,7 @@
             </HBox>
 
             <Label fx:id="lblEstadoConsulta" style="-fx-text-fill: white; -fx-font-size: 14px;"
-                   text="Seleccione un plazo o consulte todas las membresías." />
+                   text="Elija qué membresías mostrar: todas, o solo las activas que están por vencer." />
         </VBox>
     </top>
 
