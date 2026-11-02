@@ -21,7 +21,7 @@
                    text="🕒 HISTORIAL DE ACCESOS" />
 
             <Label style="-fx-font-size: 14px; -fx-text-fill: #D1D5DB;"
-                   text="Registro de las entradas al gimnasio y de las consultas de membresía" />
+                   text="Historial de intentos permitidos y denegados; consultas de membresía por separado" />
 
             <HBox alignment="CENTER_LEFT" spacing="12">
                 <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Ver:" />
@@ -45,6 +45,15 @@
                         style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
                         text="Exportar a CSV" />
             </HBox>
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <Label text="Desde:" style="-fx-text-fill: white;" />
+                <DatePicker fx:id="fechaDesde" promptText="Opcional" />
+                <Label text="Hasta:" style="-fx-text-fill: white;" />
+                <DatePicker fx:id="fechaHasta" promptText="Opcional" />
+                <ProgressIndicator fx:id="indicadorCarga" visible="false" prefWidth="28" prefHeight="28" />
+                <Label text="Fechas y socio: pulse Actualizar. Si deja Desde vacío se usa el período."
+                       style="-fx-text-fill: white;" />
+            </HBox>
         </VBox>
     </top>
 
@@ -65,7 +74,7 @@
                     <TableColumn fx:id="colSocio" prefWidth="240" text="Socio" />
                     <TableColumn fx:id="colCedula" prefWidth="140" text="Cédula" />
                     <TableColumn fx:id="colResultado" prefWidth="130" text="Resultado" />
-                    <TableColumn fx:id="colMotivo" prefWidth="220" text="Plan" />
+                    <TableColumn fx:id="colMotivo" prefWidth="220" text="Motivo" />
                 </columns>
             </TableView>
 

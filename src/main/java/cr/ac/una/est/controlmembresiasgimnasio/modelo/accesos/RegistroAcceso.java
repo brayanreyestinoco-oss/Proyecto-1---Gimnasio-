@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * @param nombre    nombre del socio (null si la cédula no está registrada)
  * @param cedula    cédula del socio o la que se consultó
  * @param permitido si se permitió la entrada / si la membresía está vigente
- * @param motivo    plan (entradas) o estado (consultas)
+ * @param motivo    motivo de acceso o estado de consulta
  */
 public record RegistroAcceso(
         LocalDateTime fechaHora,
