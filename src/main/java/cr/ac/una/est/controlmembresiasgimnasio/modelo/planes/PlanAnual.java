@@ -7,55 +7,69 @@ import cr.ac.una.est.controlmembresiasgimnasio.interfaces.IRenovable;
  */
 public class PlanAnual extends Plan implements IRenovable {
 
-    private static final double DESCUENTO = 0.15; // 15% de descuento
+    /** Código con el que se guarda este tipo en MySQL. */
+    public static final String TIPO = "ANUAL";
+
+    // Descuento en porcentaje (15 = 15%).
+    private final double descuentoPorcentaje;
 
     /**
-     * Crea un plan anual con un precio base fijo (antes de descuento).
+     * Crea un plan anual con los valores originales del sistema:
+     * 12 mensualidades de 15000 con 15% de descuento.
      */
     public PlanAnual() {
-        super("Anual", 15000 * 12);
+        this("Anual", 15000 * 12, 15,
+                "Acceso al gimnasio + 15% de descuento por pago anual");
     }
 
-    /**
-     * Calcula el precio final aplicando el descuento anual.
-     * @return precio final en colones
-     */
+    /** Crea un plan anual nuevo (sin guardar). */
+    public PlanAnual(String nombre, double precioBase,
+                     double descuentoPorcentaje, String beneficios) {
+        super(nombre, precioBase, beneficios);
+        this.descuentoPorcentaje = descuentoPorcentaje;
+    }
+
+    /** Reconstruye un plan anual desde los datos almacenados. */
+    public PlanAnual(int idPlan, String nombre, double precioBase,
+                     double descuentoPorcentaje, String beneficios) {
+        super(idPlan, nombre, precioBase, beneficios);
+        this.descuentoPorcentaje = descuentoPorcentaje;
+    }
+
+    /** Obtiene el descuento aplicado al plan, en porcentaje. */
+    public double getDescuentoPorcentaje() {
+        return descuentoPorcentaje;
+    }
+
+    @Override
+    public String getTipo() {
+        return TIPO;
+    }
+
+    /** El ajuste del plan anual es su descuento en porcentaje. */
+    @Override
+    public double getAjuste() {
+        return descuentoPorcentaje;
+    }
+
+    /** Calcula el precio final aplicando el descuento anual. */
     @Override
     public double calcularPrecioFinal() {
-        return getPrecioBase() * (1 - DESCUENTO);
+        return getPrecioBase() * (1 - descuentoPorcentaje / 100.0);
     }
 
-    /**
-     * El plan anual dura 12 meses.
-     * @return 12
-     */
+    /** El plan anual dura 12 meses. */
     @Override
     public int getDuracionEnMeses() {
         return 12;
     }
 
-    /**
-     * Describe los beneficios del plan anual.
-     * @return texto de beneficios
-     */
-    @Override
-    public String getBeneficios() {
-        return "Acceso al gimnasio + 15% de descuento por pago anual";
-    }
-
-    /**
-     * El plan anual se renueva automáticamente al vencer.
-     * @return true
-     */
+    /** El plan anual se renueva automáticamente al vencer. */
     @Override
     public boolean esRenovableAutomaticamente() {
         return true;
     }
 
-    /**
-     * El costo de renovar es igual al precio final con descuento.
-     * @return costo de renovación
-     */
     @Override
     public double costoRenovacion() {
         return calcularPrecioFinal();

@@ -4,101 +4,78 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<!-- Contenedor principal de la pantalla de reportes. -->
+<!-- Reporte de membresías: la tabla ocupa todo el ancho y alto disponibles. -->
+<BorderPane prefHeight="700.0" prefWidth="1200.0"
+            style="-fx-background-color: #F4F6F8; -fx-font-size: 15px;"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.ReportesController">
 
-<BorderPane maxHeight="550.0" maxWidth="1100.0" minHeight="550.0" minWidth="1100.0" prefHeight="550.0" prefWidth="1100.0" style="-fx-background-color: #F4F6F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.ReportesController">
-
-    <!-- ENCABEZADO -->
-    <!-- Contiene el título y los botones de acciones del reporte. -->
     <top>
-
-        <VBox prefWidth="1100.0" spacing="10" style="-fx-background-color: #1F2937;">
-
-            <!-- Espaciado interno del encabezado. -->
+        <VBox spacing="10" style="-fx-background-color: #1F2937;">
             <padding>
-                <Insets bottom="10" left="15" right="15" top="15" />
+                <Insets bottom="18" left="25" right="25" top="18" />
             </padding>
 
-            <!-- Título principal de la pantalla de reportes. -->
-            <Label style="-fx-font-size: 20px;                        -fx-font-weight: bold;                        -fx-text-fill: white;" text="Reporte de Membresías" />
+            <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white;"
+                   text="Reporte de Membresías" />
 
-            <!-- Contenedor horizontal para los botones del reporte. -->
-            <HBox spacing="10">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Vencimientos:" />
 
-                <!-- Botón utilizado para actualizar los datos de la tabla. -->
-                <Button fx:id="btnActualizar" onAction="#cargarReporte" style="-fx-background-color: white;                            -fx-text-fill: #1F2937;                            -fx-font-weight: bold;                            -fx-background-radius: 6;                            -fx-border-color: #D1D5DB;                            -fx-border-radius: 6;" text="Actualizar" />
+                <ComboBox fx:id="selectorPlazo" prefHeight="40.0" prefWidth="170.0" promptText="Todas" />
 
-                <!-- Botón utilizado para exportar el reporte a un archivo CSV. -->
-                <Button fx:id="btnExportarCsv" onAction="#exportarCsv" style="-fx-background-color: #2563EB;                            -fx-text-fill: white;                            -fx-font-weight: bold;                            -fx-background-radius: 6;" text="Exportar a CSV" />
+                <Button fx:id="btnActualizar" onAction="#cargarReporte" prefHeight="40" prefWidth="130"
+                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;"
+                        text="Actualizar" />
 
+                <Button fx:id="btnExportarCsv" onAction="#exportarCsv" prefHeight="40" prefWidth="170"
+                        style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
+                        text="Exportar a CSV" />
             </HBox>
 
+            <Label fx:id="lblEstadoConsulta" style="-fx-text-fill: white; -fx-font-size: 14px;"
+                   text="Seleccione un plazo o consulte todas las membresías." />
         </VBox>
-
     </top>
 
-
-    <!-- CONTENIDO -->
-    <!-- Contiene la tabla con la información de las membresías. -->
     <center>
-
-        <!-- Tabla donde se muestran los datos del reporte. -->
-        <TableView fx:id="tablaReporte" minWidth="1050.0" prefHeight="400.0" prefWidth="1050.0" style="-fx-background-color: white;                         -fx-border-color: #D1D5DB;                         -fx-border-radius: 6;                         -fx-background-radius: 6;">
-
-            <!-- Define las columnas que forman parte del reporte. -->
-            <columns>
-
-                <!-- Columna que muestra el nombre del socio. -->
-                <TableColumn fx:id="colSocio" prefWidth="145.0" text="Socio" />
-
-                <!-- Columna que muestra la cédula del socio. -->
-                <TableColumn fx:id="colCedula" prefWidth="105.0" text="Cédula" />
-
-                <!-- Columna que muestra el plan de la membresía. -->
-                <TableColumn fx:id="colPlan" prefWidth="100.0" text="Plan" />
-
-                <!-- Columna que muestra la fecha de inicio de la membresía. -->
-                <TableColumn fx:id="colFechaInicio" prefWidth="110.0" text="Inicio" />
-
-                <!-- Columna que muestra la fecha de vencimiento de la membresía. -->
-                <TableColumn fx:id="colFechaVencimiento" prefWidth="120.0" text="Vencimiento" />
-
-                <!-- Columna que muestra el estado de la membresía. -->
-                <TableColumn fx:id="colEstado" prefWidth="90.0" text="Estado" />
-
-                <!-- Columna que muestra si existe renovación automática. -->
-                <TableColumn fx:id="colRenovacionAutomatica" prefWidth="105.0" text="Renov. Auto." />
-
-                <!-- Columna que muestra el costo de renovación. -->
-                <TableColumn fx:id="colCostoRenovacion" prefWidth="135.0" text="Costo Renovación" />
-
-                <!-- Columna que muestra el método utilizado para realizar el pago. -->
-                <TableColumn fx:id="colMetodoPago" prefWidth="188.0" text="Método de Pago" />
-
-            </columns>
-
-        </TableView>
-
-    </center>
-
-
-    <!-- BOTÓN VOLVER -->
-    <!-- Contiene el botón para regresar al menú principal. -->
-    <bottom>
-
-        <!-- Contenedor que posiciona el botón en la parte inferior derecha. -->
-        <HBox alignment="BOTTOM_RIGHT">
-
-            <!-- Espaciado del botón con respecto a los bordes de la ventana. -->
+        <VBox>
             <padding>
-                <Insets bottom="10" right="10" />
+                <Insets bottom="10" left="25" right="25" top="20" />
             </padding>
 
-            <!-- Botón que regresa al menú principal. -->
-            <Button fx:id="btnVolver" onAction="#volverMenu" prefHeight="30" prefWidth="80" style="-fx-background-color: #6B7280;                         -fx-text-fill: white;                         -fx-font-weight: bold;                         -fx-background-radius: 6;" text="← Volver" />
+            <TableView fx:id="tablaReporte"
+                       style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-size: 14px; -fx-fixed-cell-size: 38px;"
+                       VBox.vgrow="ALWAYS">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                </columnResizePolicy>
+                <columns>
+                    <TableColumn fx:id="colSocio" prefWidth="200.0" text="Socio" />
+                    <TableColumn fx:id="colCedula" prefWidth="130.0" text="Cédula" />
+                    <TableColumn fx:id="colPlan" prefWidth="110.0" text="Plan" />
+                    <TableColumn fx:id="colFechaInicio" prefWidth="120.0" text="Inicio" />
+                    <TableColumn fx:id="colFechaVencimiento" prefWidth="130.0" text="Vencimiento" />
+                    <TableColumn fx:id="colEstado" prefWidth="100.0" text="Estado" />
+                    <TableColumn fx:id="colRenovacionAutomatica" prefWidth="120.0" text="Renov. Auto." />
+                    <TableColumn fx:id="colCostoRenovacion" prefWidth="150.0" text="Costo Renovación" />
+                    <TableColumn fx:id="colMetodoPago" prefWidth="150.0" text="Método de Pago" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
 
+    <bottom>
+        <HBox alignment="BOTTOM_RIGHT">
+            <padding>
+                <Insets bottom="15" right="25" />
+            </padding>
+
+            <Button fx:id="btnVolver" onAction="#volverMenu" prefHeight="40" prefWidth="120"
+                    style="-fx-background-color: #6B7280; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
+                    text="← Volver" />
         </HBox>
-
     </bottom>
 
 </BorderPane>

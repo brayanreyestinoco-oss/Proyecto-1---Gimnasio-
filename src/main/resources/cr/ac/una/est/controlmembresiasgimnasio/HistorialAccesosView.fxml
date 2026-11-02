@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!-- Historial: entradas al gimnasio y consultas de membresía. -->
+<BorderPane prefHeight="700.0" prefWidth="1200.0"
+            style="-fx-background-color: #F4F6F8; -fx-font-size: 15px;"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.HistorialAccesosController">
+
+    <top>
+        <VBox spacing="10" style="-fx-background-color: #1F2937;">
+            <padding>
+                <Insets bottom="18" left="25" right="25" top="18" />
+            </padding>
+
+            <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white;"
+                   text="🕒 HISTORIAL DE ACCESOS" />
+
+            <Label style="-fx-font-size: 14px; -fx-text-fill: #D1D5DB;"
+                   text="Registro de las entradas al gimnasio y de las consultas de membresía" />
+
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Ver:" />
+                <ComboBox fx:id="cmbTipo" prefHeight="40" prefWidth="230" />
+
+                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Período:" />
+                <ComboBox fx:id="cmbPeriodo" prefHeight="40" prefWidth="170" />
+
+                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Resultado:" />
+                <ComboBox fx:id="cmbResultado" prefHeight="40" prefWidth="210" />
+
+                <TextField fx:id="txtBuscar" prefHeight="40" prefWidth="320"
+                           promptText="Buscar por cédula o nombre"
+                           style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 8px; -fx-font-size: 15px;" />
+
+                <Button onAction="#cargarHistorial" prefHeight="40" prefWidth="130"
+                        style="-fx-background-color: white; -fx-text-fill: #1F2937; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-border-color: #D1D5DB; -fx-border-radius: 6;"
+                        text="🔄 Actualizar" />
+
+                <Button onAction="#exportarCsv" prefHeight="40" prefWidth="170"
+                        style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
+                        text="Exportar a CSV" />
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="8">
+            <padding>
+                <Insets bottom="10" left="25" right="25" top="20" />
+            </padding>
+
+            <TableView fx:id="tablaAccesos"
+                       style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-size: 14px; -fx-fixed-cell-size: 38px;"
+                       VBox.vgrow="ALWAYS">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                </columnResizePolicy>
+                <columns>
+                    <TableColumn fx:id="colFechaHora" prefWidth="190" text="Fecha y hora" />
+                    <TableColumn fx:id="colSocio" prefWidth="240" text="Socio" />
+                    <TableColumn fx:id="colCedula" prefWidth="140" text="Cédula" />
+                    <TableColumn fx:id="colResultado" prefWidth="130" text="Resultado" />
+                    <TableColumn fx:id="colMotivo" prefWidth="220" text="Plan" />
+                </columns>
+            </TableView>
+
+            <Label fx:id="lblResumen" style="-fx-text-fill: #1F2937; -fx-font-size: 14px; -fx-font-weight: bold;" />
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="BOTTOM_RIGHT">
+            <padding>
+                <Insets bottom="15" right="25" />
+            </padding>
+
+            <Button onAction="#volverMenu" prefHeight="40" prefWidth="120"
+                    style="-fx-background-color: #6B7280; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 6;"
+                    text="← Volver" />
+        </HBox>
+    </bottom>
+
+</BorderPane>

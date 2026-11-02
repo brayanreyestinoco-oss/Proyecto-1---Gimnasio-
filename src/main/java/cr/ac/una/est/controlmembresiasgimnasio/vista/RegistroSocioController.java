@@ -1,5 +1,6 @@
 package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
+import cr.ac.una.est.controlmembresiasgimnasio.Pantalla;
 import cr.ac.una.est.controlmembresiasgimnasio.DatosAplicacion;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.socios.Socio;
@@ -155,6 +156,42 @@ public class RegistroSocioController {
             );
 
             // Detiene el proceso de guardado.
+            return;
+        }
+
+        /*
+         * CORRECCIÓN:
+         * Verifica que el teléfono del socio
+         * contenga únicamente números.
+         */
+        if (!txtTelefono.getText().trim().matches("[0-9]+")) {
+
+            mostrarMensaje(
+                    Alert.AlertType.WARNING,
+                    "Teléfono inválido",
+                    "El teléfono del socio debe contener únicamente números."
+            );
+
+            return;
+        }
+
+        /*
+         * CORRECCIÓN:
+         * El teléfono de emergencia puede estar vacío.
+         * Si contiene información, solo acepta números.
+         */
+        String telefonoEmergencia =
+                txtTelefonoEmergencia.getText().trim();
+
+        if (!telefonoEmergencia.isEmpty()
+                && !telefonoEmergencia.matches("[0-9]+")) {
+
+            mostrarMensaje(
+                    Alert.AlertType.WARNING,
+                    "Teléfono de emergencia inválido",
+                    "El teléfono de emergencia debe contener únicamente números."
+            );
+
             return;
         }
 
@@ -398,13 +435,7 @@ public class RegistroSocioController {
                                     .getWindow();
 
             // Cambia la escena actual por la pantalla de socios.
-            stage.setScene(
-                    new Scene(
-                            root,
-                            600,
-                            400
-                    )
-            );
+            Pantalla.cambiar(stage, root);
 
         } catch (IOException e) {
 

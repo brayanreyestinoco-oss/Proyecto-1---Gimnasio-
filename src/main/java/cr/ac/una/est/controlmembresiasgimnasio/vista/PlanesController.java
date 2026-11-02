@@ -1,8 +1,13 @@
 package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
+import cr.ac.una.est.controlmembresiasgimnasio.Pantalla;
 import cr.ac.una.est.controlmembresiasgimnasio.DatosAplicacion;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.planes.Plan;
+import cr.ac.una.est.controlmembresiasgimnasio.modelo.planes.PlanAnual;
+import cr.ac.una.est.controlmembresiasgimnasio.modelo.planes.PlanMensual;
+import cr.ac.una.est.controlmembresiasgimnasio.modelo.planes.PlanVIP;
+import cr.ac.una.est.controlmembresiasgimnasio.repository.RepositorioException;
 import cr.ac.una.est.controlmembresiasgimnasio.service.PlanService;
 
 import javafx.collections.FXCollections;
@@ -12,6 +17,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -19,35 +28,61 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
- * Controlador encargado de mostrar
- * y consultar los planes disponibles.
+ * Controlador de la pantalla de planes.
+ * Consulta, crea, modifica y elimina planes en MySQL a través de PlanService.
  */
 public class PlanesController {
 
-    // Tabla donde se muestran los planes disponibles.
+    // Textos del combo de tipo.
+    private static final String TXT_MENSUAL = "Mensual";
+    private static final String TXT_ANUAL = "Anual";
+    private static final String TXT_VIP = "VIP";
+
     @FXML
     private TableView<PlanFila> tablaPlanes;
 
-    // Columna que muestra el nombre del plan.
     @FXML
     private TableColumn<PlanFila, String> colNombre;
 
-    // Columna que muestra el precio del plan.
     @FXML
     private TableColumn<PlanFila, String> colPrecio;
 
-    // Columna que muestra los beneficios del plan.
     @FXML
     private TableColumn<PlanFila, String> colBeneficios;
 
-    // Campo de texto utilizado para buscar un plan por su nombre.
+    // Campo de búsqueda por nombre.
     @FXML
     private TextField txtBuscar;
 
-    // Servicio encargado de gestionar los planes.
+    // Formulario de creación y edición.
+    @FXML
+    private ComboBox<String> cmbTipo;
+
+    @FXML
+    private TextField txtNombre;
+
+    @FXML
+    private TextField txtPrecioBase;
+
+    @FXML
+    private Label lblAjuste;
+
+    @FXML
+    private TextField txtAjuste;
+
+    @FXML
+    private TextField txtBeneficios;
+
+    @FXML
+    private Button btnEliminar;
+
     private PlanService planService;
+
+    // Plan que se está editando; null cuando el formulario está en modo "nuevo".
+    private Plan planEnEdicion;
 
     /**
      * Inicializa la pantalla de planes.
@@ -55,26 +90,27 @@ public class PlanesController {
     @FXML
     public void initialize() {
 
-        // Obtiene el servicio de planes utilizado por la aplicación.
-        planService =
-                DatosAplicacion.getPlanService();
+        planService = DatosAplicacion.getPlanService();
 
-        // Indica que la columna de nombre utilizará el atributo "nombre".
-        colNombre.setCellValueFactory(
-                new PropertyValueFactory<>("nombre")
-        );
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        colBeneficios.setCellValueFactory(new PropertyValueFactory<>("beneficios"));
 
-        // Indica que la columna de precio utilizará el atributo "precio".
-        colPrecio.setCellValueFactory(
-                new PropertyValueFactory<>("precio")
-        );
+        cmbTipo.setItems(FXCollections.observableArrayList(
+                TXT_MENSUAL, TXT_ANUAL, TXT_VIP));
 
-        // Indica que la columna de beneficios utilizará el atributo "beneficios".
-        colBeneficios.setCellValueFactory(
-                new PropertyValueFactory<>("beneficios")
-        );
+        // Al cambiar el tipo se adapta el campo de ajuste.
+        cmbTipo.setOnAction(event -> actualizarCampoAjuste());
 
-        // Carga y muestra todos los planes disponibles.
+        // Al seleccionar una fila se carga el plan en el formulario.
+        tablaPlanes.getSelectionModel().selectedItemProperty().addListener(
+                (obs, anterior, seleccionada) -> {
+                    if (seleccionada != null) {
+                        cargarEnFormulario(seleccionada.getPlan());
+                    }
+                });
+
+        nuevoPlan();
         mostrarTodos();
     }
 
@@ -84,114 +120,255 @@ public class PlanesController {
     @FXML
     public void buscarPlan() {
 
-        // Obtiene el texto ingresado en el campo de búsqueda y elimina espacios.
-        String nombreBuscado =
-                txtBuscar
-                        .getText()
-                        .trim();
+        String nombreBuscado = txtBuscar.getText().trim();
 
-        // Comprueba si el campo de búsqueda está vacío.
         if (nombreBuscado.isEmpty()) {
-
-            // Muestra un mensaje indicando que se debe ingresar un nombre.
-            mostrarAlerta(
-                    "Escribe el nombre de un plan para buscar."
-            );
-
-            // Detiene la ejecución porque no existe un criterio de búsqueda.
+            mostrarAlerta(Alert.AlertType.INFORMATION,
+                    "Escribe el nombre de un plan para buscar.");
             return;
         }
 
-        // Busca un plan utilizando el nombre proporcionado.
-        Plan planEncontrado =
-                planService.buscarPorNombre(
-                        nombreBuscado
-                );
+        try {
+            Plan planEncontrado = planService.buscarPorNombre(nombreBuscado);
 
-        // Comprueba si no se encontró ningún plan.
-        if (planEncontrado == null) {
+            if (planEncontrado == null) {
+                mostrarAlerta(Alert.AlertType.INFORMATION,
+                        "No se encontró ningún plan llamado \""
+                                + nombreBuscado + "\".");
+                return;
+            }
 
-            // Informa al usuario que no existe un plan con ese nombre.
-            mostrarAlerta(
-                    "No se encontró ningún plan llamado \""
-                            + nombreBuscado
-                            + "\"."
-            );
+            ObservableList<PlanFila> filas = FXCollections.observableArrayList();
+            filas.add(convertirAFila(planEncontrado));
+            tablaPlanes.setItems(filas);
 
-            // Detiene la ejecución porque no existe un plan para mostrar.
-            return;
+        } catch (RepositorioException e) {
+            mostrarAlerta(Alert.AlertType.ERROR, e.getMessage()
+                    + " Revisa la conexión con MySQL.");
         }
-
-        // Crea una lista observable para almacenar el resultado de la búsqueda.
-        ObservableList<PlanFila> filas =
-                FXCollections.observableArrayList();
-
-        // Convierte el plan encontrado en una fila para la tabla.
-        filas.add(
-                convertirAFila(
-                        planEncontrado
-                )
-        );
-
-        // Muestra en la tabla únicamente el plan encontrado.
-        tablaPlanes.setItems(
-                filas
-        );
     }
 
     /**
-     * Muestra todos los planes disponibles.
+     * Muestra todos los planes guardados en la base de datos.
      */
     @FXML
     public void mostrarTodos() {
 
-        // Crea una lista observable para almacenar los planes que se mostrarán.
-        ObservableList<PlanFila> filas =
-                FXCollections.observableArrayList();
+        try {
+            ObservableList<PlanFila> filas = FXCollections.observableArrayList();
 
-        // Recorre todos los planes disponibles en el servicio.
-        for (Plan plan :
-                planService.getPlanesDisponibles()) {
+            for (Plan plan : planService.getPlanesDisponibles()) {
+                filas.add(convertirAFila(plan));
+            }
 
-            // Convierte cada plan en una fila para la tabla.
-            filas.add(
-                    convertirAFila(
-                            plan
-                    )
-            );
+            tablaPlanes.setItems(filas);
+            txtBuscar.clear();
+
+        } catch (RepositorioException e) {
+            mostrarAlerta(Alert.AlertType.ERROR, e.getMessage()
+                    + " Revisa la conexión con MySQL.");
         }
-
-        // Coloca todas las filas en la tabla.
-        tablaPlanes.setItems(
-                filas
-        );
-
-        // Limpia el campo de búsqueda después de mostrar todos los planes.
-        txtBuscar.clear();
     }
 
     /**
-     * Convierte un Plan en una fila
-     * para mostrarlo en la tabla.
-     *
-     * @param plan plan que se desea mostrar
-     * @return fila preparada para la tabla
+     * Limpia el formulario para registrar un plan nuevo.
      */
-    private PlanFila convertirAFila(
-            Plan plan) {
+    @FXML
+    private void nuevoPlan() {
 
-        // Crea y devuelve una fila con los datos necesarios del plan.
+        planEnEdicion = null;
+        tablaPlanes.getSelectionModel().clearSelection();
+
+        cmbTipo.setDisable(false);
+        cmbTipo.getSelectionModel().select(TXT_MENSUAL);
+        txtNombre.clear();
+        txtPrecioBase.clear();
+        txtAjuste.clear();
+        txtBeneficios.clear();
+        btnEliminar.setDisable(true);
+
+        actualizarCampoAjuste();
+    }
+
+    /**
+     * Guarda el plan del formulario: lo crea si es nuevo o lo modifica
+     * si hay uno seleccionado.
+     */
+    @FXML
+    private void guardarPlan() {
+
+        try {
+            double precioBase = leerNumero(txtPrecioBase.getText(), "El precio base");
+            double ajuste = 0;
+
+            // El ajuste solo aplica a los planes Anual y VIP.
+            if (!TXT_MENSUAL.equals(cmbTipo.getValue())) {
+                ajuste = leerNumero(txtAjuste.getText(),
+                        TXT_ANUAL.equals(cmbTipo.getValue())
+                                ? "El descuento" : "El recargo");
+            }
+
+            if (planEnEdicion == null) {
+                planService.crear(
+                        codigoTipo(cmbTipo.getValue()),
+                        txtNombre.getText(),
+                        precioBase,
+                        ajuste,
+                        txtBeneficios.getText());
+                mostrarAlerta(Alert.AlertType.INFORMATION, "Plan creado correctamente.");
+            } else {
+                planService.modificar(
+                        planEnEdicion.getIdPlan(),
+                        txtNombre.getText(),
+                        precioBase,
+                        ajuste,
+                        txtBeneficios.getText());
+                mostrarAlerta(Alert.AlertType.INFORMATION, "Plan modificado correctamente.");
+            }
+
+            nuevoPlan();
+            mostrarTodos();
+
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            mostrarAlerta(Alert.AlertType.WARNING, e.getMessage());
+        } catch (RepositorioException e) {
+            mostrarAlerta(Alert.AlertType.ERROR, e.getMessage()
+                    + " Revisa la conexión con MySQL.");
+        }
+    }
+
+    /**
+     * Elimina el plan seleccionado, previa confirmación.
+     */
+    @FXML
+    private void eliminarPlan() {
+
+        if (planEnEdicion == null) {
+            mostrarAlerta(Alert.AlertType.INFORMATION,
+                    "Selecciona un plan de la tabla para eliminarlo.");
+            return;
+        }
+
+        Alert confirmacion = new Alert(
+                Alert.AlertType.CONFIRMATION,
+                "¿Eliminar el plan \"" + planEnEdicion.getNombre() + "\"?",
+                ButtonType.YES, ButtonType.NO);
+        confirmacion.setTitle("Gestión de planes");
+        confirmacion.setHeaderText(null);
+
+        Optional<ButtonType> respuesta = confirmacion.showAndWait();
+        if (respuesta.isEmpty() || respuesta.get() != ButtonType.YES) {
+            return;
+        }
+
+        try {
+            planService.eliminar(planEnEdicion.getIdPlan());
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Plan eliminado.");
+            nuevoPlan();
+            mostrarTodos();
+
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            // Plan inexistente o en uso por alguna membresía.
+            mostrarAlerta(Alert.AlertType.WARNING, e.getMessage());
+        } catch (RepositorioException e) {
+            mostrarAlerta(Alert.AlertType.ERROR, e.getMessage()
+                    + " Revisa la conexión con MySQL.");
+        }
+    }
+
+    /**
+     * Pone los datos de un plan en el formulario para editarlo.
+     */
+    private void cargarEnFormulario(Plan plan) {
+
+        planEnEdicion = plan;
+
+        // El tipo de un plan guardado no se puede cambiar.
+        cmbTipo.setValue(textoTipo(plan));
+        cmbTipo.setDisable(true);
+
+        txtNombre.setText(plan.getNombre());
+        txtPrecioBase.setText(formatearNumero(plan.getPrecioBase()));
+        txtAjuste.setText(formatearNumero(plan.getAjuste()));
+        txtBeneficios.setText(plan.getBeneficios());
+        btnEliminar.setDisable(false);
+
+        actualizarCampoAjuste();
+    }
+
+    /**
+     * Cambia la etiqueta del campo de ajuste según el tipo elegido.
+     */
+    private void actualizarCampoAjuste() {
+
+        String tipo = cmbTipo.getValue();
+
+        if (TXT_ANUAL.equals(tipo)) {
+            lblAjuste.setText("Descuento (%)");
+            txtAjuste.setPromptText("Ej. 15");
+            txtAjuste.setDisable(false);
+        } else if (TXT_VIP.equals(tipo)) {
+            lblAjuste.setText("Recargo VIP (₡)");
+            txtAjuste.setPromptText("Ej. 10000");
+            txtAjuste.setDisable(false);
+        } else {
+            lblAjuste.setText("Ajuste (no aplica)");
+            txtAjuste.setPromptText("");
+            txtAjuste.clear();
+            txtAjuste.setDisable(true);
+        }
+    }
+
+    // Convierte el texto del combo en el código guardado en MySQL.
+    private String codigoTipo(String texto) {
+        if (TXT_ANUAL.equals(texto)) {
+            return PlanAnual.TIPO;
+        }
+        if (TXT_VIP.equals(texto)) {
+            return PlanVIP.TIPO;
+        }
+        return PlanMensual.TIPO;
+    }
+
+    // Convierte el tipo de un plan en el texto que muestra el combo.
+    private String textoTipo(Plan plan) {
+        if (plan instanceof PlanAnual) {
+            return TXT_ANUAL;
+        }
+        if (plan instanceof PlanVIP) {
+            return TXT_VIP;
+        }
+        return TXT_MENSUAL;
+    }
+
+    // Lee un número del formulario; acepta coma o punto decimal.
+    private double leerNumero(String texto, String nombreCampo) {
+        String limpio = texto == null ? "" : texto.trim().replace(",", ".");
+        if (limpio.isEmpty()) {
+            throw new IllegalArgumentException(nombreCampo + " es obligatorio.");
+        }
+        try {
+            return Double.parseDouble(limpio);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(nombreCampo + " debe ser un número.");
+        }
+    }
+
+    // Muestra 15000 en lugar de 15000.0.
+    private String formatearNumero(double valor) {
+        return valor == Math.floor(valor)
+                ? String.valueOf((long) valor)
+                : String.valueOf(valor);
+    }
+
+    /**
+     * Convierte un Plan en una fila para mostrarlo en la tabla.
+     */
+    private PlanFila convertirAFila(Plan plan) {
         return new PlanFila(
-                // Obtiene el nombre del plan.
+                plan,
                 plan.getNombre(),
-
-                // Calcula el precio final y lo convierte a formato de colones.
-                String.format(
-                        "₡%,.0f",
-                        plan.calcularPrecioFinal()
-                ),
-
-                // Obtiene los beneficios asociados al plan.
+                String.format("₡%,.0f", plan.calcularPrecioFinal()),
                 plan.getBeneficios()
         );
     }
@@ -204,150 +381,70 @@ public class PlanesController {
 
         try {
 
-            // Crea el cargador para abrir la vista del menú principal.
-            FXMLLoader loader =
-                    new FXMLLoader(
-                            HelloApplication.class
-                                    .getResource(
-                                            "MenuPrincipalView.fxml"
-                                    )
-                    );
-
-            // Carga la estructura visual del menú principal.
-            Parent root =
-                    loader.load();
-
-            // Obtiene la ventana actual desde la tabla de planes.
-            Stage stage =
-                    (Stage)
-                            tablaPlanes
-                                    .getScene()
-                                    .getWindow();
-
-            // Cambia la escena actual por la del menú principal.
-            stage.setScene(
-                    new Scene(
-                            root,
-                            600,
-                            400
+            FXMLLoader loader = new FXMLLoader(
+                    HelloApplication.class.getResource(
+                            "MenuPrincipalView.fxml"
                     )
             );
 
-            // Centra nuevamente la ventana en la pantalla.
-            stage.centerOnScreen();
+            Parent root = loader.load();
 
+            Stage stage = (Stage) tablaPlanes.getScene().getWindow();
+
+            Pantalla.cambiar(stage, root);
         } catch (IOException e) {
 
-            // Muestra un mensaje si no se pudo cargar el menú principal.
             mostrarAlerta(
+                    Alert.AlertType.ERROR,
                     "No se pudo regresar al menú principal."
             );
         }
+
     }
 
+
     /**
-     * Muestra una alerta.
-     *
-     * @param mensaje mensaje que se mostrará
+     * Muestra una alerta del tipo indicado.
      */
-    private void mostrarAlerta(
-            String mensaje) {
-
-        // Crea una alerta de tipo informativo.
-        Alert alerta =
-                new Alert(
-                        Alert.AlertType.INFORMATION
-                );
-
-        // Establece el título de la ventana de alerta.
-        alerta.setTitle(
-                "Gestión de planes"
-        );
-
-        // Elimina el encabezado de la alerta.
-        alerta.setHeaderText(
-                null
-        );
-
-        // Establece el mensaje que se mostrará.
-        alerta.setContentText(
-                mensaje
-        );
-
-        // Muestra la alerta y espera a que el usuario la cierre.
+    private void mostrarAlerta(Alert.AlertType tipo, String mensaje) {
+        Alert alerta = new Alert(tipo);
+        alerta.setTitle("Gestión de planes");
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
 
     /**
-     * Clase auxiliar utilizada para mostrar
-     * los datos de un plan en la tabla.
+     * Fila de la tabla: datos para mostrar más el Plan original,
+     * que se usa para llenar el formulario al seleccionarla.
      */
     public static class PlanFila {
 
-        // Nombre del plan que se mostrará en la tabla.
+        private final Plan plan;
         private final String nombre;
-
-        // Precio formateado del plan.
         private final String precio;
-
-        // Beneficios que ofrece el plan.
         private final String beneficios;
 
-        /**
-         * Crea una fila para la tabla.
-         *
-         * @param nombre nombre del plan
-         * @param precio precio del plan
-         * @param beneficios beneficios del plan
-         */
-        public PlanFila(
-                String nombre,
-                String precio,
-                String beneficios) {
-
-            // Guarda el nombre recibido para la fila.
-            this.nombre =
-                    nombre;
-
-            // Guarda el precio recibido para la fila.
-            this.precio =
-                    precio;
-
-            // Guarda los beneficios recibidos para la fila.
-            this.beneficios =
-                    beneficios;
+        public PlanFila(Plan plan, String nombre, String precio, String beneficios) {
+            this.plan = plan;
+            this.nombre = nombre;
+            this.precio = precio;
+            this.beneficios = beneficios;
         }
 
-        /**
-         * Obtiene el nombre.
-         *
-         * @return nombre del plan
-         */
-        public String getNombre() {
+        public Plan getPlan() {
+            return plan;
+        }
 
-            // Devuelve el nombre almacenado.
+        public String getNombre() {
             return nombre;
         }
 
-        /**
-         * Obtiene el precio.
-         *
-         * @return precio del plan
-         */
         public String getPrecio() {
-
-            // Devuelve el precio almacenado.
             return precio;
         }
 
-        /**
-         * Obtiene los beneficios.
-         *
-         * @return beneficios del plan
-         */
         public String getBeneficios() {
-
-            // Devuelve los beneficios almacenados.
             return beneficios;
         }
     }

@@ -2,172 +2,112 @@ package cr.ac.una.est.controlmembresiasgimnasio.service;
 
 import cr.ac.una.est.controlmembresiasgimnasio.interfaces.Gestionable;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.socios.Socio;
+import cr.ac.una.est.controlmembresiasgimnasio.repository.SocioRepository;
+import cr.ac.una.est.controlmembresiasgimnasio.repository.SocioRepositoryJdbc;
 
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Servicio encargado de administrar los socios
- * registrados en el gimnasio.
- */
 public class SocioService implements Gestionable<Socio> {
 
-    private ArrayList<Socio> socios;
+    private final SocioRepository socioRepository;
 
-    private int siguienteId;
-
-    /**
-     * Crea el servicio de socios.
-     */
     public SocioService() {
-
-        socios = new ArrayList<>();
-
-        siguienteId = 1;
+        this(new SocioRepositoryJdbc());
     }
 
-    /**
-     * Registra un nuevo socio.
-     *
-     * @param socio socio que se desea registrar
-     */
+    public SocioService(SocioRepository socioRepository) {
+        if (socioRepository == null) {
+            throw new IllegalArgumentException(
+                    "El repositorio de socios no puede ser nulo.");
+        }
+
+        this.socioRepository = socioRepository;
+    }
+
     @Override
     public void registrar(Socio socio) {
 
-        if (socio == null) {
-            return;
+        validarSocio(socio);
+
+        if (buscarPorCedula(socio.getCedula()) != null) {
+            throw new IllegalArgumentException(
+                    "Ya existe un socio registrado con esa cédula.");
         }
 
-        socio.setIdSocio(siguienteId);
-
-        siguienteId++;
-
-        socios.add(socio);
+        // MySQL genera el ID y el repositorio lo asigna al objeto.
+        socioRepository.guardar(socio);
     }
 
-    /**
-     * Busca un socio utilizando su número de socio.
-     *
-     * @param id número del socio
-     * @return socio encontrado o null si no existe
-     */
     @Override
     public Socio buscar(int id) {
-
-        for (Socio socio : socios) {
-
-            if (socio.getIdSocio() == id) {
-
-                return socio;
-            }
-        }
-
-        return null;
+        return socioRepository.buscarPorId(id).orElse(null);
     }
 
-    /**
-     * Busca un socio utilizando su cédula.
-     *
-     * @param cedula cédula del socio
-     * @return socio encontrado o null si no existe
-     */
     public Socio buscarPorCedula(String cedula) {
 
-        if (cedula == null) {
+        if (cedula == null || cedula.trim().isEmpty()) {
             return null;
         }
 
-        for (Socio socio : socios) {
-
-            if (socio.getCedula().equalsIgnoreCase(cedula)) {
-
-                return socio;
-            }
-        }
-
-        return null;
+        return socioRepository.buscarPorCedula(
+                cedula.trim()
+        ).orElse(null);
     }
 
-    /**
-     * Modifica los datos de un socio existente.
-     *
-     * @param socio socio con los nuevos datos
-     * @return true si se modificó correctamente
-     */
     @Override
     public boolean modificar(Socio socio) {
 
-        if (socio == null) {
-            return false;
+        validarSocio(socio);
+
+        if (socio.getIdSocio() <= 0) {
+            throw new IllegalArgumentException(
+                    "El socio no tiene un identificador válido.");
         }
 
-        Socio socioExistente =
-                buscar(socio.getIdSocio());
+        Socio socioMismaCedula =
+                buscarPorCedula(socio.getCedula());
 
-        if (socioExistente != null) {
+        if (socioMismaCedula != null
+                && socioMismaCedula.getIdSocio() != socio.getIdSocio()) {
 
-            socioExistente.setCedula(
-                    socio.getCedula()
-            );
-
-            socioExistente.setNombre(
-                    socio.getNombre()
-            );
-
-            socioExistente.setTelefono(
-                    socio.getTelefono()
-            );
-
-            socioExistente.setCorreo(
-                    socio.getCorreo()
-            );
-
-            socioExistente.setContactoEmergencia(
-                    socio.getContactoEmergencia()
-            );
-
-            socioExistente.setTelefonoEmergencia(
-                    socio.getTelefonoEmergencia()
-            );
-
-            socioExistente.setCondicionesMedicas(
-                    socio.getCondicionesMedicas()
-            );
-
-            return true;
+            throw new IllegalArgumentException(
+                    "Ya existe otro socio registrado con esa cédula.");
         }
 
-        return false;
+        return socioRepository.actualizar(socio);
     }
 
-    /**
-     * Elimina un socio utilizando su número de socio.
-     *
-     * @param id número del socio
-     * @return true si fue eliminado
-     */
     @Override
     public boolean eliminar(int id) {
-
-        Socio socio =
-                buscar(id);
-
-        if (socio != null) {
-
-            socios.remove(socio);
-
-            return true;
-        }
-
-        return false;
+        return socioRepository.eliminar(id);
     }
 
-    /**
-     * Obtiene todos los socios registrados.
-     *
-     * @return lista de socios
-     */
     public ArrayList<Socio> getSocios() {
+        List<Socio> socios = socioRepository.listarTodos();
+        return new ArrayList<>(socios);
+    }
 
-        return socios;
+    private void validarSocio(Socio socio) {
+
+        if (socio == null) {
+            throw new IllegalArgumentException(
+                    "Los datos del socio no pueden estar vacíos.");
+        }
+
+        if (vacio(socio.getCedula())
+                || vacio(socio.getNombre())
+                || vacio(socio.getTelefono())
+                || vacio(socio.getCorreo())
+                || vacio(socio.getContactoEmergencia())
+                || vacio(socio.getTelefonoEmergencia())) {
+
+            throw new IllegalArgumentException(
+                    "Debe completar todos los campos obligatorios.");
+        }
+    }
+
+    private boolean vacio(String valor) {
+        return valor == null || valor.trim().isEmpty();
     }
 }

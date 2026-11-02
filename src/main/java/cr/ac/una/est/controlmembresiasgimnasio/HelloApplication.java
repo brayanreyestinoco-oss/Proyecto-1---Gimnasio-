@@ -14,7 +14,10 @@ import java.io.IOException;
 public class HelloApplication extends Application {
 
     /**
-     * Inicia la aplicación mostrando la pantalla de inicio de sesión.
+     * Inicia la aplicación mostrando la pantalla de inicio de sesión,
+     * maximizada. Todas las pantallas siguientes reutilizan la misma
+     * escena (ver {@link Pantalla}), por lo que se mantienen en
+     * pantalla completa.
      *
      * @param stage ventana principal
      * @throws IOException si ocurre un error al cargar el FXML
@@ -30,13 +33,8 @@ public class HelloApplication extends Application {
                         )
                 );
 
-        // Crea la escena utilizando la vista cargada y establece sus dimensiones.
-        Scene scene =
-                new Scene(
-                        fxmlLoader.load(),
-                        600,
-                        400
-                );
+        // Crea la escena; su tamaño real lo define la ventana maximizada.
+        Scene scene = new Scene(fxmlLoader.load());
 
         // Establece el título que aparecerá en la ventana principal.
         stage.setTitle(
@@ -45,6 +43,13 @@ public class HelloApplication extends Application {
 
         // Asigna la escena creada a la ventana principal.
         stage.setScene(scene);
+
+        // Tamaño mínimo por si el usuario restaura la ventana.
+        stage.setMinWidth(900);
+        stage.setMinHeight(600);
+
+        // Abre la ventana maximizada.
+        stage.setMaximized(true);
 
         // Muestra la ventana principal de la aplicación.
         stage.show();

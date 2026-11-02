@@ -1,0 +1,6 @@
+# Copie este archivo como "db.properties" en la raíz del proyecto
+# (junto al pom.xml) y escriba los datos reales de la base.
+# db.properties está en .gitignore: NO se sube al repositorio.
+db.url=jdbc:mysql://HOST:PUERTO/defaultdb?sslMode=REQUIRED&connectTimeout=8000&serverTimezone=America/Costa_Rica
+db.user=avnadmin
+db.password=

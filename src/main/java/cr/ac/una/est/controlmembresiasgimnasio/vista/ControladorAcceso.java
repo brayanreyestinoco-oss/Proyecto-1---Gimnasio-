@@ -1,285 +1,286 @@
 package cr.ac.una.est.controlmembresiasgimnasio.vista;
 
+import cr.ac.una.est.controlmembresiasgimnasio.Pantalla;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
+import cr.ac.una.est.controlmembresiasgimnasio.modelo.accesos.RegistroAcceso;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
 import cr.ac.una.est.controlmembresiasgimnasio.service.ControlAcceso;
+import cr.ac.una.est.controlmembresiasgimnasio.service.HistorialAccesoService;
+import cr.ac.una.est.controlmembresiasgimnasio.service.ResultadoAcceso;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
-/**
- * Controlador encargado de manejar
- * la simulación de acceso al gimnasio.
- */
 public class ControladorAcceso {
 
-    // Campo donde se ingresa el número de cédula del socio.
     @FXML
     private TextField txtCedula;
 
-    // Etiqueta donde se muestra el nombre del socio.
     @FXML
     private Label lblNombre;
 
-    // Etiqueta donde se muestra el nombre del plan.
     @FXML
     private Label lblPlan;
 
-    // Etiqueta donde se muestra la fecha de vencimiento de la membresía.
     @FXML
     private Label lblVencimiento;
 
-    // Etiqueta donde se muestra el resultado de la verificación.
     @FXML
     private Label lblResultado;
 
-    // Servicio encargado de controlar y verificar los accesos.
+    @FXML
+    private TableView<RegistroAcceso> tablaRecientes;
+
+    @FXML
+    private TableColumn<RegistroAcceso, String> colHora;
+
+    @FXML
+    private TableColumn<RegistroAcceso, String> colSocioReciente;
+
+    @FXML
+    private TableColumn<RegistroAcceso, String> colCedulaReciente;
+
+    @FXML
+    private TableColumn<RegistroAcceso, String> colResultadoReciente;
+
+    private static final DateTimeFormatter FORMATO_HORA =
+            DateTimeFormatter.ofPattern("HH:mm:ss");
+
+    private final HistorialAccesoService historialService =
+            new HistorialAccesoService();
+
     private ControlAcceso controlAcceso;
 
-    /**
-     * Inicializa la pantalla de acceso.
-     */
     @FXML
     public void initialize() {
-
-        // Limpia los datos mostrados inicialmente en la pantalla.
         limpiarInformacion();
+
+        colHora.setCellValueFactory(c -> new SimpleStringProperty(
+                FORMATO_HORA.format(c.getValue().fechaHora())));
+        colSocioReciente.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().nombre() == null ? "-" : c.getValue().nombre()));
+        colCedulaReciente.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().cedula()));
+        colResultadoReciente.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().permitido() ? "PERMITIDO" : "DENEGADO"));
+
+        colResultadoReciente.setCellFactory(columna -> new TableCell<>() {
+            @Override
+            protected void updateItem(String texto, boolean vacio) {
+                super.updateItem(texto, vacio);
+
+                if (vacio || texto == null) {
+                    setText(null);
+                    setStyle("");
+                    return;
+                }
+
+                setText(texto);
+                setStyle("-fx-font-weight: bold; -fx-text-fill: "
+                        + ("PERMITIDO".equals(texto)
+                        ? "#15803D" : "#DC2626") + ";");
+            }
+        });
+
+        cargarRecientes();
     }
 
-    /**
-     * Asigna el servicio utilizado
-     * para verificar el acceso.
-     *
-     * @param controlAcceso servicio de control de acceso
-     */
-    public void setControlAcceso(
-            ControlAcceso controlAcceso) {
+    /** Muestra las últimas entradas de hoy, leídas de acceso_historial. */
+    private void cargarRecientes() {
 
-        // Guarda el servicio recibido para utilizarlo posteriormente.
-        this.controlAcceso =
-                controlAcceso;
+        Task<List<RegistroAcceso>> tarea = new Task<>() {
+            @Override
+            protected List<RegistroAcceso> call() {
+                return historialService.listar(
+                        LocalDate.now().atStartOfDay(), 8);
+            }
+        };
+
+        tarea.setOnSucceeded(e ->
+                tablaRecientes.getItems().setAll(tarea.getValue()));
+
+        Thread hilo = new Thread(tarea, "cargar-accesos-recientes");
+        hilo.setDaemon(true);
+        hilo.start();
     }
 
-    /**
-     * Verifica si el socio ingresado
-     * posee una membresía vigente.
-     */
+    public void setControlAcceso(ControlAcceso controlAcceso) {
+        this.controlAcceso = controlAcceso;
+    }
+
+    /** Registra una ENTRADA (se guarda en acceso_historial). */
     @FXML
     private void verificarAcceso() {
+        procesar(true);
+    }
 
-        // Obtiene el texto ingresado y elimina espacios al inicio y al final.
-        String textoNumero =
-                txtCedula
-                        .getText()
-                        .trim();
+    /** Consulta la membresía sin registrar entrada (se guarda en consulta_membresia). */
+    @FXML
+    private void consultarMembresia() {
+        procesar(false);
+    }
 
-        // Comprueba si el campo de cédula está vacío.
-        if (textoNumero.isBlank()) {
+    private void procesar(boolean esEntrada) {
 
-            // Limpia la información anterior mostrada en pantalla.
+        String cedula = txtCedula.getText().trim();
+
+        if (cedula.isEmpty()) {
             limpiarInformacion();
 
-            // Indica al usuario que debe ingresar el número de cédula.
             lblResultado.setText(
-                    "Ingrese el numero de cedula del socio."
+                    "Ingrese el número de cédula del socio."
             );
 
             return;
         }
 
-        // Guarda la cédula ingresada por el usuario.
-        String cedula = textoNumero;
-
-        // Verifica que el servicio de control de acceso haya sido asignado.
         if (controlAcceso == null) {
-
-            // Limpia la información mostrada.
             limpiarInformacion();
 
-            // Informa que los datos necesarios todavía no están disponibles.
             lblResultado.setText(
-                    "Los datos del sistema no han sido cargados."
+                    "Error: el servicio de acceso no está inicializado."
             );
 
             return;
         }
 
-        /*
-         * Buscamos la membresía asociada
-         * al número de socio.
-         */
-        Membresia membresia =
-                controlAcceso.buscarMembresiaPorCedula(
-                        cedula
-                );
+        ResultadoAcceso resultado;
 
-        /*
-         * Si no existe membresía,
-         * el socio no puede ingresar.
-         */
-        if (membresia == null) {
+        try {
+            resultado = esEntrada
+                    ? controlAcceso.registrarEntrada(cedula)
+                    : controlAcceso.consultarMembresia(cedula);
 
-            // Limpia los datos de la membresía anterior.
+        } catch (IllegalStateException e) {
             limpiarInformacion();
 
-            // Indica que el acceso fue rechazado porque no existe una membresía.
             lblResultado.setText(
-                    "ACCESO DENEGADO - SIN MEMBRESÍA"
+                    "Error al consultar la base de datos."
             );
 
             return;
         }
 
-        // Muestra en pantalla la información de la membresía encontrada.
-        mostrarInformacionMembresia(
-                membresia
-        );
+        if (resultado.membresia() == null) {
+            limpiarInformacion();
+        } else {
+            mostrarInformacionMembresia(resultado.membresia());
+        }
 
-        // Solicita al servicio que determine si el socio puede ingresar.
-        boolean accesoPermitido =
-                controlAcceso.verificarAccesoPorCedula(
-                        cedula
-                );
+        String texto;
 
-        // Comprueba si el acceso fue autorizado.
-        if (accesoPermitido) {
+        if (esEntrada) {
 
-            // Muestra el mensaje de acceso permitido.
-            lblResultado.setText(
-                    "ACCESO PERMITIDO"
+            if (resultado.permitido()) {
+                texto = "ACCESO PERMITIDO";
+            } else {
+                texto = "ACCESO DENEGADO - "
+                        + resultado.motivo().toUpperCase();
+            }
+
+        } else {
+            texto = "CONSULTA: " + resultado.motivo().toUpperCase();
+        }
+
+        if (!resultado.registrado()) {
+            texto += "\n(No se pudo guardar en la base de datos)";
+        }
+
+        lblResultado.setText(texto);
+
+        txtCedula.clear();
+        txtCedula.requestFocus();
+
+        if (esEntrada) {
+            cargarRecientes();
+        }
+    }
+
+    private void mostrarInformacionMembresia(Membresia membresia) {
+
+        if (membresia.getSocio() != null) {
+
+            lblNombre.setText(
+                    membresia.getSocio().getNombre()
             );
 
         } else {
 
-            // Muestra el mensaje cuando el acceso es rechazado por morosidad.
-            lblResultado.setText(
-                    "ACCESO DENEGADO POR MOROSIDAD"
-            );
+            lblNombre.setText("-");
         }
-    }
 
-    /**
-     * Muestra los datos de la membresía
-     * encontrada.
-     *
-     * @param membresia membresía del socio
-     */
-    private void mostrarInformacionMembresia(
-            Membresia membresia) {
+        if (membresia.getPlan() != null) {
 
-        // Obtiene y muestra el nombre del socio asociado a la membresía.
-        lblNombre.setText(
-                membresia
-                        .getSocio()
-                        .getNombre()
-        );
+            lblPlan.setText(
+                    membresia.getPlan().getNombre()
+            );
 
-        // Obtiene y muestra el nombre del plan contratado.
-        lblPlan.setText(
-                membresia
-                        .getPlan()
-                        .getNombre()
-        );
+        } else {
 
-        // Comprueba si la membresía todavía no tiene una fecha de vencimiento.
-        if (membresia.getFechaVencimiento()
-                == null) {
+            lblPlan.setText("-");
+        }
 
-            // Indica que todavía no existe un pago registrado.
+        if (membresia.getFechaVencimiento() != null) {
+
+            lblVencimiento.setText(
+                    membresia.getFechaVencimiento().toString()
+            );
+
+        } else {
+
             lblVencimiento.setText(
                     "Sin pago registrado"
             );
-
-        } else {
-
-            // Muestra la fecha de vencimiento de la membresía.
-            lblVencimiento.setText(
-                    membresia
-                            .getFechaVencimiento()
-                            .toString()
-            );
         }
     }
 
-    /**
-     * Limpia la información mostrada
-     * en pantalla.
-     */
     private void limpiarInformacion() {
 
-        // Coloca un guion en el campo del nombre.
-        lblNombre.setText(
-                "-"
-        );
+        lblNombre.setText("-");
+        lblPlan.setText("-");
+        lblVencimiento.setText("-");
 
-        // Coloca un guion en el campo del plan.
-        lblPlan.setText(
-                "-"
-        );
-
-        // Coloca un guion en el campo de vencimiento.
-        lblVencimiento.setText(
-                "-"
-        );
-
-        // Restablece el mensaje inicial de la pantalla.
         lblResultado.setText(
-                "Ingrese el número de cedula del socio"
+                "Ingrese el número de cédula del socio"
         );
     }
 
-    /**
-     * Regresa al menú principal.
-     */
     @FXML
     private void volverMenu() {
 
         try {
 
-            // Carga el archivo FXML correspondiente al menú principal.
             FXMLLoader loader =
                     new FXMLLoader(
-                            HelloApplication.class
-                                    .getResource(
-                                            "MenuPrincipalView.fxml"
-                                    )
+                            HelloApplication.class.getResource(
+                                    "MenuPrincipalView.fxml"
+                            )
                     );
 
-            // Carga la estructura visual del menú principal.
-            Parent root =
-                    loader.load();
+            Parent root = loader.load();
 
-            // Obtiene la ventana actual utilizando el campo de cédula.
             Stage stage =
-                    (Stage)
-                            txtCedula
-                                    .getScene()
-                                    .getWindow();
+                    (Stage) txtCedula.getScene().getWindow();
 
-            // Cambia la escena actual por la del menú principal.
-            stage.setScene(
-                    new Scene(
-                            root,
-                            600,
-                            400
-                    )
-            );
-
-            // Centra nuevamente la ventana en la pantalla.
-            stage.centerOnScreen();
-
+            Pantalla.cambiar(stage, root);
         } catch (IOException e) {
 
-            // Muestra un mensaje si ocurre un error al cargar el menú.
             lblResultado.setText(
-                    "No se pudo regresar al menú principal."
+                    "Error al regresar al menú principal."
             );
         }
     }

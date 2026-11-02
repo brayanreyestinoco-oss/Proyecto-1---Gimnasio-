@@ -1,192 +1,160 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Importa las clases de geometría utilizadas para configurar espacios y posiciones. -->
 <?import javafx.geometry.*?>
-<!-- Importa los controles utilizados en la interfaz, como botones, etiquetas y ScrollPane. -->
 <?import javafx.scene.control.*?>
-<!-- Importa los contenedores utilizados para organizar los elementos visuales. -->
 <?import javafx.scene.layout.*?>
 
-<!-- Contenedor principal de la pantalla del menú principal. -->
-<!-- Mantiene un tamaño fijo de 600x400 píxeles. -->
-<VBox prefHeight="400.0" prefWidth="600.0"
-      style="-fx-background-color: #F4F6F8;"
-      xmlns="http://javafx.com/javafx/17.0.12"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.MenuPrincipalController">
+<!-- Pantalla del menú principal. Ocupa toda la ventana (que se abre maximizada). -->
+<BorderPane fx:id="raiz"
+            prefHeight="650.0" prefWidth="1000.0"
+            style="-fx-background-color: #F4F6F8;"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="cr.ac.una.est.controlmembresiasgimnasio.vista.MenuPrincipalController">
 
-    <!-- Contiene los elementos principales de la pantalla. -->
-    <children>
+    <!-- ENCABEZADO -->
+    <top>
+        <VBox alignment="CENTER"
+              spacing="5.0"
+              style="-fx-background-color: #1F2937;">
 
-        <!-- Contenedor que divide el menú en encabezado, contenido y parte inferior. -->
-        <BorderPane prefHeight="400.0" prefWidth="600.0">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+            </padding>
 
-            <!-- ENCABEZADO -->
-            <!-- Parte superior donde se muestra el nombre del sistema. -->
-            <top>
-                <!-- Contenedor vertical utilizado para organizar el título y subtítulo. -->
+            <Label style="-fx-text-fill: white;
+                           -fx-font-size: 26px;
+                           -fx-font-weight: bold;"
+                   text="MENU PRINCIPAL 📚"/>
+
+            <Label style="-fx-text-fill: #D1D5DB;
+                           -fx-font-size: 13px;"
+                   text="Sistema de Gestión de Membresías"/>
+        </VBox>
+    </top>
+
+    <!-- MENÚ: botones centrados con un ancho fijo para que no se estiren demasiado. -->
+    <center>
+        <ScrollPane fitToHeight="true"
+                    fitToWidth="true"
+                    hbarPolicy="NEVER"
+                    style="-fx-background-color: transparent;"
+                    vbarPolicy="AS_NEEDED">
+            <content>
                 <VBox alignment="CENTER"
-                      spacing="5.0"
-                      style="-fx-background-color: #1F2937;">
+                      spacing="12.0">
 
-                    <!-- Espaciado interno del encabezado. -->
                     <padding>
-                        <Insets bottom="15.0"
-                                left="20.0"
-                                right="20.0"
-                                top="15.0"/>
+                        <Insets bottom="20.0" left="30.0" right="30.0" top="20.0"/>
                     </padding>
 
-                    <!-- Título principal del menú. -->
-                    <Label style="-fx-text-fill: white;
-                                   -fx-font-size: 22px;
-                                   -fx-font-weight: bold;"
-                           text="MENU PRINCIPAL 📚"/>
+                    <Button maxWidth="480.0" prefWidth="480.0"
+                            mnemonicParsing="false"
+                            prefHeight="46.0"
+                            onAction="#abrirSocios"
+                            style="-fx-background-color: white;
+                                   -fx-text-fill: #1F2937;
+                                   -fx-font-size: 16px;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 8px;
+                                   -fx-border-radius: 8px;
+                                   -fx-border-color: #D1D5DB;"
+                            text="👥  Socios"/>
 
-                    <!-- Subtítulo que identifica el sistema. -->
-                    <Label style="-fx-text-fill: #D1D5DB;
-                                   -fx-font-size: 12px;"
-                           text="Sistema de Gestión de Membresías"/>
+                    <Button maxWidth="480.0" prefWidth="480.0"
+                            mnemonicParsing="false"
+                            prefHeight="46.0"
+                            onAction="#abrirPlanes"
+                            style="-fx-background-color: white;
+                                   -fx-text-fill: #1F2937;
+                                   -fx-font-size: 16px;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 8px;
+                                   -fx-border-radius: 8px;
+                                   -fx-border-color: #D1D5DB;"
+                            text="📋  Planes"/>
+
+                    <Button maxWidth="480.0" prefWidth="480.0"
+                            mnemonicParsing="false"
+                            prefHeight="46.0"
+                            onAction="#abrirPagos"
+                            style="-fx-background-color: white;
+                                   -fx-text-fill: #1F2937;
+                                   -fx-font-size: 16px;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 8px;
+                                   -fx-border-radius: 8px;
+                                   -fx-border-color: #D1D5DB;"
+                            text="💰  Pagos"/>
+
+                    <!-- FACTURACIÓN: facturas de los clientes y exportación a Word. -->
+                    <Button maxWidth="480.0" prefWidth="480.0"
+                            mnemonicParsing="false"
+                            prefHeight="46.0"
+                            onAction="#abrirFacturacion"
+                            style="-fx-background-color: white;
+                                   -fx-text-fill: #1F2937;
+                                   -fx-font-size: 16px;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 8px;
+                                   -fx-border-radius: 8px;
+                                   -fx-border-color: #D1D5DB;"
+                            text="🧾  Facturación"/>
+
+                    <Button maxWidth="480.0" prefWidth="480.0"
+                            mnemonicParsing="false"
+                            prefHeight="46.0"
+                            onAction="#abrirAcceso"
+                            style="-fx-background-color: white;
+                                   -fx-text-fill: #1F2937;
+                                   -fx-font-size: 16px;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 8px;
+                                   -fx-border-radius: 8px;
+                                   -fx-border-color: #D1D5DB;"
+                            text="🛡  Control de Accesos"/>
+
+                    <!-- HISTORIAL DE ACCESOS: quién entró y cuándo. -->
+                    <Button maxWidth="480.0" prefWidth="480.0"
+                            mnemonicParsing="false"
+                            prefHeight="46.0"
+                            onAction="#abrirHistorialAccesos"
+                            style="-fx-background-color: white;
+                                   -fx-text-fill: #1F2937;
+                                   -fx-font-size: 16px;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 8px;
+                                   -fx-border-radius: 8px;
+                                   -fx-border-color: #D1D5DB;"
+                            text="🕒  Historial de Accesos"/>
+
+                    <Button maxWidth="480.0" prefWidth="480.0"
+                            mnemonicParsing="false"
+                            prefHeight="46.0"
+                            onAction="#abrirReportes"
+                            style="-fx-background-color: white;
+                                   -fx-text-fill: #1F2937;
+                                   -fx-font-size: 16px;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 8px;
+                                   -fx-border-radius: 8px;
+                                   -fx-border-color: #D1D5DB;"
+                            text="📖  Reportes"/>
+
+                    <Button maxWidth="480.0" prefWidth="480.0"
+                            mnemonicParsing="false"
+                            prefHeight="46.0"
+                            onAction="#cerrarSesion"
+                            style="-fx-background-color: #DC2626;
+                                   -fx-text-fill: white;
+                                   -fx-font-size: 16px;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 8px;"
+                            text="🔒  Cerrar Sesión"/>
+
                 </VBox>
-            </top>
+            </content>
+        </ScrollPane>
+    </center>
 
-            <!-- MENÚ -->
-            <!-- Parte central que contiene las opciones disponibles del sistema. -->
-            <center>
-                <!-- Permite desplazarse verticalmente si se agregan más opciones al menú. -->
-                <ScrollPane fitToHeight="true"
-                            fitToWidth="true"
-                            hbarPolicy="NEVER"
-                            style="-fx-background-color: transparent;"
-                            vbarPolicy="AS_NEEDED">
-
-                    <!-- Contenido que se mostrará dentro del ScrollPane. -->
-                    <content>
-                        <!-- Organiza verticalmente todos los botones del menú. -->
-                        <VBox alignment="TOP_CENTER"
-                              spacing="10.0">
-
-                            <!-- Espaciado interno alrededor de las opciones del menú. -->
-                            <padding>
-                                <Insets bottom="20.0"
-                                        left="30.0"
-                                        right="30.0"
-                                        top="20.0"/>
-                            </padding>
-
-                            <!-- SOCIOS -->
-                            <!-- Botón que permite acceder a la gestión de socios. -->
-                            <Button maxWidth="Infinity"
-                                    mnemonicParsing="false"
-                                    prefHeight="42.0"
-                                    onAction="#abrirSocios"
-                                    style="-fx-background-color: white;
-                                           -fx-text-fill: #1F2937;
-                                           -fx-font-size: 15px;
-                                           -fx-font-weight: bold;
-                                           -fx-background-radius: 8px;
-                                           -fx-border-radius: 8px;
-                                           -fx-border-color: #D1D5DB;"
-                                    text="👥  Socios"/>
-
-                            <!-- PLANES -->
-                            <!-- Botón que permite acceder a la gestión de planes. -->
-                            <Button maxWidth="Infinity"
-                                    mnemonicParsing="false"
-                                    prefHeight="42.0"
-                                    onAction="#abrirPlanes"
-                                    style="-fx-background-color: white;
-                                           -fx-text-fill: #1F2937;
-                                           -fx-font-size: 15px;
-                                           -fx-font-weight: bold;
-                                           -fx-background-radius: 8px;
-                                           -fx-border-radius: 8px;
-                                           -fx-border-color: #D1D5DB;"
-                                    text="📋  Planes"/>
-
-                            <!-- PAGOS -->
-                            <!-- Botón que permite acceder a la gestión de pagos. -->
-                            <Button maxWidth="Infinity"
-                                    mnemonicParsing="false"
-                                    prefHeight="42.0"
-                                    onAction="#abrirPagos"
-                                    style="-fx-background-color: white;
-                                           -fx-text-fill: #1F2937;
-                                           -fx-font-size: 15px;
-                                           -fx-font-weight: bold;
-                                           -fx-background-radius: 8px;
-                                           -fx-border-radius: 8px;
-                                           -fx-border-color: #D1D5DB;"
-                                    text="💰  Pagos"/>
-
-                            <!-- CONTROL DE ACCESOS -->
-                            <!-- Botón que permite acceder al control de entrada de los socios. -->
-                            <Button maxWidth="Infinity"
-                                    mnemonicParsing="false"
-                                    prefHeight="42.0"
-                                    onAction="#abrirAcceso"
-                                    style="-fx-background-color: white;
-                                           -fx-text-fill: #1F2937;
-                                           -fx-font-size: 15px;
-                                           -fx-font-weight: bold;
-                                           -fx-background-radius: 8px;
-                                           -fx-border-radius: 8px;
-                                           -fx-border-color: #D1D5DB;"
-                                    text="🛡  Control de Accesos"/>
-
-                            <!-- REPORTES -->
-                            <!-- Botón que permite acceder a la generación y consulta de reportes. -->
-                            <Button maxWidth="Infinity"
-                                    mnemonicParsing="false"
-                                    prefHeight="42.0"
-                                    onAction="#abrirReportes"
-                                    style="-fx-background-color: white;
-                                           -fx-text-fill: #1F2937;
-                                           -fx-font-size: 15px;
-                                           -fx-font-weight: bold;
-                                           -fx-background-radius: 8px;
-                                           -fx-border-radius: 8px;
-                                           -fx-border-color: #D1D5DB;"
-                                    text="📖  Reportes"/>
-
-                            <!-- CERRAR SESIÓN -->
-                            <!-- Botón utilizado para cerrar la sesión actual. -->
-                            <Button maxWidth="Infinity"
-                                    mnemonicParsing="false"
-                                    prefHeight="42.0"
-                                    onAction="#cerrarSesion"
-                                    style="-fx-background-color: #DC2626;
-                                           -fx-text-fill: white;
-                                           -fx-font-size: 15px;
-                                           -fx-font-weight: bold;
-                                           -fx-background-radius: 8px;"
-                                    text="🔒  Cerrar Sesión"/>
-
-                        </VBox>
-                    </content>
-
-                </ScrollPane>
-            </center>
-
-            <!-- BOTÓN VOLVER -->
-            <!-- Parte inferior reservada para controles adicionales. -->
-            <bottom>
-                <!-- Contenedor horizontal ubicado en la parte inferior derecha. -->
-                <HBox alignment="BOTTOM_RIGHT"
-                      prefHeight="45.0"
-                      prefWidth="600.0">
-
-                    <!-- Espaciado interno de la parte inferior. -->
-                    <padding>
-                        <Insets bottom="10.0"
-                                right="10.0"/>
-                    </padding>
-
-                </HBox>
-            </bottom>
-
-        </BorderPane>
-
-    </children>
-
-</VBox>
+</BorderPane>

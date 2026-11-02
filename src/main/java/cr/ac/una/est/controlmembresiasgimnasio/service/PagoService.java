@@ -1,62 +1,78 @@
 package cr.ac.una.est.controlmembresiasgimnasio.service;
+
+import cr.ac.una.est.controlmembresiasgimnasio.bd.ConexionBD;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Pago;
-import cr.ac.una.est.controlmembresiasgimnasio.modelo.socios.Socio;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.planes.Plan;
+import cr.ac.una.est.controlmembresiasgimnasio.modelo.socios.Socio;
+import cr.ac.una.est.controlmembresiasgimnasio.repository.MembresiaRepository;
+import cr.ac.una.est.controlmembresiasgimnasio.repository.MembresiaRepositoryJdbc;
+import cr.ac.una.est.controlmembresiasgimnasio.repository.PagoRepository;
+import cr.ac.una.est.controlmembresiasgimnasio.repository.PagoRepositoryJdbc;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
- * Servicio encargado de administrar los pagos y las membresías
- * de los socios del gimnasio.
+ * Servicio encargado de administrar pagos y membresías.
+ *
+ * Utiliza los repositorios JDBC para guardar y consultar
+ * los datos de la base de datos MySQL.
  */
 public class PagoService {
 
-    private ArrayList<Pago> pagos;
-    private ArrayList<Membresia> membresias;
+    private final PagoRepository pagoRepository;
+    private final MembresiaRepository membresiaRepository;
 
     /**
-     * Crea el servicio de pagos e inicializa las colecciones.
-     *
-     * @return no retorna ningún valor
+     * Inicializa los repositorios.
      */
     public PagoService() {
-        pagos = new ArrayList<>();
-        membresias = new ArrayList<>();
+        this.pagoRepository = new PagoRepositoryJdbc();
+        this.membresiaRepository = new MembresiaRepositoryJdbc();
     }
 
     /**
-     * Obtiene la lista de pagos registrados.
-     *
-     * @return lista de pagos
+     * Consulta los pagos registrados en MySQL.
      */
     public ArrayList<Pago> getPagos() {
-        return pagos;
+        try {
+            return new ArrayList<>(pagoRepository.listar());
+        } catch (SQLException e) {
+            throw new IllegalStateException(
+                    "Error al consultar los pagos.", e);
+        }
     }
 
     /**
-     * Obtiene la lista de membresías registradas.
-     *
-     * @return lista de membresías s
+     * Consulta las membresías registradas en MySQL.
      */
     public ArrayList<Membresia> getMembresias() {
-        return membresias;
+        try {
+            return new ArrayList<>(membresiaRepository.listar());
+        } catch (SQLException e) {
+            throw new IllegalStateException(
+                    "Error al consultar las membresías.", e);
+        }
     }
 
     /**
-     * Registra una nueva membresía para un socio.
+     * Registra una nueva membresía.
      *
-     * @param idMembresia identificador de la membresía
-     * @param socio socio que adquiere la membresía
-     * @param plan plan seleccionado
-     * @param fechaInicio fecha de inicio de la membresía
-     * @return la nueva membresía creada
+     * Se conserva el parámetro idMembresia para mantener
+     * compatibilidad con los controladores existentes.
+     *
+     * MySQL genera el identificador definitivo.
      */
-    public Membresia registrarMembresia(int idMembresia,
-                                        Socio socio,
-                                        Plan plan,
-                                        LocalDate fechaInicio) {
+    public Membresia registrarMembresia(
+            int idMembresia,
+            Socio socio,
+            Plan plan,
+            LocalDate fechaInicio) {
 
         if (socio == null) {
             throw new IllegalArgumentException(
@@ -79,98 +95,394 @@ public class PagoService {
         }
 
         Membresia membresia = new Membresia(
-                idMembresia,
-                socio,
-                plan,
-                fechaInicio
-        );
+                idMembresia, socio, plan, fechaInicio);
 
-        membresias.add(membresia);
+        try (Connection conexion = ConexionBD.obtenerConexion()) {
 
-        return membresia;
+            membresiaRepository.guardar(membresia, conexion);
+            return membresia;
+
+        } catch (SQLException e) {
+            throw new IllegalStateException(
+                    "No se pudo registrar la membresía.", e);
+        }
     }
 
     /**
-     * Registra un pago y actualiza la membresía correspondiente.
+     * Registra un pago y renueva la membresía.
      *
-     * @param idPago identificador del pago
-     * @param membresia membresía que recibe el pago
-     * @param monto monto pagado
-     * @param fechaPago fecha en la que se realiza el pago
-     * @param metodoPago método utilizado para pagar
-     * @return el pago registrado
+     * Ambas modificaciones se realizan dentro
+     * de una misma transacción JDBC.
      */
-    public Pago registrarPago(int idPago,
-                              Membresia membresia,
-                              double monto,
-                              LocalDate fechaPago,
-                              String metodoPago) {
+    public Pago registrarPago(
+            int idPago,
+            Membresia membresia,
+            double monto,
+            LocalDate fechaPago,
+            String metodoPago) {
 
-        validarDatosPago(membresia, monto, fechaPago, metodoPago);
+        validarDatosPago(
+                membresia, monto, fechaPago, metodoPago);
 
-        actualizarVencimiento(membresia, fechaPago);
+        if (membresia.getIdMembresia() <= 0) {
+            throw new IllegalArgumentException(
+                    "La membresía debe estar registrada en MySQL.");
+        }
 
-        Pago pago = new Pago(
-                idPago,
+        // Guardamos el estado original para restaurarlo
+        // si la transacción falla.
+        LocalDate inicioAnterior = membresia.getFechaInicio();
+        LocalDate vencimientoAnterior =
+                membresia.getFechaVencimiento();
+        boolean activaAnterior = membresia.isActiva();
+
+        try (Connection conexion = ConexionBD.obtenerConexion()) {
+
+            conexion.setAutoCommit(false);
+
+            // Variable para controlar si se intentó confirmar la transacción.
+            boolean commitIntentado = false;
+
+            try {
+                // Verificar que el socio y el plan de la membresía
+                // coincidan con registros existentes en MySQL.
+                validarReferenciasEnBD(
+                        conexion,
+                        membresia.getSocio(),
+                        membresia.getPlan()
+                );
+
+// Comprobar que la membresía pertenece al socio correcto.
+// FOR UPDATE bloquea la fila durante la transacción.
+                validarMembresiaParaRenovacion(
+                        conexion,
+                        membresia
+                );
+
+// Actualizar las fechas en el objeto Java.
+                actualizarVencimiento(membresia, fechaPago);
+
+                // Actualizar la membresía en MySQL.
+                boolean actualizada =
+                        membresiaRepository.actualizar(
+                                membresia, conexion);
+
+                if (!actualizada) {
+                    throw new SQLException(
+                            "No se encontró la membresía para actualizar.");
+                }
+
+                // Crear el objeto Pago.
+                Pago pago = new Pago(
+                        idPago,
+                        membresia,
+                        monto,
+                        fechaPago,
+                        metodoPago
+                );
+
+                // Guardar el pago utilizando la misma conexión.
+                pagoRepository.guardar(pago, conexion);
+
+                // Indicamos que vamos a confirmar la transacción.
+                commitIntentado = true;
+
+// Confirmar la actualización de membresía y el pago.
+                conexion.commit();
+
+// Si commit termina correctamente,
+// devolvemos el pago registrado.
+                return pago;
+
+            } catch (SQLException | RuntimeException e) {
+
+                // Si ya intentamos confirmar la transacción,
+                // no podemos asegurar que MySQL la haya cancelado.
+                if (commitIntentado) {
+
+                    throw new IllegalStateException(
+                            "Ocurrió un error durante la confirmación "
+                                    + "del pago. No se puede determinar con "
+                                    + "certeza si MySQL guardó los cambios. "
+                                    + "Consulte los pagos registrados antes "
+                                    + "de intentar nuevamente.",
+                            e
+                    );
+                }
+
+                // Si todavía no intentamos commit(),
+                // podemos solicitar la reversión.
+                boolean rollbackExitoso = false;
+
+                try {
+
+                    conexion.rollback();
+                    rollbackExitoso = true;
+
+                } catch (SQLException errorRollback) {
+
+                    // Conservamos el error original y el de rollback.
+                    e.addSuppressed(errorRollback);
+                }
+
+                // Restauramos el objeto Java únicamente cuando
+                // la reversión terminó correctamente.
+                if (rollbackExitoso) {
+
+                    membresia.setFechaInicio(inicioAnterior);
+
+                    membresia.setFechaVencimiento(
+                            vencimientoAnterior
+                    );
+
+                    membresia.setActiva(activaAnterior);
+                }
+
+                throw new IllegalStateException(
+                        rollbackExitoso
+                                ? "No se pudo registrar el pago. "
+                                + "La transacción fue revertida."
+                                : "No se pudo registrar el pago "
+                                + "y no fue posible confirmar "
+                                + "la reversión de la transacción.",
+                        e
+                );
+            }
+
+        } catch (SQLException e) {
+
+            // Este bloque maneja los errores de conexión
+            // o los errores al cerrar los recursos JDBC.
+            //
+            // No restauramos automáticamente el objeto Java
+            // porque, si ocurrió un problema durante commit(),
+            // el resultado de la transacción podría ser incierto.
+
+            throw new IllegalStateException(
+                    "Ocurrió un error de conexión durante "
+                            + "el registro del pago. "
+                            + "Antes de intentar registrar el pago nuevamente, "
+                            + "verifique en MySQL si quedó guardado.",
+                    e
+            );
+        }
+    }
+
+    /**
+     * Crea una membresía nueva y registra su primer pago.
+     *
+     * Las dos operaciones se ejecutan dentro de una única
+     * transacción JDBC para garantizar que ambas se guarden
+     * correctamente o que ninguna quede registrada.
+     *
+     * MySQL genera automáticamente los identificadores.
+     *
+     * @param socio socio que realiza el pago
+     * @param plan plan seleccionado
+     * @param monto monto del primer pago
+     * @param fechaPago fecha del pago
+     * @param metodoPago método de pago utilizado
+     * @return pago registrado con su ID generado por MySQL
+     */
+    public Pago registrarPrimerPago(
+            Socio socio,
+            Plan plan,
+            double monto,
+            LocalDate fechaPago,
+            String metodoPago) {
+
+        // Verificamos que exista un socio válido.
+        if (socio == null || socio.getIdSocio() <= 0) {
+            throw new IllegalArgumentException(
+                    "El socio debe estar registrado en MySQL.");
+        }
+
+        // Verificamos que el plan exista en la base de datos.
+        if (plan == null || plan.getIdPlan() <= 0) {
+            throw new IllegalArgumentException(
+                    "Debe seleccionar un plan registrado.");
+        }
+
+        // Creamos la membresía inicialmente sin identificador.
+        // MySQL generará el ID cuando se inserte.
+        Membresia membresia = new Membresia(
+                0,
+                socio,
+                plan,
+                fechaPago
+        );
+
+        // Reutilizamos las validaciones del servicio.
+        validarDatosPago(
                 membresia,
                 monto,
                 fechaPago,
                 metodoPago
         );
 
-        pagos.add(pago);
+        try (Connection conexion = ConexionBD.obtenerConexion()) {
 
-        return pago;
+            // Desactivamos la confirmación automática.
+            conexion.setAutoCommit(false);
+
+            // Indica si ya se intentó confirmar el primer pago.
+            boolean commitIntentado = false;
+
+            try {
+
+                // Comprobar que el socio y el plan existen
+                // y que sus identificadores coinciden con MySQL.
+                validarReferenciasEnBD(
+                        conexion,
+                        socio,
+                        plan
+                );
+
+                // 1. Guardar la nueva membresía.
+                membresiaRepository.guardar(
+                        membresia,
+                        conexion
+                );
+                // 2. Calcular su primer vencimiento.
+                actualizarVencimiento(
+                        membresia,
+                        fechaPago
+                );
+
+                // 3. Actualizar las fechas y activar la membresía.
+                boolean actualizada =
+                        membresiaRepository.actualizar(
+                                membresia,
+                                conexion
+                        );
+
+                if (!actualizada) {
+                    throw new SQLException(
+                            "No se pudo activar la membresía.");
+                }
+
+                // 4. Crear el pago asociado a esa membresía.
+                Pago pago = new Pago(
+                        0,
+                        membresia,
+                        monto,
+                        fechaPago,
+                        metodoPago
+                );
+
+                // 5. Registrar el pago usando la misma conexión.
+                pagoRepository.guardar(
+                        pago,
+                        conexion
+                );
+
+                // Indicamos que comienza la confirmación.
+                commitIntentado = true;
+
+// Confirmar la membresía y su primer pago.
+                conexion.commit();
+
+// Devolver el pago solamente si commit terminó.
+                return pago;
+
+            } catch (SQLException | RuntimeException e) {
+
+                // Si ya se intentó confirmar la transacción,
+                // no podemos asegurar si MySQL guardó el pago.
+                if (commitIntentado) {
+
+                    throw new IllegalStateException(
+                            "Ocurrió un error durante la confirmación "
+                                    + "del primer pago. No se puede determinar "
+                                    + "con certeza si la membresía y el pago "
+                                    + "quedaron registrados en MySQL. "
+                                    + "Verifique los datos antes de intentar "
+                                    + "registrar el pago nuevamente.",
+                            e
+                    );
+                }
+
+                // Si todavía no se intentó commit(),
+                // solicitamos revertir la transacción.
+                boolean rollbackExitoso = false;
+
+                try {
+
+                    conexion.rollback();
+                    rollbackExitoso = true;
+
+                } catch (SQLException errorRollback) {
+
+                    // Conservamos ambos errores para diagnóstico.
+                    e.addSuppressed(errorRollback);
+                }
+
+                // Restauramos el objeto Java solamente cuando
+                // rollback terminó correctamente.
+                if (rollbackExitoso) {
+
+                    // Restaurar el identificador inicial.
+                    membresia.setIdMembresia(0);
+
+                    // Restaurar las fechas iniciales.
+                    membresia.setFechaInicio(fechaPago);
+                    membresia.setFechaVencimiento(null);
+
+                    // La membresía vuelve a su estado inicial.
+                    membresia.setActiva(false);
+                }
+
+                throw new IllegalStateException(
+                        rollbackExitoso
+                                ? "No se pudo registrar el primer pago. "
+                                + "La transacción fue revertida."
+                                : "No se pudo registrar el primer pago "
+                                + "y no fue posible confirmar "
+                                + "la reversión de la transacción.",
+                        e
+                );
+            }
+
+        } catch (SQLException e) {
+
+            throw new IllegalStateException(
+                    "Error de conexión al registrar el primer pago.",
+                    e
+            );
+        }
     }
 
     /**
-     * Busca una membresía utilizando el identificador del socio.
-     *
-     * @param idSocio identificador del socio que se desea buscar
-     * @return membresía encontrada o null si no existe
+     * Busca la membresía de un socio.
      */
     public Membresia buscarMembresiaPorSocio(int idSocio) {
-
-        for (Membresia membresia : membresias) {
-
-            if (membresia.getSocio().getIdSocio() == idSocio) {
-                return membresia;
-            }
+        try {
+            return membresiaRepository.buscarPorSocio(idSocio);
+        } catch (SQLException e) {
+            throw new IllegalStateException(
+                    "Error al buscar la membresía del socio.", e);
         }
-
-        return null;
     }
 
     /**
-     * Busca una membresía utilizando su identificador.
-     *
-     * @param idMembresia identificador de la membresía
-     * @return membresía encontrada o null si no existe
+     * Busca una membresía mediante su identificador.
      */
     public Membresia buscarMembresia(int idMembresia) {
-
-        for (Membresia membresia : membresias) {
-
-            if (membresia.getIdMembresia() == idMembresia) {
-                return membresia;
-            }
+        try {
+            return membresiaRepository.buscarPorId(idMembresia);
+        } catch (SQLException e) {
+            throw new IllegalStateException(
+                    "Error al buscar la membresía.", e);
         }
-
-        return null;
     }
 
     /**
-     * Actualiza la fecha de vencimiento de una membresía
-     * después de realizar un pago.
+     * Renueva una membresía después de realizar un pago.
      *
-     * Si la membresía todavía está vigente, el nuevo período
-     * se suma a la fecha de vencimiento actual.
+     * Si todavía está vigente, suma el período desde
+     * el vencimiento actual.
      *
-     * Si está vencida o nunca ha sido pagada,
-     * el período comienza desde la fecha del pago.
-     *
-     * @param membresia membresía que recibe el pago
-     * @param fechaPago fecha en que se realizó el pago
+     * Si está vencida, comienza desde la fecha del pago.
      */
     private void actualizarVencimiento(
             Membresia membresia,
@@ -178,71 +490,42 @@ public class PagoService {
 
         LocalDate fechaBase;
 
-        /*
-         * Si la membresía ya estaba activa,
-         * tiene vencimiento y todavía no ha vencido,
-         * renovamos desde su vencimiento actual.
-         */
         if (membresia.isActiva()
                 && membresia.getFechaVencimiento() != null
-                && !membresia
-                .getFechaVencimiento()
+                && !membresia.getFechaVencimiento()
                 .isBefore(fechaPago)) {
 
-            fechaBase =
-                    membresia.getFechaVencimiento();
+            fechaBase = membresia.getFechaVencimiento();
 
         } else {
 
-            /*
-             * Si es el primer pago o la membresía
-             * ya había vencido, comenzamos desde
-             * la fecha del nuevo pago.
-             */
-            fechaBase =
-                    fechaPago;
-
-            membresia.setFechaInicio(
-                    fechaPago
-            );
+            fechaBase = fechaPago;
+            membresia.setFechaInicio(fechaPago);
         }
 
         LocalDate nuevoVencimiento =
                 fechaBase.plusMonths(
-                        membresia
-                                .getPlan()
-                                .getDuracionEnMeses()
-                );
+                        membresia.getPlan().getDuracionEnMeses());
 
-        membresia.setFechaVencimiento(
-                nuevoVencimiento
-        );
-
-        membresia.setActiva(
-                true
-        );
+        membresia.setFechaVencimiento(nuevoVencimiento);
+        membresia.setActiva(true);
     }
 
     /**
-     * Valida los datos necesarios para registrar un pago.
-     *
-     * @param membresia membresía relacionada con el pago
-     * @param monto monto que se desea registrar
-     * @param fechaPago fecha del pago
-     * @param metodoPago método utilizado para pagar
-     * @return no retorna ningún valor
+     * Valida los datos de un pago antes de procesarlo.
      */
-    private void validarDatosPago(Membresia membresia,
-                                  double monto,
-                                  LocalDate fechaPago,
-                                  String metodoPago) {
+    private void validarDatosPago(
+            Membresia membresia,
+            double monto,
+            LocalDate fechaPago,
+            String metodoPago) {
 
         if (membresia == null) {
             throw new IllegalArgumentException(
                     "La membresía no puede ser nula.");
         }
 
-        if (monto <= 0) {
+        if (!Double.isFinite(monto) || monto <= 0) {
             throw new IllegalArgumentException(
                     "El monto debe ser mayor que cero.");
         }
@@ -252,62 +535,219 @@ public class PagoService {
                     "La fecha del pago no puede ser nula.");
         }
 
-        if (metodoPago == null || metodoPago.trim().isEmpty()) {
+        if (metodoPago == null || metodoPago.isBlank()) {
             throw new IllegalArgumentException(
                     "Debe indicar el método de pago.");
         }
-    }
 
-    /**
-     * Verifica si una membresía está vigente en la fecha actual.
-     *
-     * @param membresia membresía que se desea verificar
-     * @return true si está vigente, false si está vencida
-     */
-    public boolean membresiaEstaVigente(Membresia membresia) {
-
-        if (membresia == null) {
-            return false;
+        if (metodoPago.length() > 30) {
+            throw new IllegalArgumentException(
+                    "El método de pago no puede superar 30 caracteres.");
         }
 
-        return membresia.estaVigente(LocalDate.now());
+        if (membresia.getPlan() == null) {
+            throw new IllegalArgumentException(
+                    "La membresía debe tener un plan.");
+        }
     }
 
     /**
-     * Verifica si el socio tiene una membresía vigente.
-     *
-     * @param idSocio identificador del socio
-     * @return true si tiene acceso vigente, false en caso contrario
+     * Verifica si una membresía está vigente hoy.
+     */
+    public boolean membresiaEstaVigente(Membresia membresia) {
+        return membresia != null
+                && membresia.estaVigente(LocalDate.now());
+    }
+
+    /**
+     * Comprueba si un socio tiene acceso vigente.
      */
     public boolean socioTieneAcceso(int idSocio) {
-
         Membresia membresia = buscarMembresiaPorSocio(idSocio);
 
-        return membresia != null
-                && membresiaEstaVigente(membresia);
+        return membresiaEstaVigente(membresia);
     }
+
     /**
-     * Busca una membresía utilizando la cédula del socio.
+     * Busca una membresía por la cédula del socio.
      *
-     * @param cedula cédula del socio que se desea buscar
-     * @return membresía encontrada o null si no existe
+     * Conserva el método original utilizado
+     * por RegistrarPagoController.
      */
     public Membresia buscarMembresiaPorCedula(String cedula) {
 
-        if (cedula == null) {
+        if (cedula == null || cedula.isBlank()) {
             return null;
         }
 
-        for (Membresia membresia : membresias) {
+        try {
+            return membresiaRepository.buscarPorCedula(cedula.trim());
+        } catch (SQLException e) {
+            throw new IllegalStateException(
+                    "Error al buscar la membresía por cédula.", e);
+        }
+    }
 
-            if (membresia.getSocio()
-                    .getCedula()
-                    .equalsIgnoreCase(cedula)) {
+    /**
+     * Verifica que el socio y el plan realmente existan
+     * en MySQL antes de registrar una membresía.
+     *
+     * La validación utiliza la misma conexión JDBC
+     * que la transacción del primer pago.
+     *
+     * @param conexion conexión activa de MySQL
+     * @param socio socio que realizará el pago
+     * @param plan plan seleccionado
+     * @throws SQLException si los datos no coinciden
+     */
+    private void validarReferenciasEnBD(
+            Connection conexion,
+            Socio socio,
+            Plan plan) throws SQLException {
 
-                return membresia;
+        // 1. Buscar al socio utilizando su ID y su cédula.
+        String sqlSocio =
+                "SELECT id_socio "
+                        + "FROM socio "
+                        + "WHERE id_socio = ? AND cedula = ?";
+
+        try (PreparedStatement ps =
+                     conexion.prepareStatement(sqlSocio)) {
+
+            // Asignar el ID recibido desde Java.
+            ps.setInt(1, socio.getIdSocio());
+
+            // Asignar la cédula del socio.
+            ps.setString(2, socio.getCedula());
+
+            // Ejecutar la consulta.
+            try (ResultSet rs = ps.executeQuery()) {
+
+                // Si no existe coincidencia, detener el proceso.
+                if (!rs.next()) {
+
+                    throw new SQLException(
+                            "El socio no coincide con un registro "
+                                    + "de MySQL. Verifique su ID y cédula."
+                    );
+                }
             }
         }
 
-        return null;
+        // 2. Comprobar que el plan seleccionado exista.
+        String sqlPlan =
+                "SELECT id_plan "
+                        + "FROM plan "
+                        + "WHERE id_plan = ? AND nombre = ?";
+
+        try (PreparedStatement ps =
+                     conexion.prepareStatement(sqlPlan)) {
+
+            // Asignar el identificador del plan.
+            ps.setInt(1, plan.getIdPlan());
+
+            // Asignar el nombre del plan.
+            ps.setString(2, plan.getNombre());
+
+            // Ejecutar la consulta.
+            try (ResultSet rs = ps.executeQuery()) {
+
+                // Si el plan no coincide, detener el registro.
+                if (!rs.next()) {
+
+                    throw new SQLException(
+                            "El plan seleccionado no coincide "
+                                    + "con un registro de MySQL."
+                    );
+                }
+            }
+        }
     }
+    /**
+     * Verifica que la membresía que se desea renovar
+     * exista y pertenezca al socio correcto.
+     *
+     * También comprueba que las fechas y el estado
+     * no hayan cambiado en MySQL desde la consulta.
+     */
+    private void validarMembresiaParaRenovacion(
+            Connection conexion,
+            Membresia membresia) throws SQLException {
+
+        if (membresia.getSocio() == null
+                || membresia.getSocio().getIdSocio() <= 0) {
+
+            throw new SQLException(
+                    "La membresía no tiene un socio válido."
+            );
+        }
+
+        // FOR UPDATE bloquea la fila hasta que termine
+        // la transacción con commit o rollback.
+        String sql =
+                "SELECT id_socio, fecha_inicio, "
+                        + "fecha_vencimiento, activa "
+                        + "FROM membresia "
+                        + "WHERE id_membresia = ? FOR UPDATE";
+
+        try (PreparedStatement ps =
+                     conexion.prepareStatement(sql)) {
+
+            ps.setInt(1, membresia.getIdMembresia());
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                // Verificar que la membresía exista.
+                if (!rs.next()) {
+                    throw new SQLException(
+                            "La membresía no existe en MySQL."
+                    );
+                }
+
+                // Comprobar que pertenece al socio correcto.
+                if (rs.getInt("id_socio")
+                        != membresia.getSocio().getIdSocio()) {
+
+                    throw new SQLException(
+                            "La membresía no pertenece "
+                                    + "al socio seleccionado."
+                    );
+                }
+
+                // Recuperar las fechas guardadas en MySQL.
+                java.sql.Date inicio =
+                        rs.getDate("fecha_inicio");
+
+                java.sql.Date vencimiento =
+                        rs.getDate("fecha_vencimiento");
+
+                LocalDate inicioBD =
+                        inicio == null
+                                ? null
+                                : inicio.toLocalDate();
+
+                LocalDate vencimientoBD =
+                        vencimiento == null
+                                ? null
+                                : vencimiento.toLocalDate();
+
+                // Detectar si la información cambió.
+                if (!java.util.Objects.equals(
+                        inicioBD, membresia.getFechaInicio())
+                        || !java.util.Objects.equals(
+                        vencimientoBD,
+                        membresia.getFechaVencimiento())
+                        || rs.getBoolean("activa")
+                        != membresia.isActiva()) {
+
+                    throw new SQLException(
+                            "La membresía cambió en MySQL. "
+                                    + "Consulte nuevamente sus datos "
+                                    + "antes de registrar el pago."
+                    );
+                }
+            }
+        }
+    }
+
 }

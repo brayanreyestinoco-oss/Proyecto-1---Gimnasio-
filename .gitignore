@@ -37,3 +37,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+### Configuración local de MySQL (contiene la contraseña) ###
+db.properties
+#no subir al repo ‼️‼️‼️‼️‼️‼️
