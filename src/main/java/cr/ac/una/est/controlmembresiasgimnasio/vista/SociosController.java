@@ -3,9 +3,7 @@ package cr.ac.una.est.controlmembresiasgimnasio.vista;
 import cr.ac.una.est.controlmembresiasgimnasio.Pantalla;
 import cr.ac.una.est.controlmembresiasgimnasio.DatosAplicacion;
 import cr.ac.una.est.controlmembresiasgimnasio.HelloApplication;
-import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
 import cr.ac.una.est.controlmembresiasgimnasio.modelo.socios.Socio;
-import cr.ac.una.est.controlmembresiasgimnasio.service.PagoService;
 import cr.ac.una.est.controlmembresiasgimnasio.service.SocioService;
 
 import javafx.collections.FXCollections;
@@ -64,8 +62,6 @@ public class SociosController {
     // Servicio encargado de gestionar las operaciones relacionadas con socios.
     private SocioService socioService;
 
-    // Servicio encargado de gestionar las operaciones relacionadas con pagos y membresías.
-    private PagoService pagoService;
 
     /**
      * Inicializa la pantalla de socios.
@@ -76,10 +72,6 @@ public class SociosController {
         // Obtiene el servicio de socios utilizado por la aplicación.
         socioService =
                 DatosAplicacion.getSocioService();
-
-        // Obtiene el servicio de pagos y membresías utilizado por la aplicación.
-        pagoService =
-                DatosAplicacion.getPagoService();
 
         // Configura la columna de cédula para obtener el valor del atributo "cedula".
         colCedula.setCellValueFactory(
@@ -128,15 +120,25 @@ public class SociosController {
     @FXML
     public void actualizarTabla() {
 
-        // Obtiene la lista de socios del servicio y la convierte en una lista observable.
-        tablaSocios.setItems(
-                FXCollections.observableArrayList(
-                        socioService.getSocios()
-                )
-        );
+        try {
+            tablaSocios.setItems(
+                    FXCollections.observableArrayList(
+                            socioService.getSocios()
+                    )
+            );
 
-        // Limpia el campo de búsqueda después de actualizar la tabla.
-        txtBuscar.clear();
+            limpiarInformacion();
+            txtBuscar.clear();
+
+        } catch (Exception e) {
+
+            mostrarMensaje(
+                    Alert.AlertType.ERROR,
+                    "Error al consultar socios",
+                    "No se pudieron cargar los socios desde la base de datos.\n"
+                            + e.getMessage()
+            );
+        }
     }
 
     /**
@@ -145,40 +147,46 @@ public class SociosController {
     @FXML
     public void buscarSocio() {
 
-        // Obtiene el texto de búsqueda, elimina espacios y lo convierte a minúsculas.
-        String texto =
-                txtBuscar
-                        .getText()
-                        .trim()
-                        .toLowerCase();
+        String texto = txtBuscar.getText()
+                .trim()
+                .toLowerCase();
 
-        // Comprueba si el campo de búsqueda está vacío.
         if (texto.isEmpty()) {
-
-            // Si está vacío, muestra nuevamente todos los socios.
             actualizarTabla();
-
-            // Detiene el método después de actualizar la tabla.
             return;
         }
 
-        // Filtra la lista de socios utilizando la cédula o el nombre.
-        tablaSocios.setItems(
-                FXCollections.observableArrayList(
-                        socioService
-                                .getSocios()
-                                .stream()
-                                .filter(
-                                        s -> s.getCedula()
-                                                .toLowerCase()
-                                                .contains(texto)
-                                                || s.getNombre()
-                                                .toLowerCase()
-                                                .contains(texto)
-                                )
-                                .toList()
-                )
-        );
+        try {
+            tablaSocios.setItems(
+                    FXCollections.observableArrayList(
+                            socioService.getSocios()
+                                    .stream()
+                                    .filter(s ->
+                                            s.getCedula() != null
+                                                    && s.getCedula()
+                                                    .toLowerCase()
+                                                    .contains(texto)
+                                                    ||
+                                                    s.getNombre() != null
+                                                            && s.getNombre()
+                                                            .toLowerCase()
+                                                            .contains(texto)
+                                    )
+                                    .toList()
+                    )
+            );
+
+            limpiarInformacion();
+
+        } catch (Exception e) {
+
+            mostrarMensaje(
+                    Alert.AlertType.ERROR,
+                    "Error de búsqueda",
+                    "No se pudo realizar la búsqueda de socios.\n"
+                            + e.getMessage()
+            );
+        }
     }
 
     /**
@@ -239,68 +247,64 @@ public class SociosController {
     @FXML
     private void eliminarSocio() {
 
-        // Obtiene el socio actualmente seleccionado en la tabla.
         Socio seleccionado =
                 tablaSocios
                         .getSelectionModel()
                         .getSelectedItem();
 
-        // Comprueba si no se seleccionó ningún socio.
         if (seleccionado == null) {
 
-            // Informa al usuario que debe seleccionar un socio.
             mostrarMensaje(
                     Alert.AlertType.WARNING,
                     "Eliminar socio",
                     "Seleccione un socio de la tabla."
             );
 
-            // Detiene el proceso de eliminación.
             return;
         }
 
-        // Busca si el socio seleccionado tiene una membresía registrada.
-        Membresia membresia =
-                pagoService.buscarMembresiaPorSocio(
-                        seleccionado.getIdSocio()
+        try {
+
+            boolean eliminado =
+                    socioService.eliminar(
+                            seleccionado.getIdSocio()
+                    );
+
+            if (eliminado) {
+
+                actualizarTabla();
+                limpiarInformacion();
+
+                mostrarMensaje(
+                        Alert.AlertType.INFORMATION,
+                        "Socio eliminado",
+                        "El socio fue eliminado correctamente."
                 );
 
-        // Comprueba si el socio tiene una membresía asociada.
-        if (membresia != null) {
+            } else {
 
-            // Informa que no se puede eliminar debido a la membresía existente.
+                mostrarMensaje(
+                        Alert.AlertType.WARNING,
+                        "Eliminar socio",
+                        "No se encontró el socio que desea eliminar."
+                );
+            }
+
+        } catch (IllegalStateException e) {
+
             mostrarMensaje(
                     Alert.AlertType.WARNING,
                     "No se puede eliminar",
-                    "Este socio ya tiene una membresía registrada.\n"
-                            + "Elimine o transfiera su membresía antes "
-                            + "de eliminar al socio."
+                    e.getMessage()
             );
 
-            // Detiene el proceso de eliminación.
-            return;
-        }
+        } catch (Exception e) {
 
-        // Solicita al servicio que elimine al socio seleccionado.
-        boolean eliminado =
-                socioService.eliminar(
-                        seleccionado.getIdSocio()
-                );
-
-        // Comprueba si la eliminación se realizó correctamente.
-        if (eliminado) {
-
-            // Actualiza la tabla para reflejar la eliminación.
-            actualizarTabla();
-
-            // Limpia la información adicional del socio seleccionado.
-            limpiarInformacion();
-
-            // Informa al usuario que el socio fue eliminado correctamente.
             mostrarMensaje(
-                    Alert.AlertType.INFORMATION,
-                    "Socio eliminado",
-                    "El socio fue eliminado correctamente."
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Ocurrió un problema al eliminar el socio: "
+                            + e.getMessage()
             );
         }
     }

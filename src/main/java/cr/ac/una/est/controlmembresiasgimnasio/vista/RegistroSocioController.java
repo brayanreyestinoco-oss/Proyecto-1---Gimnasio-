@@ -145,112 +145,85 @@ public class RegistroSocioController {
     @FXML
     private void guardarSocio() {
 
-        // Comprueba que los campos obligatorios estén completos.
         if (!camposValidos()) {
-
-            // Muestra una advertencia cuando faltan datos.
             mostrarMensaje(
                     Alert.AlertType.WARNING,
                     "Datos incompletos",
-                    "Debe completar los campos obligatorios."
+                    "Debe completar todos los campos obligatorios."
             );
-
-            // Detiene el proceso de guardado.
             return;
         }
 
-        /*
-         * CORRECCIÓN:
-         * Verifica que el teléfono del socio
-         * contenga únicamente números.
-         */
         if (!txtTelefono.getText().trim().matches("[0-9]+")) {
-
             mostrarMensaje(
                     Alert.AlertType.WARNING,
                     "Teléfono inválido",
                     "El teléfono del socio debe contener únicamente números."
             );
-
             return;
         }
 
-        /*
-         * CORRECCIÓN:
-         * El teléfono de emergencia puede estar vacío.
-         * Si contiene información, solo acepta números.
-         */
         String telefonoEmergencia =
                 txtTelefonoEmergencia.getText().trim();
 
-        if (!telefonoEmergencia.isEmpty()
-                && !telefonoEmergencia.matches("[0-9]+")) {
-
+        if (!telefonoEmergencia.matches("[0-9]+")) {
             mostrarMensaje(
                     Alert.AlertType.WARNING,
                     "Teléfono de emergencia inválido",
                     "El teléfono de emergencia debe contener únicamente números."
             );
-
             return;
         }
 
-        // Obtiene la cédula ingresada y elimina espacios innecesarios.
-        String cedula =
-                txtCedula.getText().trim();
-
-        /*
-         * Si estamos registrando un socio nuevo,
-         * revisamos que la cédula no exista.
-         */
-        // Comprueba si se está registrando un socio nuevo.
-        if (socioModificar == null) {
-
-            // Busca si ya existe un socio con la cédula ingresada.
-            if (socioService.buscarPorCedula(cedula) != null) {
-
-                // Informa que la cédula ya está registrada.
-                mostrarMensaje(
-                        Alert.AlertType.WARNING,
-                        "Cédula registrada",
-                        "Ya existe un socio con esa cédula."
-                );
-
-                // Detiene el proceso para evitar duplicar la cédula.
-                return;
+        try {
+            if (socioModificar == null) {
+                registrarNuevoSocio();
+            } else {
+                modificarSocioExistente();
             }
 
-            // Registra el nuevo socio.
-            registrarNuevoSocio();
+        } catch (IllegalArgumentException e) {
+            mostrarMensaje(
+                    Alert.AlertType.WARNING,
+                    "Datos inválidos",
+                    e.getMessage()
+            );
 
-        } else {
+        } catch (IllegalStateException e) {
+            mostrarMensaje(
+                    Alert.AlertType.ERROR,
+                    "Error de base de datos",
+                    e.getMessage()
+            );
 
-            // Modifica los datos del socio existente.
-            modificarSocioExistente();
+        } catch (Exception e) {
+            mostrarMensaje(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "No se pudo guardar la información del socio."
+            );
+            e.printStackTrace();
         }
     }
 
     /**
      * Registra un socio nuevo.
      */
+
     private void registrarNuevoSocio() {
 
-        // Crea un nuevo objeto Socio utilizando los datos del formulario.
-        Socio socio =
-                new Socio(
-                        txtCedula.getText().trim(),
-                        txtNombre.getText().trim(),
-                        txtTelefono.getText().trim(),
-                        txtCorreo.getText().trim(),
-                        txtContactoEmergencia.getText().trim(),
-                        txtTelefonoEmergencia.getText().trim(),
-                        txtCondicionesMedicas.getText().trim()
-                );
+        Socio socio = new Socio(
+                txtCedula.getText().trim(),
+                txtNombre.getText().trim(),
+                txtTelefono.getText().trim(),
+                txtCorreo.getText().trim(),
+                txtContactoEmergencia.getText().trim(),
+                txtTelefonoEmergencia.getText().trim(),
+                txtCondicionesMedicas.getText().trim()
+        );
 
-        // Registra el nuevo socio mediante el servicio correspondiente.
         socioService.registrar(socio);
 
-        // Informa que el socio fue registrado correctamente.
         mostrarMensaje(
                 Alert.AlertType.INFORMATION,
                 "Socio registrado",
@@ -259,100 +232,59 @@ public class RegistroSocioController {
                         + socio.getIdSocio()
         );
 
-        // Limpia el formulario después de realizar el registro.
-        limpiarFormulario();
+        volverSocios();
     }
-
     /**
      * Modifica los datos del socio seleccionado.
      */
     private void modificarSocioExistente() {
 
-        /*
-         * Revisamos si la nueva cédula pertenece
-         * a otro socio.
-         */
-        // Busca si la nueva cédula ya pertenece a otro socio.
-        Socio socioMismaCedula =
-                socioService.buscarPorCedula(
-                        txtCedula.getText().trim()
-                );
-
-        // Comprueba si existe otro socio con la misma cédula.
-        if (socioMismaCedula != null
-                && socioMismaCedula.getIdSocio()
-                != socioModificar.getIdSocio()) {
-
-            // Informa que la cédula ya está asociada a otro socio.
-            mostrarMensaje(
-                    Alert.AlertType.WARNING,
-                    "Cédula registrada",
-                    "Ya existe otro socio con esa cédula."
-            );
-
-            // Detiene el proceso de modificación.
-            return;
-        }
-
-        // Actualiza la cédula del socio.
         socioModificar.setCedula(
                 txtCedula.getText().trim()
         );
 
-        // Actualiza el nombre del socio.
         socioModificar.setNombre(
                 txtNombre.getText().trim()
         );
 
-        // Actualiza el teléfono del socio.
         socioModificar.setTelefono(
                 txtTelefono.getText().trim()
         );
 
-        // Actualiza el correo electrónico del socio.
         socioModificar.setCorreo(
                 txtCorreo.getText().trim()
         );
 
-        // Actualiza el contacto de emergencia.
         socioModificar.setContactoEmergencia(
-                txtContactoEmergencia
-                        .getText()
-                        .trim()
+                txtContactoEmergencia.getText().trim()
         );
 
-        // Actualiza el teléfono del contacto de emergencia.
         socioModificar.setTelefonoEmergencia(
-                txtTelefonoEmergencia
-                        .getText()
-                        .trim()
+                txtTelefonoEmergencia.getText().trim()
         );
 
-        // Actualiza las condiciones médicas del socio.
         socioModificar.setCondicionesMedicas(
-                txtCondicionesMedicas
-                        .getText()
-                        .trim()
+                txtCondicionesMedicas.getText().trim()
         );
 
-        // Solicita al servicio que guarde las modificaciones realizadas.
         boolean modificado =
-                socioService.modificar(
-                        socioModificar
-                );
+                socioService.modificar(socioModificar);
 
-        // Comprueba si la modificación fue realizada correctamente.
         if (modificado) {
-
-            // Informa al usuario que los datos fueron modificados.
             mostrarMensaje(
                     Alert.AlertType.INFORMATION,
                     "Socio modificado",
                     "Los datos del socio fueron modificados correctamente."
             );
 
-            // Regresa a la pantalla principal de socios.
             volverSocios();
+
+        } else {
+            mostrarMensaje(
+                    Alert.AlertType.WARNING,
+                    "Sin cambios",
+                    "No se encontró el socio que desea modificar."
+            );
         }
     }
 
@@ -373,10 +305,12 @@ public class RegistroSocioController {
      */
     private boolean camposValidos() {
 
-        // Comprueba que la cédula, el nombre y el teléfono contengan información.
         return !txtCedula.getText().isBlank()
                 && !txtNombre.getText().isBlank()
-                && !txtTelefono.getText().isBlank();
+                && !txtTelefono.getText().isBlank()
+                && !txtCorreo.getText().isBlank()
+                && !txtContactoEmergencia.getText().isBlank()
+                && !txtTelefonoEmergencia.getText().isBlank();
     }
 
     /**
