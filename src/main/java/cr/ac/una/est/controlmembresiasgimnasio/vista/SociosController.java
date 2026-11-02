@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -20,6 +21,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Controlador encargado de administrar
@@ -260,6 +262,18 @@ public class SociosController {
                     "Seleccione un socio de la tabla."
             );
 
+            return;
+        }
+
+        Alert confirmacion = new Alert(
+                Alert.AlertType.CONFIRMATION,
+                "¿Eliminar al socio \"" + seleccionado.getNombre() + "\"?",
+                ButtonType.YES, ButtonType.NO);
+        confirmacion.setTitle("Eliminar socio");
+        confirmacion.setHeaderText(null);
+
+        Optional<ButtonType> respuesta = confirmacion.showAndWait();
+        if (respuesta.isEmpty() || respuesta.get() != ButtonType.YES) {
             return;
         }
 
