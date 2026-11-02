@@ -1,6 +1,13 @@
 package cr.ac.una.est.controlmembresiasgimnasio.modelo.socios;
 import java.time.LocalDate;
 
+// ============================================================
+// Socio.java
+// QUÉ HACE:      Un socio del gimnasio: cédula, contacto de emergencia y condiciones médicas
+//                (además de los datos de Persona).
+// CONECTADO A:   Tabla socio (SocioRepositoryJdbc). La administra SocioService y la usan
+//                SociosController y RegistroSocioController.
+// ============================================================
 // Clase que representa a un socio del gimnasio y hereda los datos básicos de Persona.
 public class Socio extends Persona {
 

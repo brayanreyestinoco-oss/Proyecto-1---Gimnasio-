@@ -2,6 +2,11 @@ package cr.ac.una.est.controlmembresiasgimnasio.modelo.planes;
 
 import cr.ac.una.est.controlmembresiasgimnasio.interfaces.IRenovable;
 
+// ============================================================
+// PlanMensual.java
+// QUÉ HACE:      Plan de un mes: el precio final es el precio base, sin cambios.
+// CONECTADO A:   Hijo de Plan; usado por PlanService y PlanRepositoryJdbc.
+// ============================================================
 /**
  * Representa un plan mensual básico del gimnasio.
  */

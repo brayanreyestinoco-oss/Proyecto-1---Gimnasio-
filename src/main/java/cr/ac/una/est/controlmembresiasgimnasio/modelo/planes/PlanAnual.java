@@ -2,6 +2,11 @@ package cr.ac.una.est.controlmembresiasgimnasio.modelo.planes;
 
 import cr.ac.una.est.controlmembresiasgimnasio.interfaces.IRenovable;
 
+// ============================================================
+// PlanAnual.java
+// QUÉ HACE:      Plan de 12 meses con un descuento (15%) sobre el precio base.
+// CONECTADO A:   Hijo de Plan; usado por PlanService y PlanRepositoryJdbc.
+// ============================================================
 /**
  * Representa un plan anual con descuento respecto al precio mensual.
  */

@@ -3,6 +3,13 @@ package cr.ac.una.est.controlmembresiasgimnasio.modelo.facturas;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+// ============================================================
+// Factura.java
+// QUÉ HACE:      Datos de una factura (cliente, plan, subtotal, IVA, total). No se guarda en la BD:
+//                se calcula desde un pago.
+// CONECTADO A:   La crea FacturaService; la usan FormatoFactura (vista previa), FacturaDocx (Word)
+//                y FacturacionController.
+// ============================================================
 /**
  * Factura de un pago de membresía. Se genera a partir de los datos
  * que ya existen en la base (pago, membresía, socio y plan), por lo

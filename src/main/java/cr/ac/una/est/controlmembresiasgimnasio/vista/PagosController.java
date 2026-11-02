@@ -29,6 +29,12 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 
+// ============================================================
+// PagosController.java
+// QUÉ HACE:      Pantalla de Pagos: muestra el historial de pagos, busca por cédula o nombre y abre
+//                el formulario de nuevo pago.
+// CONECTADO A:   PagosView.fxml y PagoService. Boton 'Registrar pago' abre RegistrarPagoView.
+// ============================================================
 /**
  * Controlador de la pantalla de gestión de pagos.
  *

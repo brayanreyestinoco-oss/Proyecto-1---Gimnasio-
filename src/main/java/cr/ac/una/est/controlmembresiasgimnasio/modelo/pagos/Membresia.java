@@ -5,6 +5,13 @@ import cr.ac.una.est.controlmembresiasgimnasio.modelo.socios.Socio;
 
 import java.time.LocalDate;
 
+// ============================================================
+// Membresia.java
+// QUÉ HACE:      Representa la membresía de un socio: su plan, fecha de inicio, fecha de
+//                vencimiento y si está activa.
+// CONECTADO A:   Tabla membresia (MembresiaRepositoryJdbc). Se relaciona con Socio y Plan; la usan
+//                PagoService y ControlAcceso.
+// ============================================================
 /**
  * Representa la membresía de un socio del gimnasio.
  * Relaciona un socio con un plan y mantiene

@@ -10,6 +10,12 @@ import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+// ============================================================
+// FacturaDocx.java
+// QUÉ HACE:      Crea el archivo Word (.docx) de una factura, armando el XML a mano (sin librerías
+//                externas).
+// CONECTADO A:   Modelo Factura. Lo llama FacturacionController al pulsar Exportar a Word.
+// ============================================================
 /**
  * Exporta una factura a un archivo Word (.docx).
  *
@@ -49,6 +55,7 @@ public final class FacturaDocx {
         zip.closeEntry();
     }
 
+    // Arma el contenido del documento (encabezado, cliente, detalle y totales).
     private static String documento(Factura f) {
         StringBuilder x = new StringBuilder();
 

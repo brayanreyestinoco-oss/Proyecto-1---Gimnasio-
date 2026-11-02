@@ -1,5 +1,10 @@
 package cr.ac.una.est.controlmembresiasgimnasio.modelo.socios;
 
+// ============================================================
+// Persona.java
+// QUÉ HACE:      Datos básicos de una persona: nombre, teléfono y correo.
+// CONECTADO A:   Clase padre de Socio.
+// ============================================================
 // Clase base que representa los datos generales de una persona.
 public class Persona {
 

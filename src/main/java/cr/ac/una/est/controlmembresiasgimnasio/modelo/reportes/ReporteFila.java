@@ -1,5 +1,11 @@
 package cr.ac.una.est.controlmembresiasgimnasio.modelo.reportes;
 
+// ============================================================
+// ReporteFila.java
+// QUÉ HACE:      Una fila del reporte de membresías, ya con todo en texto listo para mostrar o
+//                exportar.
+// CONECTADO A:   La arma ReporteRepositoryJdbc; la muestra ReportesController.
+// ============================================================
 public class ReporteFila {
 
     private final String socio;

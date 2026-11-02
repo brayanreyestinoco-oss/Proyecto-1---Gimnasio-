@@ -11,6 +11,13 @@ import cr.ac.una.est.controlmembresiasgimnasio.repository.RepositorioException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+// ============================================================
+// PlanService.java
+// QUÉ HACE:      Reglas de los planes: crear, modificar, eliminar y buscar, y traduce los errores
+//                de la base a mensajes claros.
+// CONECTADO A:   PlanRepositoryJdbc y los modelos de plan. Lo usan PlanesController y
+//                RegistrarPagoController.
+// ============================================================
 /**
  * Servicio con la lógica de negocio de los planes de membresía.
  * Los planes se guardan en MySQL a través de un PlanRepository.

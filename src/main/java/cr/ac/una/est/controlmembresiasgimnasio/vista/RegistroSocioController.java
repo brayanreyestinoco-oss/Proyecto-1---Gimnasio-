@@ -18,6 +18,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+// ============================================================
+// RegistroSocioController.java
+// QUÉ HACE:      Formulario para registrar un socio nuevo o modificar uno existente (valida los
+//                datos antes de guardar).
+// CONECTADO A:   RegistroSocioView.fxml y SocioService. Vuelve a Socios al terminar.
+// ============================================================
 /**
  * Controlador encargado de registrar
  * y modificar socios.
@@ -210,6 +216,7 @@ public class RegistroSocioController {
      * Registra un socio nuevo.
      */
 
+    // Crea el socio con SocioService y avisa su número.
     private void registrarNuevoSocio() {
 
         Socio socio = new Socio(

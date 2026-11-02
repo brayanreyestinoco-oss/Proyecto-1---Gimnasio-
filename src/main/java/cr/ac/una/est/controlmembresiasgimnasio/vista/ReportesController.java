@@ -30,6 +30,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+// ============================================================
+// ReportesController.java
+// QUÉ HACE:      Pantalla de Reportes: lista membresías (todas, por vencer o ya vencidas) y exporta
+//                a CSV.
+// CONECTADO A:   ReportesView.fxml y ReporteService.
+// ============================================================
 public class ReportesController {
 
     @FXML
@@ -60,6 +66,7 @@ public class ReportesController {
     private static final String OPCION_7 = "Por vencer: próximos 7 días";
     private static final String OPCION_15 = "Por vencer: próximos 15 días";
     private static final String OPCION_30 = "Por vencer: próximos 30 días";
+    private static final String OPCION_VENCIDAS = "Ya vencidas";
     @FXML
     private Label lblEstadoConsulta;
     @FXML
@@ -71,6 +78,7 @@ public class ReportesController {
             new ReporteService(new ReporteRepositoryJdbc());
     private Task<List<ReporteFila>> tareaConsulta;
 
+    // Configura las columnas y la lista de filtros.
     @FXML
     public void initialize() {
         colSocio.setCellValueFactory(new PropertyValueFactory<>("socio"));
@@ -87,7 +95,7 @@ public class ReportesController {
         colMetodoPago.setCellValueFactory(new PropertyValueFactory<>("metodoPago"));
 
         selectorPlazo.setItems(FXCollections.observableArrayList(
-                OPCION_TODAS, OPCION_7, OPCION_15, OPCION_30));
+                OPCION_TODAS, OPCION_7, OPCION_15, OPCION_30, OPCION_VENCIDAS));
         selectorPlazo.getSelectionModel().selectFirst();
         selectorPlazo.valueProperty().addListener(
                 (observable, anterior, seleccionado) -> cargarReporte());
@@ -95,27 +103,33 @@ public class ReportesController {
         cargarReporte();
     }
 
+    // Consulta en segundo plano según el filtro elegido.
     @FXML
     public void cargarReporte() {
         if (tareaConsulta != null && tareaConsulta.isRunning()) {
             return;
         }
 
-        Integer dias = obtenerDiasSeleccionados();
+        boolean soloVencidas = OPCION_VENCIDAS.equals(selectorPlazo.getValue());
+        Integer dias = soloVencidas ? null : obtenerDiasSeleccionados();
         cambiarEstadoConsulta(true);
         lblEstadoConsulta.setText("Consultando membresías en MySQL...");
 
         tareaConsulta = new Task<>() {
             @Override
             protected List<ReporteFila> call() throws Exception {
-                return reporteService.consultar(dias);
+                return soloVencidas
+                        ? reporteService.consultarVencidas()
+                        : reporteService.consultar(dias);
             }
         };
 
         tareaConsulta.setOnSucceeded(event -> {
             List<ReporteFila> filas = tareaConsulta.getValue();
             tablaReporte.setItems(FXCollections.observableArrayList(filas));
-            lblEstadoConsulta.setText(describirResultado(filas.size(), dias));
+            lblEstadoConsulta.setText(soloVencidas
+                    ? describirVencidas(filas.size())
+                    : describirResultado(filas.size(), dias));
             cambiarEstadoConsulta(false);
             btnExportarCsv.setDisable(filas.isEmpty());
         });
@@ -140,9 +154,11 @@ public class ReportesController {
         hilo.start();
     }
 
+    // Convierte la opcion elegida en 7, 15 o 30 días (o ninguno).
     private Integer obtenerDiasSeleccionados() {
         String seleccionado = selectorPlazo.getValue();
-        if (seleccionado == null || OPCION_TODAS.equals(seleccionado)) {
+        if (seleccionado == null || OPCION_TODAS.equals(seleccionado)
+                || OPCION_VENCIDAS.equals(seleccionado)) {
             return null;
         }
         return switch (seleccionado) {
@@ -173,6 +189,15 @@ public class ReportesController {
                 : membresias + " activas vencen entre hoy y el " + hasta + ".";
     }
 
+    // Frase de resumen para 'ya vencidas'.
+    private String describirVencidas(int cantidad) {
+        return cantidad == 0
+                ? "No hay membresías vencidas."
+                : (cantidad == 1 ? "1 membresía vencida" : cantidad + " membresías vencidas")
+                + " (su fecha de vencimiento ya pasó).";
+    }
+
+    // Bloquea los botones mientras se consulta.
     private void cambiarEstadoConsulta(boolean consultando) {
         selectorPlazo.setDisable(consultando);
         btnActualizar.setDisable(consultando);
@@ -181,6 +206,7 @@ public class ReportesController {
         }
     }
 
+    // Guarda la lista en un archivo CSV.
     @FXML
     public void exportarCsv() {
         if (tablaReporte.getItems().isEmpty()) {
@@ -218,6 +244,7 @@ public class ReportesController {
         }
     }
 
+    // Escribe una linea del CSV.
     private void escribirFila(BufferedWriter escritor, List<String> valores)
             throws IOException {
         for (int indice = 0; indice < valores.size(); indice++) {
@@ -229,6 +256,7 @@ public class ReportesController {
         escritor.write("\r\n");
     }
 
+    // Protege comillas y saltos de linea en el CSV.
     private String escaparCsv(String valor) {
         String sinSaltos = valor == null
                 ? ""
@@ -236,6 +264,7 @@ public class ReportesController {
         return "\"" + sinSaltos.replace("\"", "\"\"") + "\"";
     }
 
+    // Regresa al menú principal.
     @FXML
     private void volverMenu() {
         try {
@@ -250,6 +279,7 @@ public class ReportesController {
         }
     }
 
+    // Muestra una ventanita de aviso.
     private void mostrarAlerta(Alert.AlertType tipo, String mensaje) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle("Reporte de membresías");

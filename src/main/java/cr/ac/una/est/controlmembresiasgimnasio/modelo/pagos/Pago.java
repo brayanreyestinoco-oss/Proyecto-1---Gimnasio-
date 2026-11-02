@@ -4,6 +4,12 @@ import cr.ac.una.est.controlmembresiasgimnasio.modelo.pagos.Membresia;
 
 import java.time.LocalDate;
 
+// ============================================================
+// Pago.java
+// QUÉ HACE:      Representa un pago: monto, fecha y método, ligado a una membresía.
+// CONECTADO A:   Tabla pago (PagoRepositoryJdbc). Lo crea PagoService y lo muestran PagosController
+//                y FacturaService.
+// ============================================================
 /**
  * Representa un pago realizado por un socio
  * para una membresía del gimnasio.

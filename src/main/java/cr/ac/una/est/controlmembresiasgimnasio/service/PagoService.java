@@ -17,6 +17,13 @@ import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+// ============================================================
+// PagoService.java
+// QUÉ HACE:      Reglas de pagos y membresías: registrar un pago, crear o renovar la membresía y
+//                calcular el vencimiento, todo en una transacción.
+// CONECTADO A:   MembresiaRepositoryJdbc, PagoRepositoryJdbc y ConexionBD. Lo usan
+//                RegistrarPagoController, PagosController, ControlAcceso y FacturaService.
+// ============================================================
 /**
  * Servicio encargado de administrar pagos y membresías.
  *

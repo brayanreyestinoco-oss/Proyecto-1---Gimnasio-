@@ -13,6 +13,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+// ============================================================
+// AccesoRepositoryJdbc.java
+// QUÉ HACE:      Guarda y lee en MySQL los intentos de entrada (intento_acceso) y las consultas
+//                (consulta_membresia).
+// CONECTADO A:   ConexionBD (la base de datos), ControlAcceso (guarda) e HistorialAccesoService
+//                (lee).
+// ============================================================
 /**
  * Implementación JDBC del contrato de acceso. El historial nuevo usa intento_acceso.
  * Se conservan las operaciones antiguas para compatibilidad:

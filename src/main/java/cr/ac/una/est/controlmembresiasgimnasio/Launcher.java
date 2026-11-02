@@ -2,6 +2,11 @@ package cr.ac.una.est.controlmembresiasgimnasio;
 
 import javafx.application.Application;
 
+// ============================================================
+// Launcher.java
+// QUÉ HACE:      Punto de entrada del programa; solo arranca HelloApplication.
+// CONECTADO A:   HelloApplication (que abre la ventana).
+// ============================================================
 // Clase encargada de iniciar la aplicación JavaFX.
 public class Launcher {
 

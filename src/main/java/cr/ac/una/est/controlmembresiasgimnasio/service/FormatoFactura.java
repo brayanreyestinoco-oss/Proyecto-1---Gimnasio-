@@ -9,6 +9,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+// ============================================================
+// FormatoFactura.java
+// QUÉ HACE:      Da formato a fechas, dinero y porcentajes, escribe el total en letras y arma la
+//                vista previa de texto de la factura.
+// CONECTADO A:   La usan FacturaDocx, FacturacionController y varias pantallas para mostrar montos
+//                y fechas.
+// ============================================================
 /**
  * Formato de textos de una factura: montos, fechas, total en letras
  * y vista previa en texto plano.
@@ -40,6 +47,7 @@ public final class FormatoFactura {
     private FormatoFactura() {
     }
 
+    // Fecha en formato dd/MM/yyyy.
     public static String fecha(LocalDate fecha) {
         return fecha == null ? "" : FECHA.format(fecha);
     }
@@ -51,6 +59,7 @@ public final class FormatoFactura {
         return "₡" + formato.format(monto);
     }
 
+    // Porcentaje listo para mostrar.
     public static String porcentaje(double tasa) {
         return new DecimalFormat("0.##",
                 DecimalFormatSymbols.getInstance(Locale.US))

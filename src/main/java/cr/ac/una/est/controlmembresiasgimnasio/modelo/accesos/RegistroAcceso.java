@@ -2,6 +2,12 @@ package cr.ac.una.est.controlmembresiasgimnasio.modelo.accesos;
 
 import java.time.LocalDateTime;
 
+// ============================================================
+// RegistroAcceso.java
+// QUÉ HACE:      Una fila del historial: fecha y hora, socio, cédula, si se permitió y el motivo.
+// CONECTADO A:   La llena AccesoRepositoryJdbc y la muestran ControladorAcceso e
+//                HistorialAccesosController.
+// ============================================================
 /**
  * Una fila del historial de entradas o de consultas.
  *

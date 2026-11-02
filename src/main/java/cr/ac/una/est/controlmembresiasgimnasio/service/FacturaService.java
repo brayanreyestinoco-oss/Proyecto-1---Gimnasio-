@@ -9,6 +9,13 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+// ============================================================
+// FacturaService.java
+// QUÉ HACE:      Convierte los pagos en facturas: numera la factura, separa el IVA del total y arma
+//                el objeto Factura.
+// CONECTADO A:   PagoService (de dónde saca pagos y membresías) y el modelo Factura. Lo usa
+//                FacturacionController.
+// ============================================================
 /**
  * Genera las facturas de los clientes a partir de los pagos
  * registrados en la base de datos.

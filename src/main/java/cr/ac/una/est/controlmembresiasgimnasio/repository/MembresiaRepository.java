@@ -6,6 +6,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+// ============================================================
+// MembresiaRepository.java
+// QUÉ HACE:      Lista de operaciones para guardar y leer membresías.
+// CONECTADO A:   La implementa MembresiaRepositoryJdbc; la usa PagoService.
+// ============================================================
 /**
  * Interfaz encargada de definir las operaciones
  * de persistencia de las membresías del gimnasio.

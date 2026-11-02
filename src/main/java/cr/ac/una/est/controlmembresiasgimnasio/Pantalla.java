@@ -4,6 +4,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+// ============================================================
+// Pantalla.java
+// QUÉ HACE:      Cambia de una pantalla a otra dentro de la misma ventana, sin que se encoja.
+// CONECTADO A:   La usan todos los controladores de vista al abrir o volver a una pantalla.
+// ============================================================
 /**
  * Utilidad para cambiar de pantalla manteniendo la ventana
  * maximizada. En lugar de crear una escena nueva (lo que haría

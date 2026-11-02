@@ -6,6 +6,13 @@ import cr.ac.una.est.controlmembresiasgimnasio.repository.AccesoRepositoryJdbc;
 
 import java.sql.SQLException;
 
+// ============================================================
+// ControlAcceso.java
+// QUÉ HACE:      Decide si un socio puede entrar: busca su membresía por cédula y revisa si está
+//                vigente. Guarda cada intento o consulta.
+// CONECTADO A:   PagoService (busca la membresía) y AccesoRepositoryJdbc (guarda). Lo usa
+//                ControladorAcceso.
+// ============================================================
 public class ControlAcceso {
 
     private PagoService pagoService;

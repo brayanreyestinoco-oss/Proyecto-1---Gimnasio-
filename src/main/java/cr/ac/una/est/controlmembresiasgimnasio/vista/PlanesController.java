@@ -30,6 +30,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Optional;
 
+// ============================================================
+// PlanesController.java
+// QUÉ HACE:      Pantalla de Planes: lista los planes y permite crear, modificar y eliminar (con
+//                confirmacion).
+// CONECTADO A:   PlanesView.fxml y PlanService.
+// ============================================================
 /**
  * Controlador de la pantalla de planes.
  * Consulta, crea, modifica y elimina planes en MySQL a través de PlanService.

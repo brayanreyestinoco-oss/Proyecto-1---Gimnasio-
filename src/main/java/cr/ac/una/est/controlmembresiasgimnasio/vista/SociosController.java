@@ -23,6 +23,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Optional;
 
+// ============================================================
+// SociosController.java
+// QUÉ HACE:      Pantalla de Socios: lista y busca socios; abre el formulario para registrar o
+//                modificar y elimina (con confirmacion).
+// CONECTADO A:   SociosView.fxml y SocioService. Abre RegistroSocioView.
+// ============================================================
 /**
  * Controlador encargado de administrar
  * la pantalla de socios.

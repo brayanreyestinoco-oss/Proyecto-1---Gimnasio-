@@ -1,5 +1,10 @@
 package cr.ac.una.est.controlmembresiasgimnasio.interfaces;
 
+// ============================================================
+// Gestionable.java
+// QUÉ HACE:      Contrato simple: registrar, buscar, modificar y eliminar.
+// CONECTADO A:   Lo implementa SocioService.
+// ============================================================
 // Interfaz genérica para definir operaciones básicas de gestión.
 public interface Gestionable<T> {
 

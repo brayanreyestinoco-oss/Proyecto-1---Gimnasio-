@@ -8,6 +8,13 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// ============================================================
+// HistorialAccesoService.java
+// QUÉ HACE:      Intermediario que entrega al historial los registros de entradas y consultas según
+//                el filtro pedido.
+// CONECTADO A:   AccesoRepositoryJdbc. Lo usan ControladorAcceso (últimos intentos) e
+//                HistorialAccesosController.
+// ============================================================
 /**
  * Consulta del historial de entradas al gimnasio.
  */

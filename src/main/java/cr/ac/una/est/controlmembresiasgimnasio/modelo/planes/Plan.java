@@ -1,5 +1,12 @@
 package cr.ac.una.est.controlmembresiasgimnasio.modelo.planes;
 
+// ============================================================
+// Plan.java
+// QUÉ HACE:      Clase base de los planes (nombre, precio base y beneficios). Cada tipo calcula su
+//                precio final distinto.
+// CONECTADO A:   Hijos: PlanMensual, PlanAnual, PlanVIP. Tabla plan (PlanRepositoryJdbc); la
+//                administra PlanService.
+// ============================================================
 /**
  * Clase abstracta que representa un plan de membresía del gimnasio.
  * Sirve como base para PlanMensual, PlanAnual y PlanVIP.

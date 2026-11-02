@@ -1,5 +1,11 @@
 package cr.ac.una.est.controlmembresiasgimnasio.interfaces;
 
+// ============================================================
+// IRenovable.java
+// QUÉ HACE:      Contrato para planes que se pueden renovar (dice si es automática y cuánto
+//                cuesta).
+// CONECTADO A:   Lo implementan PlanMensual, PlanAnual y PlanVIP.
+// ============================================================
 /**
  * Contrato para elementos del sistema que pueden renovarse periódicamente.
  * No todas las clases del sistema comparten una jerarquía común, por eso

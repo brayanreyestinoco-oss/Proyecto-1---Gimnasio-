@@ -2,6 +2,11 @@ package cr.ac.una.est.controlmembresiasgimnasio.modelo.planes;
 
 import cr.ac.una.est.controlmembresiasgimnasio.interfaces.IRenovable;
 
+// ============================================================
+// PlanVIP.java
+// QUÉ HACE:      Plan mensual con un recargo extra por beneficios VIP (clases, casillero).
+// CONECTADO A:   Hijo de Plan; usado por PlanService y PlanRepositoryJdbc.
+// ============================================================
 /**
  * Representa un plan VIP con acceso a clases especiales.
  */

@@ -15,6 +15,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+// ============================================================
+// LoginController.java
+// QUÉ HACE:      Pantalla de inicio de sesión: valida usuario y contraseña y abre el menú
+//                principal.
+// CONECTADO A:   LoginView.fxml y MenuPrincipalView.fxml.
+// ============================================================
 /**
  * Controlador encargado de manejar
  * el inicio de sesión de la aplicación.

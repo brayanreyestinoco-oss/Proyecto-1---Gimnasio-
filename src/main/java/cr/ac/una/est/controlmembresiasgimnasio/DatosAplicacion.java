@@ -4,6 +4,12 @@ import cr.ac.una.est.controlmembresiasgimnasio.service.PagoService;
 import cr.ac.una.est.controlmembresiasgimnasio.service.PlanService;
 import cr.ac.una.est.controlmembresiasgimnasio.service.SocioService;
 
+// ============================================================
+// DatosAplicacion.java
+// QUÉ HACE:      Guarda UNA sola copia de los servicios (socios, planes, pagos) para que todas las
+//                pantallas compartan los mismos datos.
+// CONECTADO A:   SocioService, PlanService y PagoService. Lo usan los controladores de vista.
+// ============================================================
 /**
  * Clase encargada de mantener las instancias compartidas
  * de los servicios utilizados por la aplicación.

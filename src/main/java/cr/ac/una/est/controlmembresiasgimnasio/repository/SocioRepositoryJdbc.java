@@ -13,6 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+// ============================================================
+// SocioRepositoryJdbc.java
+// QUÉ HACE:      Lee y escribe la tabla socio en MySQL (crear, buscar por id o cédula, listar,
+//                modificar, eliminar).
+// CONECTADO A:   ConexionBD y el modelo Socio. Lo usa SocioService.
+// ============================================================
 public class SocioRepositoryJdbc implements SocioRepository {
 
     private static final String SQL_INSERTAR =
@@ -43,6 +49,7 @@ public class SocioRepositoryJdbc implements SocioRepository {
     private static final String SQL_ELIMINAR =
             "DELETE FROM socio WHERE id_socio = ?";
 
+    // Inserta un socio nuevo y le asigna el id que genera MySQL.
     @Override
     public Socio guardar(Socio socio) {
 
@@ -69,6 +76,7 @@ public class SocioRepositoryJdbc implements SocioRepository {
         }
     }
 
+    // Lista todos los socios.
     @Override
     public List<Socio> listarTodos() {
 
@@ -89,6 +97,7 @@ public class SocioRepositoryJdbc implements SocioRepository {
         }
     }
 
+    // Busca un socio por id.
     @Override
     public Optional<Socio> buscarPorId(int id) {
 
@@ -110,6 +119,7 @@ public class SocioRepositoryJdbc implements SocioRepository {
         }
     }
 
+    // Busca un socio por cédula.
     @Override
     public Optional<Socio> buscarPorCedula(String cedula) {
 
@@ -132,6 +142,7 @@ public class SocioRepositoryJdbc implements SocioRepository {
         }
     }
 
+    // Modifica los datos de un socio.
     @Override
     public boolean actualizar(Socio socio) {
 
@@ -148,6 +159,7 @@ public class SocioRepositoryJdbc implements SocioRepository {
         }
     }
 
+    // Borra un socio por id.
     @Override
     public boolean eliminar(int id) {
 
@@ -182,6 +194,7 @@ public class SocioRepositoryJdbc implements SocioRepository {
                 ? "" : socio.getCondicionesMedicas());
     }
 
+    // Convierte una fila de la tabla socio en un objeto Socio.
     private Socio mapearSocio(ResultSet rs) throws SQLException {
 
         Socio socio = new Socio(
@@ -199,6 +212,7 @@ public class SocioRepositoryJdbc implements SocioRepository {
         return socio;
     }
 
+    // Traduce errores de MySQL (por ejemplo cédula repetida) a mensajes claros.
     private RuntimeException convertirError(SQLException e) {
 
         if (e.getErrorCode() == 1062) {

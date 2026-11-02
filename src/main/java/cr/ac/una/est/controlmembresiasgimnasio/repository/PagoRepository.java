@@ -6,6 +6,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+// ============================================================
+// PagoRepository.java
+// QUÉ HACE:      Lista de operaciones para guardar y leer pagos.
+// CONECTADO A:   La implementa PagoRepositoryJdbc; la usa PagoService.
+// ============================================================
 /**
  * Interfaz que define las operaciones de persistencia
  * para los pagos realizados por los socios del gimnasio.

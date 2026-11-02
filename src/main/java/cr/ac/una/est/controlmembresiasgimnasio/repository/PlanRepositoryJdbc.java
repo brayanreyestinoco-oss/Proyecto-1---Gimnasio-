@@ -14,6 +14,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+// ============================================================
+// PlanRepositoryJdbc.java
+// QUÉ HACE:      Lee y escribe la tabla plan en MySQL y convierte cada fila en PlanMensual,
+//                PlanAnual o PlanVIP.
+// CONECTADO A:   ConexionBD y los modelos de plan. Lo usa PlanService.
+// ============================================================
 /**
  * Implementación JDBC de PlanRepository sobre la tabla "plan" de MySQL.
  * Todas las consultas con datos variables usan PreparedStatement.
@@ -23,6 +29,7 @@ public class PlanRepositoryJdbc implements PlanRepository {
     private static final String COLUMNAS =
             "id_plan, tipo, nombre, precio_base, descuento_pct, recargo, beneficios";
 
+    // Inserta un plan nuevo.
     @Override
     public void guardar(Plan plan) throws SQLException {
         String sql = "INSERT INTO plan "
@@ -45,6 +52,7 @@ public class PlanRepositoryJdbc implements PlanRepository {
         }
     }
 
+    // Busca un plan por su id.
     @Override
     public Plan buscarPorId(int idPlan) throws SQLException {
         String sql = "SELECT " + COLUMNAS + " FROM plan WHERE id_plan = ?";
@@ -59,6 +67,7 @@ public class PlanRepositoryJdbc implements PlanRepository {
         }
     }
 
+    // Busca un plan por su nombre.
     @Override
     public Plan buscarPorNombre(String nombre) throws SQLException {
         // La colación de la columna no distingue mayúsculas/minúsculas.
@@ -74,6 +83,7 @@ public class PlanRepositoryJdbc implements PlanRepository {
         }
     }
 
+    // Lista todos los planes.
     @Override
     public List<Plan> listar() throws SQLException {
         String sql = "SELECT " + COLUMNAS + " FROM plan ORDER BY id_plan";
@@ -90,6 +100,7 @@ public class PlanRepositoryJdbc implements PlanRepository {
         return planes;
     }
 
+    // Modifica un plan existente.
     @Override
     public boolean actualizar(Plan plan) throws SQLException {
         String sql = "UPDATE plan SET nombre = ?, precio_base = ?, "
@@ -110,6 +121,7 @@ public class PlanRepositoryJdbc implements PlanRepository {
         }
     }
 
+    // Borra un plan por su id.
     @Override
     public boolean eliminar(int idPlan) throws SQLException {
         String sql = "DELETE FROM plan WHERE id_plan = ?";

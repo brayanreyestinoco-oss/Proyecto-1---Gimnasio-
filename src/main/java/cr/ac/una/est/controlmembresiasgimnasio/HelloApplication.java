@@ -7,6 +7,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+// ============================================================
+// HelloApplication.java
+// QUÉ HACE:      Abre la ventana principal (maximizada), carga el tema de colores y muestra el
+//                Login.
+// CONECTADO A:   LoginView.fxml y estilos.css. Desde el login todo el resto de pantallas se abre
+//                con Pantalla.cambiar.
+// ============================================================
 /**
  * Clase principal encargada de iniciar
  * la aplicación del gimnasio.

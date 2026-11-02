@@ -30,6 +30,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+// ============================================================
+// FacturacionController.java
+// QUÉ HACE:      Pantalla de Facturacion: lista las facturas, muestra la vista previa y exporta a
+//                Word.
+// CONECTADO A:   FacturacionView.fxml, FacturaService (facturas), FormatoFactura (vista previa) y
+//                FacturaDocx (Word).
+// ============================================================
 /**
  * Controlador de la pantalla de facturación: lista las facturas de los
  * clientes (una por pago), muestra una vista previa y las exporta a Word.
@@ -81,6 +88,7 @@ public class FacturacionController {
     private final FilteredList<Factura> facturasFiltradas =
             new FilteredList<>(facturas, f -> true);
 
+    // Configura la tabla, el buscador y la vista previa.
     @FXML
     public void initialize() {
 
@@ -146,6 +154,7 @@ public class FacturacionController {
         hilo.start();
     }
 
+    // Filtra la lista por número, cédula o nombre.
     private void filtrar(String texto) {
 
         String filtro = texto == null
@@ -157,17 +166,20 @@ public class FacturacionController {
                 || f.clienteCedula().toLowerCase().contains(filtro));
     }
 
+    // Borra el buscador para ver todas.
     @FXML
     private void mostrarTodas() {
         txtBuscar.clear();
     }
 
+    // Muestra el texto de la factura seleccionada.
     private void mostrarVistaPrevia(Factura factura) {
         txtVistaPrevia.setText(factura == null
                 ? "Seleccione una factura para ver su vista previa."
                 : FormatoFactura.vistaPrevia(factura));
     }
 
+    // Pregunta dónde guardar y crea el Word con FacturaDocx.
     @FXML
     private void exportarDocx() {
 
@@ -211,6 +223,7 @@ public class FacturacionController {
         }
     }
 
+    // Regresa al menú principal.
     @FXML
     private void volverMenu() {
 
@@ -231,6 +244,7 @@ public class FacturacionController {
         }
     }
 
+    // Muestra una ventanita de aviso.
     private void mostrarAlerta(Alert.AlertType tipo, String mensaje) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle("Facturación");

@@ -17,6 +17,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+// ============================================================
+// MembresiaRepositoryJdbc.java
+// QUÉ HACE:      Lee y escribe la tabla membresia en MySQL (y arma la membresía junto con su socio
+//                y su plan).
+// CONECTADO A:   ConexionBD y los modelos Membresía, Socio y Plan. Lo usa PagoService.
+// ============================================================
 /**
  * Implementación JDBC para la tabla membresia.
  *
@@ -151,6 +157,7 @@ public class MembresiaRepositoryJdbc
         }
     }
 
+    // Busca la membresía de un socio por su cédula.
     @Override
     public Membresia buscarPorCedula(String cedula)
             throws SQLException {

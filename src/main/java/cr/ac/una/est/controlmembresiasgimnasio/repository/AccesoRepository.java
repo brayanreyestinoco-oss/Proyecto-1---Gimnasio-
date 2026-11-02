@@ -5,6 +5,12 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// ============================================================
+// AccesoRepository.java
+// QUÉ HACE:      Lista de operaciones para guardar y leer entradas y consultas de acceso.
+// CONECTADO A:   La implementa AccesoRepositoryJdbc; la usan ControlAcceso e
+//                HistorialAccesoService.
+// ============================================================
 /** Contrato de persistencia del control de acceso; no depende de JDBC concreto. */
 public interface AccesoRepository {
     /** @param cedula cédula exacta @return ID del socio o null @throws SQLException ante errores de lectura */

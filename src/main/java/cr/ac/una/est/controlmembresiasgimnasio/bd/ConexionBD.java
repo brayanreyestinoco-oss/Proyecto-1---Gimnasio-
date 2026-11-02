@@ -9,6 +9,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+// ============================================================
+// ConexionBD.java
+// QUÉ HACE:      Crea la conexión a la base de datos MySQL (Aiven) leyendo db.properties o
+//                variables de entorno.
+// CONECTADO A:   Todos los repositorios *Jdbc piden aquí su conexión.
+// ============================================================
 /**
  * Entrega conexiones JDBC a la base de datos MySQL (local o en línea).
  *

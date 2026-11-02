@@ -2,6 +2,12 @@ package cr.ac.una.est.controlmembresiasgimnasio.repository;
 
 import java.sql.SQLException;
 
+// ============================================================
+// RepositorioException.java
+// QUÉ HACE:      Error propio que guarda el código SQL, para poder dar mensajes claros (por
+//                ejemplo, plan duplicado).
+// CONECTADO A:   Lo lanzan los repositorios y lo traduce PlanService.
+// ============================================================
 /**
  * Excepción no verificada que envuelve un error de base de datos.
  *

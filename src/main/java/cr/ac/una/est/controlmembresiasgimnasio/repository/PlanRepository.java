@@ -5,6 +5,11 @@ import cr.ac.una.est.controlmembresiasgimnasio.modelo.planes.Plan;
 import java.sql.SQLException;
 import java.util.List;
 
+// ============================================================
+// PlanRepository.java
+// QUÉ HACE:      Lista de operaciones para guardar y leer planes.
+// CONECTADO A:   La implementa PlanRepositoryJdbc; la usa PlanService.
+// ============================================================
 /**
  * Operaciones de persistencia de los planes del gimnasio.
  * La implementación usa JDBC y MySQL.

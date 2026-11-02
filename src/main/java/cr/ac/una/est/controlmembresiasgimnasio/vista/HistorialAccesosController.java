@@ -33,6 +33,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+// ============================================================
+// HistorialAccesosController.java
+// QUÉ HACE:      Pantalla de Historial de Accesos: muestra quién entró o consultó, con filtros, y
+//                exporta a CSV.
+// CONECTADO A:   HistorialAccesosView.fxml y HistorialAccesoService.
+// ============================================================
 /**
  * Pantalla con el historial de entradas al gimnasio
  * (tabla acceso_historial) y de consultas de membresía
@@ -102,6 +108,7 @@ public class HistorialAccesosController {
     private final FilteredList<RegistroAcceso> filtrados =
             new FilteredList<>(registros, r -> true);
 
+    // Configura los filtros (tipo, período, resultado) y las columnas.
     @FXML
     public void initialize() {
 
@@ -221,6 +228,7 @@ public class HistorialAccesosController {
         hilo.start();
     }
 
+    // Convierte permitido/denegado en el texto de la tabla.
     private String textoResultado(RegistroAcceso r) {
         boolean consulta = VER_CONSULTAS.equals(cmbTipo.getValue());
 
@@ -235,6 +243,7 @@ public class HistorialAccesosController {
         return "PERMITIDO".equals(texto) || "VIGENTE".equals(texto);
     }
 
+    // Calcula la fecha de inicio según el período (Hoy, 7 días, Todos).
     private LocalDateTime calcularDesde() {
 
         String periodo = cmbPeriodo.getValue();
@@ -250,6 +259,7 @@ public class HistorialAccesosController {
         return LocalDate.now().atStartOfDay();
     }
 
+    // Filtra lo ya cargado por resultado y por texto de busqueda.
     private void aplicarFiltros() {
 
         String texto = txtBuscar.getText() == null
@@ -279,6 +289,7 @@ public class HistorialAccesosController {
         });
     }
 
+    // Escribe el conteo de registros, permitidos y denegados.
     private void actualizarResumen() {
 
         long permitidas = filtrados.stream()
@@ -298,6 +309,7 @@ public class HistorialAccesosController {
                 + (total - permitidas) + " denegado(s)/no vigente(s)");
     }
 
+    // Guarda lo que se ve en la tabla en un archivo CSV.
     @FXML
     private void exportarCsv() {
 
@@ -355,6 +367,7 @@ public class HistorialAccesosController {
         }
     }
 
+    // Escribe una linea del CSV.
     private void escribirFila(BufferedWriter escritor, List<String> valores)
             throws IOException {
 
@@ -368,6 +381,7 @@ public class HistorialAccesosController {
         escritor.write("\r\n");
     }
 
+    // Regresa al menú principal.
     @FXML
     private void volverMenu() {
         if (tareaActual != null) tareaActual.cancel();
@@ -389,6 +403,7 @@ public class HistorialAccesosController {
         }
     }
 
+    // Muestra una ventanita de aviso.
     private void mostrarAlerta(Alert.AlertType tipo, String mensaje) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle("Historial de accesos");

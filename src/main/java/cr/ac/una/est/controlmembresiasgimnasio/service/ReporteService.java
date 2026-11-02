@@ -8,6 +8,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
+// ============================================================
+// ReporteService.java
+// QUÉ HACE:      Pide al repositorio las membresías del reporte según el filtro (todas, por vencer
+//                en 7/15/30 días o ya vencidas).
+// CONECTADO A:   ReporteRepositoryJdbc. Lo usa ReportesController.
+// ============================================================
 public class ReporteService {
 
     private final ReporteRepository reporteRepository;
@@ -16,6 +22,12 @@ public class ReporteService {
         this.reporteRepository = Objects.requireNonNull(reporteRepository);
     }
 
+    // Membresías que ya vencieron (hasta hoy).
+    public List<ReporteFila> consultarVencidas() throws SQLException {
+        return reporteRepository.consultarVencidas(LocalDate.now());
+    }
+
+    // Sin días = todas; con 7, 15 o 30 = las que vencen en ese plazo.
     public List<ReporteFila> consultar(Integer dias) throws SQLException {
         if (dias == null) {
             return reporteRepository.listarTodas();

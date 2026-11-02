@@ -15,6 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+// ============================================================
+// ReporteRepositoryJdbc.java
+// QUÉ HACE:      Consulta en MySQL las membresías para el reporte y calcula el estado
+//                (Vigente/Vencida/Inactiva) y el costo de renovacion.
+// CONECTADO A:   ConexionBD y ReporteFila. Lo usa ReporteService.
+// ============================================================
 public class ReporteRepositoryJdbc implements ReporteRepository {
 
     private static final DateTimeFormatter FORMATO_FECHA =
@@ -33,6 +39,7 @@ public class ReporteRepositoryJdbc implements ReporteRepository {
                     + "LEFT JOIN socio s ON s.id_socio = m.id_socio "
                     + "LEFT JOIN plan p ON p.id_plan = m.id_plan ";
 
+    // Todas las membresías, activas o no.
     @Override
     public List<ReporteFila> listarTodas() throws SQLException {
         String sql = CONSULTA_BASE + "ORDER BY m.id_membresia";
@@ -43,6 +50,7 @@ public class ReporteRepositoryJdbc implements ReporteRepository {
         }
     }
 
+    // Membresías activas que vencen entre dos fechas.
     @Override
     public List<ReporteFila> consultarProximasVencer(LocalDate desde, LocalDate hasta)
             throws SQLException {
@@ -60,6 +68,23 @@ public class ReporteRepositoryJdbc implements ReporteRepository {
         }
     }
 
+    // Membresías activas cuya fecha de vencimiento ya paso.
+    @Override
+    public List<ReporteFila> consultarVencidas(LocalDate hoy) throws SQLException {
+        String sql = CONSULTA_BASE
+                + "WHERE m.activa = TRUE AND m.fecha_vencimiento < ? "
+                + "ORDER BY m.fecha_vencimiento, m.id_membresia";
+
+        try (Connection conexion = ConexionBD.obtenerConexion();
+             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
+            sentencia.setDate(1, Date.valueOf(hoy));
+            try (ResultSet resultados = sentencia.executeQuery()) {
+                return leerFilas(resultados);
+            }
+        }
+    }
+
+    // Convierte el resultado de MySQL en filas de texto y calcula el estado de cada una.
     private List<ReporteFila> leerFilas(ResultSet resultados) throws SQLException {
         List<ReporteFila> filas = new ArrayList<>();
         LocalDate hoy = LocalDate.now();
@@ -117,6 +142,7 @@ public class ReporteRepositoryJdbc implements ReporteRepository {
         return "ANUAL".equalsIgnoreCase(tipo) ? "Sí" : "No";
     }
 
+    // Calcula lo que cuesta renovar según el tipo de plan.
     private String costoRenovacion(String tipo, BigDecimal precioBase,
                                    BigDecimal descuento, BigDecimal recargo) {
         if (tipo == null || precioBase == null) {

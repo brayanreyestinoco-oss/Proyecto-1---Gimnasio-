@@ -27,6 +27,13 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+// ============================================================
+// ControladorAcceso.java
+// QUÉ HACE:      Pantalla de Control de Acceso: el usuario escribe la cédula y el programa dice si
+//                puede entrar (verde) o no (rojo).
+// CONECTADO A:   ControlDeAccesoView.fxml (diseño), ControlAcceso (decide y guarda) e
+//                HistorialAccesoService (últimos intentos). Se abre desde el menú.
+// ============================================================
 public class ControladorAcceso {
 
     @FXML
@@ -75,6 +82,7 @@ public class ControladorAcceso {
     private ControlAcceso controlAcceso;
     private boolean procesando;
 
+    // Se ejecuta al abrir la pantalla: arma la tabla de últimos intentos.
     @FXML
     public void initialize() {
         limpiarInformacion();
@@ -130,6 +138,7 @@ public class ControladorAcceso {
         hilo.start();
     }
 
+    // El menú le entrega el ControlAcceso que debe usar.
     public void setControlAcceso(ControlAcceso controlAcceso) {
         this.controlAcceso = controlAcceso;
     }
@@ -146,6 +155,7 @@ public class ControladorAcceso {
         procesar(false);
     }
 
+    // Llama a ControlAcceso en segundo plano y muestra el resultado.
     private void procesar(boolean esEntrada) {
 
         String cedula = txtCedula.getText().trim();
@@ -313,6 +323,7 @@ public class ControladorAcceso {
         return "venció el " + fecha + " (hace " + (-dias) + " días)";
     }
 
+    // Muestra socio, plan y vencimiento.
     private void mostrarInformacionMembresia(Membresia membresia) {
 
         if (membresia.getSocio() != null) {
@@ -351,6 +362,7 @@ public class ControladorAcceso {
         }
     }
 
+    // Deja los datos del socio en blanco.
     private void limpiarInformacion() {
 
         lblNombre.setText("-");
@@ -364,6 +376,7 @@ public class ControladorAcceso {
         pintarResultado(null);
     }
 
+    // Regresa al menú principal.
     @FXML
     private void volverMenu() {
 

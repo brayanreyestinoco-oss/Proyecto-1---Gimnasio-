@@ -13,6 +13,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+// ============================================================
+// PagoRepositoryJdbc.java
+// QUÉ HACE:      Lee y escribe la tabla pago en MySQL. Guarda dentro de una transacción que le pasa
+//                PagoService.
+// CONECTADO A:   ConexionBD y los modelos Pago y Membresía. Lo usa PagoService.
+// ============================================================
 /**
  * Implementación JDBC del repositorio de pagos.
  *

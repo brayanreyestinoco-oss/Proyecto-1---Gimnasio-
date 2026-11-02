@@ -8,6 +8,12 @@ import cr.ac.una.est.controlmembresiasgimnasio.repository.SocioRepositoryJdbc;
 import java.util.ArrayList;
 import java.util.List;
 
+// ============================================================
+// SocioService.java
+// QUÉ HACE:      Reglas de los socios: valida los datos y registra, busca, modifica y elimina.
+// CONECTADO A:   SocioRepositoryJdbc. Lo usan SociosController, RegistroSocioController y
+//                RegistrarPagoController.
+// ============================================================
 public class SocioService implements Gestionable<Socio> {
 
     private final SocioRepository socioRepository;
@@ -25,6 +31,7 @@ public class SocioService implements Gestionable<Socio> {
         this.socioRepository = socioRepository;
     }
 
+    // Valida y guarda un socio nuevo.
     @Override
     public void registrar(Socio socio) {
 
@@ -39,11 +46,13 @@ public class SocioService implements Gestionable<Socio> {
         socioRepository.guardar(socio);
     }
 
+    // Busca un socio por id.
     @Override
     public Socio buscar(int id) {
         return socioRepository.buscarPorId(id).orElse(null);
     }
 
+    // Busca un socio por cédula.
     public Socio buscarPorCedula(String cedula) {
 
         if (cedula == null || cedula.trim().isEmpty()) {
@@ -55,6 +64,7 @@ public class SocioService implements Gestionable<Socio> {
         ).orElse(null);
     }
 
+    // Valida y guarda los cambios de un socio.
     @Override
     public boolean modificar(Socio socio) {
 
@@ -78,16 +88,19 @@ public class SocioService implements Gestionable<Socio> {
         return socioRepository.actualizar(socio);
     }
 
+    // Elimina un socio; no deja si ya tiene membresía.
     @Override
     public boolean eliminar(int id) {
         return socioRepository.eliminar(id);
     }
 
+    // Lista de todos los socios.
     public ArrayList<Socio> getSocios() {
         List<Socio> socios = socioRepository.listarTodos();
         return new ArrayList<>(socios);
     }
 
+    // Revisa que los datos obligatorios esten completos.
     private void validarSocio(Socio socio) {
 
         if (socio == null) {

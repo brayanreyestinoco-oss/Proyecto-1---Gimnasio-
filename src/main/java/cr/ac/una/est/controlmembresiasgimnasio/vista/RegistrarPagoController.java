@@ -26,6 +26,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
 
+// ============================================================
+// RegistrarPagoController.java
+// QUÉ HACE:      Formulario de nuevo pago: busca al socio por cédula, calcula el monto y el
+//                vencimiento según el plan y guarda.
+// CONECTADO A:   RegistrarPagoView.fxml, SocioService, PlanService y PagoService. Al terminar
+//                vuelve a Pagos.
+// ============================================================
 /**
  * Controlador encargado de registrar pagos de membresías.
  *
